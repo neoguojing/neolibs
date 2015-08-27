@@ -1,0 +1,15 @@
+
+SOURCES = $(wildcard *.c)
+OBJS := $(patsubst %.c, %.o,$(SOURCES))
+
+main: $(OBJS)
+	@echo "source files:" $(SOURCES)
+	@echo "object files:" $(OBJS)
+	$(CC) $(OBJS)  -D$(MACRO) $(CFLAGS) -o main 
+		   
+sinclude $(SOURCES:.c=.d)
+%d: %c
+	@echo "create depend"
+	$(CXX) -M $(CXXFLAGS) $< > $@.$$$$; \
+	sed 's,\($*\)\.o[ :]*,\1.o $@ ,g' < $@.$$$$ > $@; \
+	rm -f $@.$$$$
