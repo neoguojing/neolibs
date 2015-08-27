@@ -1,0 +1,21 @@
+#Compile option define
+CC=		gcc -pthread
+CXX=		g++ -pthread
+AR=		ar
+ARFLAGS=
+CFLAGS=
+CXXFLAGS=
+#  -g  只是编译器，在编译的时候，产生调试信息
+#-static 此选项将禁止使用动态库。
+# -shared (-G) 此选项将尽量使用动态库，为默认选项 
+#-Wall 一般使用该选项，允许发出GCC能够提供的所有有用的警告
+#-werror 把所有警告转换为错误，以在警告发生时中止编译过程 
+#-w 关闭所有警告,建议不要使用此项 
+# -Dmacro  相当于C语言中的#define macro    -Dmacro=defn   
+#  -Umacro  相当于C语言中的#undef macro    -undef  取消对任何非标准宏的定义  
+#  -o制定目标名称,缺省的时候,gcc 编译出来的文件是a.out
+# -O0   -O1   -O2   -O3  编译器的优化选项的4个级别，-O0表示没有优化,-O1为缺省值，-O3优化级别最高
+# -M  生成文件关联的信息。包含目标文件所依赖的所有源代码你可以用gcc -M hello.c来测试一下，很简单。  
+#   -MM  和上面的那个一样，但是它将忽略由#include造成的依赖关系。  
+#   -MD  和-M相同，但是输出将导入到.d的文件里面  
+#   -MMD  和-MM相同，但是输出将导入到.d的文件里面   
