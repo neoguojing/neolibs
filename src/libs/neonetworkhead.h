@@ -16,17 +16,18 @@
     #include<process.h>
     #include<WinSock.h>
 #else
-    #include<unistd>
+    #include<unistd.h>
     #include<errno.h>
-    #include<pthresd.h>
+    #include<pthread.h>
     #include<fcntl.h>
     #include<netinet/in.h>
     #include<string.h>
-    #include<sys/utime.h>
-    #include<arpa/inet>
+    #include<sys/time.h>
+    #include<arpa/inet.h>
     #include<termios.h>
     #include<netdb.h>
     #include<getopt.h>
+    #include<time.h>
 #endif
 
 #ifdef NEO_DEBUG
@@ -67,11 +68,11 @@
 
 #else
 
-Inline unsigned long GetTickCount(void)
+inline unsigned long GetTickCount(void)
 {
 	unsigned long IRet=0;
 	struct timeval tv;
-	gettimeofday(&tv,null);
+	gettimeofday(&tv,NULL);
 	IRet=tv.tv_usec/1000;
 	return IRet;
 }
@@ -101,10 +102,10 @@ Inline unsigned long GetTickCount(void)
 	pthread_create(&thread,NULL,func,args);
 #define THREADCREATE_ERROR -1
 #define THREADFUNC(func,args) void *func(void *args)
-#define Sleep(ms) usleep((_useconds_t)(ms*1000))
+#define Sleep(ms) usleep(ms*1000)
 
 unsigned long GetTickCount(void);
-#include <sys/utime.h>
+//#include <sys/utime.h>
 #define _GetTimeOfDay GetTickCount
 #define MIN_SLEEP 1
 #endif

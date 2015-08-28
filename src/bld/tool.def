@@ -1,11 +1,11 @@
-#Compile option define
-CC = gcc
-CXX = g++
-AR = ar   #静态库
-LD = ld   #链接器
-ARFLAGS =
-CFLAGS = -g -Wall -Wextra -pthread
-CXXFLAGS = -g -Wall -Wextra -pthread
+#Compile option define ##############
+export CC = gcc
+export CXX = g++
+export AR = ar   #静态库
+export LD = ld   #链接器
+export ARFLAGS =
+export CFLAGS = -g -Wall -Wextra -pthread
+export CXXFLAGS = -g -Wall -Wextra -pthread
 #  -g  只是编译器，在编译的时候，产生调试信息
 #-static 此选项将禁止使用动态库。
 # -shared (-G) 此选项将尽量使用动态库，为默认选项 

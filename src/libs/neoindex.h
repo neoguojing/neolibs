@@ -6,7 +6,7 @@
 ////////////////////////////////////////////////////////////////////////
 //自定义头文件
 //定义WIN32_NEO宏
-#define WIN32_NEO
+//#define WIN32
 //常用头文件,
 //包含线程宏定义
 //WIN_LINUX_vsnprintf
@@ -28,7 +28,7 @@
 #define ERR_AREADY_EXIST 4
 
 
-#ifdef WIN32_NEO
+#ifdef WIN32
 
 #include <stdlib.h>
 #include <stdio.h>

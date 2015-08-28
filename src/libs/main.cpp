@@ -7,7 +7,7 @@ using namespace std;
 #include "neothread.h"
 #include "neobaselib.h"
 
-void main()
+int main()
 {
 	char str[50] = "\0";
 	char buffer[50] = "\0";
@@ -266,7 +266,11 @@ void main()
 	printf(">>>>>>>>>>>>>>>>>>>>>>>>CNEOTaskRunInfo>>>>>>>>>>>>>>>>>>>>>>>>\n");
 	CNEOBaseLibrary *pBaseLib = new CNEOBaseLibrary("baselib",".","log",NULL);
 
-	printf(">>>>>>>>>>>>>>>>>>>>>>>>CNEOTaskRun>>>>>>>>>>>>>>>>>>>>>>>>\n");
-	CNEOTaskRun *pTaskRun = new CNEOTaskRun(pBaseLib);
-	system("pause");
+    printf(">>>>>>>>>>>>>>>>>>>>>>>>CNEOTaskRun>>>>>>>>>>>>>>>>>>>>>>>>\n");
+    CNEOTaskRun *pTaskRun = new CNEOTaskRun(pBaseLib);
+#ifdef WIN32
+    system("pause");
+#else
+#endif
+    return 0;
 }

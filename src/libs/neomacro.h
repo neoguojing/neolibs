@@ -38,6 +38,7 @@ inline void NEOExchange(Parm &p1, Parm &p2)
 		const typeof(((type *)0)->member) *_mptr = (ptr);\
 		(type *)((char *)_mptr - offset_of(type,member));\
 	})
+	
 //debug
 #define DEBUG_BUFFER_LENGTH 1024
 #define NEO_DEBUG_FILENAME_LENGTH 256

@@ -7,13 +7,13 @@
 ///////////////////////////////////////////////export fun
 typedef struct COUNT_SUB//差值的数据结构
 {
-	unsigned long m_nBegin;
-	unsigned long m_nEnd;
+    unsigned long m_nBegin;
+    unsigned long m_nEnd;
 }SCountSub;
 typedef struct _COUNT_//统计平均值模块
 {
-	SCountSub m_Sub;//差值
-	unsigned long m_Sum;//统计平均值
+    SCountSub m_Sub;//差值
+    unsigned long m_Sum;//统计平均值
 }SCount;
 ////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////
@@ -56,17 +56,17 @@ typedef struct _COUNT_//统计平均值模块
 class  CCountSub
 {
 public:
-	CCountSub();
-	~CCountSub();
+    CCountSub();
+    ~CCountSub();
 public:
-	SCountSub m_CountSub;
-	unsigned long SetBegin(unsigned long n);
-	unsigned long SetEnd(unsigned long n);
-	unsigned long GetBegin(void);
-	unsigned long GetEnd(unsigned long n);
-	unsigned long GetX(void);
-	void E2B(void);
-	void Push(unsigned long ulNew);
+    SCountSub m_CountSub;
+    unsigned long SetBegin(unsigned long n);
+    unsigned long SetEnd(unsigned long n);
+    unsigned long GetBegin(void);
+    unsigned long GetEnd(unsigned long n);
+    unsigned long GetX(void);
+    void E2B(void);
+    void Push(unsigned long ulNew);
 };
 
 ///////////////////////////////////////////////////
@@ -76,32 +76,32 @@ public:
 class  CDeltaTime
 {
 public:
-	CDeltaTime();
-	~CDeltaTime();
+    CDeltaTime();
+    ~CDeltaTime();
 public:
-	CCountSub m_CountSub;
-	void Reset(void);
-	void TouchBegin(void);
-	void TouchEnd(void);
-	unsigned long GetDeltaT(void);
-	double GetOperationsPerSecond(unsigned long ulOperationCount/*期间的操作总和*/);
+    CCountSub m_CountSub;
+    void Reset(void);
+    void TouchBegin(void);
+    void TouchEnd(void);
+    unsigned long GetDeltaT(void);
+    double GetOperationsPerSecond(unsigned long ulOperationCount/*期间的操作总和*/);
 };
 //////////////////////////////////////
 //计算平均值的类
 class  CCount
 {
 public:
-	CCount();
-	~CCount();
+    CCount();
+    ~CCount();
 public:
-	SCount m_Count;
-	void SCountReset(unsigned long n);
-	unsigned long SCountSum(void);
-	unsigned long SCountSetSum(unsigned long n);
-	unsigned long SCountGetSum(void);
-	unsigned long SCountGetX(void);
-	void SCountSetBegin(unsigned long n);
-	unsigned long SCountSetEnd(unsigned long n);
+    SCount m_Count;
+    void SCountReset(unsigned long n);
+    unsigned long SCountSum(void);
+    unsigned long SCountSetSum(unsigned long n);
+    unsigned long SCountGetSum(void);
+    unsigned long SCountGetX(void);
+    void SCountSetBegin(unsigned long n);
+    unsigned long SCountSetEnd(unsigned long n);
 };
 ////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
@@ -110,39 +110,39 @@ public:
 //#define FILENAME_STRING_LENGTH 256//文件名的统一长度
 //#define FULL_NAME(path,name,fullname,ext_name/*扩展名*/)\
 //{\
-//	if(strlen(path))\
+//  if(strlen(path))\
 //    {\
-//	   if(strlen(ext_name))\
-//			SafePrintf(fullname,\
-//			FILENAME_STRING_LENGTH,\
-//			"%s%s%s.%s",\
-//			path,\
-//			PATH_CHAR,\
-//			name,\
-//			ext_name);\
-//	else\
-//	    SafePrintf(fullname,\
-//		FILENAME_STRING_LENGTH,\
-//		"%s%s.%s",\
-//		path,\
-//		PATH_CHAR,\
-//		name);\
+//     if(strlen(ext_name))\
+//          SafePrintf(fullname,\
+//          FILENAME_STRING_LENGTH,\
+//          "%s%s%s.%s",\
+//          path,\
+//          PATH_CHAR,\
+//          name,\
+//          ext_name);\
+//  else\
+//      SafePrintf(fullname,\
+//      FILENAME_STRING_LENGTH,\
+//      "%s%s.%s",\
+//      path,\
+//      PATH_CHAR,\
+//      name);\
 //    }\
-//	else\
+//  else\
 //   {\
 //        if(strlen(ext_name))\
-//			SafePrintf(fullname,\
-//			FILENAME_STRING_LENGTH,\
-//			"%s.%s",\
-//			path,\
-//			PATH_CHAR,\
-//			name,\
-//			ext_name);\
-//		else\
-//			SafePrintf(fullname,\
-//			FILENAME_STRING_LENGTH,\
-//			"%s",\
-//			name);\
+//          SafePrintf(fullname,\
+//          FILENAME_STRING_LENGTH,\
+//          "%s.%s",\
+//          path,\
+//          PATH_CHAR,\
+//          name,\
+//          ext_name);\
+//      else\
+//          SafePrintf(fullname,\
+//          FILENAME_STRING_LENGTH,\
+//          "%s",\
+//          name);\
 //    }\
 //}\
 //
@@ -150,34 +150,34 @@ public:
 class  CNEOLowDebug
 {
 public:
-	//删除一个文件
-	static void DeleteAFile(char *szFileName);
-	//过滤路径获取文件名
-	static char *GetTrueFileName(char *szBuffer);
+    //删除一个文件
+    static void DeleteAFile(char *szFileName);
+    //过滤路径获取文件名
+    static char *GetTrueFileName(char *szBuffer);
 public:
-	//输出字符串DebugToFile到文件或控制台，返回字符数，不包括\0
-	int DebugToFile(char *szFormat,...);
-	//输出一块内存段到文件。
-	void DebugToFileBin(char *pBuffer,int nLength);
+    //输出字符串DebugToFile到文件或控制台，返回字符数，不包括\0
+    int DebugToFile(char *szFormat,...);
+    //输出一块内存段到文件。
+    void DebugToFileBin(char *pBuffer,int nLength);
 public:
-	//构造函数与析构函数
-	CNEOLowDebug (char *szPathName,                //路径名
-		char *szAppName,                           //文件名
-		_APP_INFO_OUT_CALLBACK pInfoOutCallback=NULL,//额外的输出回调函数
-		void *pInfoOutCallbackParam=NULL,          //回调函数参数
-		bool bePrintToScreenFlag=false           //是否打印到屏幕
-		);
-	~CNEOLowDebug();
+    //构造函数与析构函数
+    CNEOLowDebug (char *szPathName,                //路径名
+        char *szAppName,                           //文件名
+        _APP_INFO_OUT_CALLBACK pInfoOutCallback=NULL,//额外的输出回调函数
+        void *pInfoOutCallbackParam=NULL,          //回调函数参数
+        bool bePrintToScreenFlag=false           //是否打印到屏幕
+        );
+    ~CNEOLowDebug();
 public:
-	//回调函数定义
-	//在需要的时候，抓取输出信息，打入自己的输出队列
-	_APP_INFO_OUT_CALLBACK pInfoOutCallback;
-	//给调用者提供的指针
-	void *pInfoOutCallbackParam;
+    //回调函数定义
+    //在需要的时候，抓取输出信息，打入自己的输出队列
+    _APP_INFO_OUT_CALLBACK pInfoOutCallback;
+    //给调用者提供的指针
+    void *pInfoOutCallbackParam;
 private:
-	bool m_bePrintToScreenFlag;                  //内部保留的输出标记
-	char m_szFileName[NEO_DEBUG_FILENAME_LENGTH];//拼接好的路径名+文件名
-	CMutexLock m_Lock;                           //线程安全锁
+    bool m_bePrintToScreenFlag;                  //内部保留的输出标记
+    char m_szFileName[NEO_DEBUG_FILENAME_LENGTH];//拼接好的路径名+文件名
+    CMutexLock m_Lock;                           //线程安全锁
 };
 
 

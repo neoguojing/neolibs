@@ -8,14 +8,14 @@
 #include "../include/neo_net_index,h.h"
 int _tmain(int argc, _TCHAR* argv[])
 {
-	//slDevInfo sinfo={0};
-	lDevInfo *sinfo=NULL;
-	//Wincap_GetDrvInfo(&sinfo);
-	//for(int i=0;i<info.dev_num;i++)
-	//	printf("%s", info.devinfo);
-	printf("%d \r\n", sizeof(unsigned long long));
-	while(1);
-	return 0;
+    //slDevInfo sinfo={0};
+    lDevInfo *sinfo=NULL;
+    //Wincap_GetDrvInfo(&sinfo);
+    //for(int i=0;i<info.dev_num;i++)
+    //  printf("%s", info.devinfo);
+    printf("%d \r\n", sizeof(unsigned long long));
+    while(1);
+    return 0;
 }
 
 #ifdef NEOLIB_C_PLUS_PLUS

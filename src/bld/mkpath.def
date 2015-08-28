@@ -1,0 +1,41 @@
+#the directory definition
+export NEO_ROOT := $(shell  /bin/pwd | /bin/sed  \
+          -e 's!/src.*!!' \
+          -e 's!/tools.*!!' \
+          -e 's!/build.*!!'  \
+          )
+#	@echo $(NEO_ROOT)
+
+###################build path ##########################
+export BUILD_PATH = $(NEO_ROOT)/build/
+#	@echo $(BUILD_PATH)
+	
+export LIB_TARGET_PATH = $(BUILD_PATH)libs/
+#	@echo $(LIB_TARGET_PATH)
+
+export OBJECT_PATH =  $(BUILD_PATH)object/
+#	@echo $(LIB_TARGET_PATH)
+
+export TARGET_PATH =  $(BUILD_PATH)program/
+#	@echo $(TARGET_PATH)
+
+###################src path ##########################
+export SRC_ROOT_PATH = $(NEO_ROOT)/src/
+#	@echo $(SRC_ROOT_PATH)
+export APP_PATH = $(SRC_ROOT_PATH)app/
+#	@echo $(APP_PATH)
+export BLD_PATH = $(SRC_ROOT_PATH)bld/
+#	@echo $(BLD_PATH)
+export LIB_PATH = $(SRC_ROOT_PATH)libs/
+#	@echo $(LIB_PATH)
+
+###################tool path ##########################
+export TOOL_ROOT_PATH = $(NEO_ROOT)/tools/
+#	@echo $(TOOL_ROOT_PATH)
+export GTEST_PATH = $(TOOL_ROOT_PATH)gtest/
+#	@echo $(GTEST_PATH)
+###################vpath############################
+vpath %.o $(OBJECT_PATH)
+vpath %.h $(SRC_ROOT_PATH)include/ $(APP_PATH)include/
+vpath %.a $(LIB_TARGET_PATH)
+
