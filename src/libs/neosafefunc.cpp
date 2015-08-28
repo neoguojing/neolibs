@@ -17,7 +17,7 @@ int neosafesprintf(char *szBuf,int nDestSize,char *szFormat,...)
     int nListCount=0;
     va_list pArgList;
     va_start(pArgList,szFormat);
-    nListCount+=_vsnprintf(szBuf+nListCount,nDestSize+nListCount,szFormat,pArgList);
+    nListCount+=WIN_LINUX_vsnprintf(szBuf+nListCount,nDestSize+nListCount,szFormat,pArgList);
     va_end(pArgList);
     *(szBuf+nDestSize-1)='\0';
     return strlen(szBuf);
