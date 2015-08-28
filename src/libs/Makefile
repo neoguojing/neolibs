@@ -1,9 +1,9 @@
 #neolib makefile
-NEOLIB_TGT = $(LIB_TARGET_PATH)neolib
-SOURCES= $(wildcard *.cpp)
+export NEOLIB_TGT = $(LIB_TARGET_PATH)neolib
+export SOURCES= $(wildcard *.cpp)
 
 TMP_OBJS = $(patsubst %.cpp, %.o,$(SOURCES))
-OBJS = $(addprefix $(OBJECT_PATH),$(TMP_OBJS))
+export OBJS = $(addprefix $(OBJECT_PATH),$(TMP_OBJS))
 
 #.PHONY :test
 #test:
@@ -11,16 +11,23 @@ OBJS = $(addprefix $(OBJECT_PATH),$(TMP_OBJS))
 #	@echo "object files:" $(TMP_OBJS)
 #	@echo "object files:" $(OBJS)
 
-neolib:$(TMP_OBJS) 
+NEOLIB_TGT:$(TMP_OBJS) 
 	@echo "source files:" $(SOURCES)
 	@echo "object files:" $(TMP_OBJS)
-	$(CXX) $(TMP_OBJS) $(CXXFLAGS) -o neolib -lpthread
+	$(CXX) $(TMP_OBJS) $(CXXFLAGS) -o $(NEOLIB_TGT) -lpthread
 		   
-sinclude $(SOURCES:.cpp=.d)
+#sinclude $(SOURCES:.cpp=.d)
+sinclude $(addprefix $(OBJECT_PATH),$(SOURCES:.cpp=.d))
 
-include $(BLD_PATH)relation.gen
+#include $(BLD_PATH)relation.gen
 #%d: %cpp
-#	@echo "create depend"
-#	$(CXX) -M $(CXXFLAGS) $< > $@.$$$$; \
-#	sed 's,\($*\)\.o[ :]*,\1.o $@ ,g' < $@.$$$$ > $@; \
-#	rm -f $@.$$$$
+$(addprefix $(OBJECT_PATH),%d): %cpp
+	@echo "create depend"
+	$(CXX) -M $(CXXFLAGS) $< > $@.$$$$; \
+	#sed -i 's,\($*\)\.o,$(OBJECT_PATH)\1.o ,g' $@.$$$$; \
+	sed 's,\($*\)\.o[ :]*,\1.o $@ ,g' < $@.$$$$ > $@; \
+	rm -f $@.$$$$
+	
+	#sed 's,main.o,/home/neo/workspace/neogithub/neolibs.git/trunk/build/libs/main.o ,g' < main.d > tmpmain.d
+
+
