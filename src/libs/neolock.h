@@ -2,7 +2,7 @@
 
 #define NEOLOCK
 #include "neoindex.h"
-#include "neomacro.h"
+
 ////锁变量重定义
 //#ifdef WIN32_NEO
 //#define MUTEX CRITICAL_SECTION

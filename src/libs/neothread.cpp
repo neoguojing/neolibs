@@ -492,7 +492,7 @@ void CNEOTaskPool::TaskServiceThread(void *pCallParam,
     //获得本对象指针
     CNEOTaskPool *pThis=(CNEOTaskPool *)pCallParam;
     int nID=pThis->m_nThreadID.Add()-1;
-    //pThis->XGSysLog("CNEOTaskPool::TaskServiceThread():start %d!\n",nID);
+    pThis->XGSysLog("CNEOTaskPool::TaskServiceThread():start %d!\n",nID);
 
     while(MvarGet(bThreadContinue))          // 标准的线程池守候循环
     {

@@ -6,7 +6,6 @@
 #include "neolock.h"      
 #include "neodebug.h"        
 #include "neosafefunc.h"
-#include "neonetworkhead.h"
 ///////////////////////////////////////////////export func
 // void neosafestrncpy(char *pD,char *pS,int nDestSize);
 // int neosafesprintf(char *szBuf,int nDestSize,char *szFormat,...);

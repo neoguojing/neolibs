@@ -3,7 +3,6 @@
 #define NEODEBUG  
 #include "neoindex.h"
 #include "neolock.h"
-#include "neonetworkhead.h"
 ///////////////////////////////////////////////export fun
 typedef struct COUNT_SUB//差值的数据结构
 {

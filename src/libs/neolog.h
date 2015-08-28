@@ -2,7 +2,6 @@
 
 #define NEOLOG
 #include "neoindex.h"
-#include "neomacro.h"
 
 class CNEOMemPoolWithLock;
 class CNEOLowDebug;

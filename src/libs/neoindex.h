@@ -12,9 +12,9 @@
 //WIN_LINUX_vsnprintf
 #define NEO_DEBUG
 #define NEOLIB_C_PLUS_PLUS __cplusplus
-//#include "neonetworkhead.h"
+#include "neonetworkhead.h"
 //ºêÎÄ¼þÃû
-//#include "neomacro.h"
+#include "neomacro.h"
 #define IN
 #define OUT 
 #define INOUT
@@ -27,16 +27,6 @@
 #define ERR_NULLPOINT 3
 #define ERR_AREADY_EXIST 4
 
-
-#ifdef WIN32
-
-#include <stdlib.h>
-#include <stdio.h>
-#include <time.h>
-#include <WinSock.h>
-#else
-
-#endif
 
 #else
 

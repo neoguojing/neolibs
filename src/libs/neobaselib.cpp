@@ -9,7 +9,6 @@
 #include "neothread.h"                                      
 #include "neolog.h"
 #include "neobaselib.h"
-#include "neomacro.h"
 /////////////////////////////////////////////////////////////////////
 CNEOBaseLibrary::CNEOBaseLibrary(char *szAppName,
     char *szLogPath,
