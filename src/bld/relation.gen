@@ -1,7 +1,14 @@
 
 #生成规则
-%d: %c
+#%d: %c
+#	@echo "create depend"
+#	$(CXX) -M $(CXXFLAGS) $< > $@.$$$$; \
+#	sed 's,\($*\)\.o[ :]*,\1.o $@ ,g' < $@.$$$$ > $@; \
+#	rm -f $@.$$$$
+
+$(addprefix $(OBJECT_PATH),%d): %cpp
 	@echo "create depend"
 	$(CXX) -M $(CXXFLAGS) $< > $@.$$$$; \
+	#sed -i 's,\($*\)\.o,$(OBJECT_PATH)\1.o ,g' $@.$$$$; \
 	sed 's,\($*\)\.o[ :]*,\1.o $@ ,g' < $@.$$$$ > $@; \
 	rm -f $@.$$$$
