@@ -20,17 +20,17 @@ typedef struct _COUNT_//统计平均值模块
 ////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////
 //字符输出
- int SafePrintf(char *szBuf,int nMaxlength,char *szFormat,...);
+ int SafePrintf(char *szBuf,int nMaxlength,const char *szFormat,...);
 //获得时间戳
  int GetTimeStamp(char *szBuf,int nMaxlength);
 //打印到文件或屏幕
- int OutputFileOrScreen(char *szFileName,char *szMode,char *szFormate,...);
+ int OutputFileOrScreen(const char *szFileName,const char *szMode,const char *szFormate,...);
 //以二进制输出数据
- int Debug_bin_ASC(char *pPrintBuffer,char *pBuffer,int nLength);
+ int Debug_bin_ASC(char *pPrintBuffer,const char *pBuffer,int nLength);
 //以16进制输出数据
- int Debug_bin_HEX(char *pPrintBuffer,char *pBuffer,int nLength);
+ int Debug_bin_HEX(char *pPrintBuffer,const char *pBuffer,int nLength);
 //输出主入口函数
- void Debug_bin(char *pBuffer,int nLength);
+ void Debug_bin(const char *pBuffer,int nLength);
 ///////////////////////////////////////////////////////////////
 //获取差值的函数
  unsigned long SCountSubGetX(SCountSub &CountSub);
@@ -38,7 +38,7 @@ typedef struct _COUNT_//统计平均值模块
  unsigned long SCountSubSetEnd(SCountSub &CountSub,unsigned long n);
 ///////////////////////////////////////////////////////////////
 //统计平均值模块
- void SCountReset(SCount &Count,unsigned long n);//初始化
+ void SCountReset(SCount &Count);//初始化
  unsigned long SCountSum(SCount &Count);//计算统计平均值
  unsigned long SCountGetSum(SCount &Count);//返回sum值
  unsigned long SCountGetX(SCount &Count);//返回当前的差值
@@ -64,7 +64,7 @@ public:
     unsigned long SetBegin(unsigned long n);
     unsigned long SetEnd(unsigned long n);
     unsigned long GetBegin(void);
-    unsigned long GetEnd(unsigned long n);
+    unsigned long GetEnd(void);
     unsigned long GetX(void);
     void E2B(void);
     void Push(unsigned long ulNew);
@@ -96,7 +96,7 @@ public:
     ~CCount();
 public:
     SCount m_Count;
-    void SCountReset(unsigned long n);
+    void SCountReset(void);
     unsigned long SCountSum(void);
     unsigned long SCountSetSum(unsigned long n);
     unsigned long SCountGetSum(void);
@@ -112,18 +112,18 @@ class  CNEOLowDebug
 {
 public:
     //删除一个文件
-    static void DeleteAFile(char *szFileName);
+    static void DeleteAFile(const char *szFileName);
     //过滤路径获取文件名
     static char *GetTrueFileName(char *szBuffer);
 public:
     //输出字符串DebugToFile到文件或控制台，返回字符数，不包括\0
-    int DebugToFile(char *szFormat,...);
+    int DebugToFile(const char *szFormat,...);
     //输出一块内存段到文件。
     void DebugToFileBin(char *pBuffer,int nLength);
 public:
     //构造函数与析构函数
-    CNEOLowDebug (char *szPathName,                //路径名
-        char *szAppName,                           //文件名
+    CNEOLowDebug (const char *szPathName,                //路径名
+        const char *szAppName,                           //文件名
         _APP_INFO_OUT_CALLBACK pInfoOutCallback=NULL,//额外的输出回调函数
         void *pInfoOutCallbackParam=NULL,          //回调函数参数
         bool bePrintToScreenFlag=false           //是否打印到屏幕
