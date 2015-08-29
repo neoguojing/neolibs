@@ -17,7 +17,7 @@
 ////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////
 namespace NEOLIB {
-int SafePrintf(char *szBuf,int nMaxlength,char *szFormat,...)
+int SafePrintf(char *szBuf,int nMaxlength,const char *szFormat,...)
 {
     int nListCount=0;
     va_list pArgList;
@@ -54,7 +54,7 @@ int GetTimeStamp(char *szBuf,int nMaxlength)
     return nLength;
 }
 //同时打印字符到屏幕或文件
-int OutputFileOrScreen(char *szFileName,char *szMode,char *szFormate,...)
+int OutputFileOrScreen(const char *szFileName,const char *szMode,const char *szFormate,...)
 {
     char szBuf[DEBUG_BUFFER_LENGTH] = "\0";//debug时要定义DEBUG_BUFFER_LENGTH
     char szTime[256] = "\0";
@@ -87,7 +87,7 @@ int OutputFileOrScreen(char *szFileName,char *szMode,char *szFormate,...)
 }
 
 //地址码—地址码的16进制表示—ASC字符表示
-int Debug_bin_ASC(char *pPrintBuffer,char *pBuffer,int nLength)
+int Debug_bin_ASC(char *pPrintBuffer,const char *pBuffer,int nLength)
 {
     int i=0;
     int nCount=0;
@@ -100,7 +100,7 @@ int Debug_bin_ASC(char *pPrintBuffer,char *pBuffer,int nLength)
     }
     return nCount;
 }
-int Debug_bin_HEX(char *pPrintBuffer,char *pBuffer,int nLength)
+int Debug_bin_HEX(char *pPrintBuffer,const char *pBuffer,int nLength)
 {
     int i=0;
     int j=0;
@@ -132,7 +132,7 @@ int Debug_bin_HEX(char *pPrintBuffer,char *pBuffer,int nLength)
     return nCount;
 }
 
-void Debug_bin(char *pBuffer,int nLength)
+void Debug_bin(const char *pBuffer,int nLength)
 {
     int nAddr=0;//当前指针的偏移量
     int nLineCount=0;
@@ -187,18 +187,20 @@ CCountSub::CCountSub()
 CCountSub::~CCountSub(){}
 
 unsigned long CCountSub::SetBegin(unsigned long n)
-{
-    return m_CountSub.m_nBegin;
+{	
+    m_CountSub.m_nBegin = n;
+	return m_CountSub.m_nBegin;
 }
 unsigned long CCountSub::SetEnd(unsigned long n)
 {
+	m_CountSub.m_nEnd = n;
     return m_CountSub.m_nEnd;
 }
 unsigned long CCountSub::GetBegin(void)
 {
     return m_CountSub.m_nBegin;
 }
-unsigned long CCountSub::GetEnd(unsigned long n)
+unsigned long CCountSub::GetEnd(void)
 {
     return m_CountSub.m_nEnd;
 }
@@ -261,7 +263,7 @@ double CDeltaTime::GetOperationsPerSecond(unsigned long ulOperationCount/*期间的
 //SCountSetBegin开始统计
 //SCountSubSetEnd多次调用来刷新结束时间
 //SCountSum获得统计平均值
-void SCountReset(SCount &Count,unsigned long n)
+void SCountReset(SCount &Count)
 {
     Count.m_Sum=0;
     Count.m_Sub.m_nBegin=0;
@@ -297,13 +299,13 @@ unsigned long SCountSetEnd(SCount &Count,unsigned long n)
 
 CCount::CCount()
 {
-    SCountReset(0);
+    SCountReset();
 }
 CCount::~CCount(){}
 
-void CCount::SCountReset(unsigned long n)
+void CCount::SCountReset(void)
 {
-    NEOLIB::SCountReset(m_Count,n);
+    NEOLIB::SCountReset(m_Count);
 }
 unsigned long CCount::SCountSum(void)
 {
@@ -390,7 +392,7 @@ inline int GetRandomBeteen(int nBegin,int nEnd)
 //CLowDebug类，用于具体功能的输出
 
     //删除一个文件
-void CNEOLowDebug::DeleteAFile(char *szFileName)
+void CNEOLowDebug::DeleteAFile(const char *szFileName)
 {
     remove(szFileName);
 }
@@ -419,7 +421,7 @@ char *CNEOLowDebug::GetTrueFileName(char *szBuffer)
 }
 
 //输出字符串DebugToFile到文件或控制台，返回字符数，不包括\0
-int CNEOLowDebug::DebugToFile(char *szFormat,...)
+int CNEOLowDebug::DebugToFile(const char *szFormat,...)
 {
     char szBuff[DEBUG_BUFFER_LENGTH] = "\0";                                //输出缓冲
     char szTemp[DEBUG_BUFFER_LENGTH] = "\0";                               //时间戳置换的中间buffer
@@ -428,8 +430,8 @@ int CNEOLowDebug::DebugToFile(char *szFormat,...)
     int nListCount=0;
     va_list pArgList;
     //time_t t;
-    struct tm *pTM=NULL;
-    int nLength=0;
+    //struct tm *pTM=NULL;
+    //int nLength=0;
     //构建时间戳
     GetTimeStamp(szTemp,DEBUG_BUFFER_LENGTH);
     SafePrintf(szTime,DEBUG_BUFFER_LENGTH,"[%s]",szTemp);
@@ -485,8 +487,8 @@ void CNEOLowDebug::DebugToFileBin(char *pBuffer,int nLength)
 }
 
 //构造函数与析构函数
-CNEOLowDebug::CNEOLowDebug (char *szPathName,                //路径名
-    char *szAppName,                           //文件名
+CNEOLowDebug::CNEOLowDebug (const char *szPathName,                //路径名
+    const char *szAppName,                           //文件名
     _APP_INFO_OUT_CALLBACK pInfoOutCallback,//额外的输出回调函数
     void *pInfoOutCallbackParam,          //回调函数参数
     bool bePrintToScreenFlag          //是否打印到屏幕

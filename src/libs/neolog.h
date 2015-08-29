@@ -53,18 +53,18 @@ private://内部私有变量
 	CNEOMemQueue *m_pFileInfoQueue;           //文件明队列
 private:
 	//内部工具函数
-	int _Printf(char *szFormat,...);        //核心打印输出模块
+	int _Printf(const char *szFormat,...);        //核心打印输出模块
 	void DeleteFirstFile(void);             //删除最老的文件
 	void FixFileInfo(void);                 //修订文件名目录队列
 	void MakeFileName(void);                //根据时间和文件大小，定制文件名
 	void GetFileName(void);                 //获得当前可用的文件名
 public:
 	static  int MakeATimeString(char *szBuffer,int nBufferSize);//定制时间戳字符串
-	void _XGDebugForBin(char *pBuffer,int nLength);  //二进制输出
-	int _XGSysLog(char *szFormat,...);               //syslog输出
-	int _XGDebug(char *szFormat,...);                //debug 输出
-	int _XGDebug2(char *szFormat,...);   
-	int _XGDebug3(char *szFormat,...);   
+	void _XGDebugForBin(const char *pBuffer,int nLength);  //二进制输出
+	int _XGSysLog(const char *szFormat,...);               //syslog输出
+	int _XGDebug(const char *szFormat,...);                //debug 输出
+	int _XGDebug2(const char *szFormat,...);   
+	int _XGDebug3(const char *szFormat,...);   
 public:
 	bool m_bSysLogFlag;
 	bool m_bDebugFlag;

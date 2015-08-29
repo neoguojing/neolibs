@@ -77,7 +77,7 @@ public:
 	/////////////////////////////////////////////
 	//文本数据拷贝构建函数
 	int StrCopyFrom(char *szString);
-	int Printf(char *szFormat,...);
+	int Printf(const char *szFormat,...);
 	/////////////////////////////////////////////
 	//数据比较函数
 	int memcmp(char *szData,int nDataLen);
@@ -176,7 +176,7 @@ public:
 	//能否正确工作的标志函数
 	bool ICanWork(void);
 	//队列最经典的功能，追加到末尾，
-	int AddLast(char *szData,int nDataLength);
+	int AddLast(const char *szData,int nDataLength);
 	int AddLast(CNEODynamicBuffer *pBuffer);
 	int AddLast(CNEOStaticBuffer *pBuffer);
 	//获得当前内部元素个数
@@ -227,7 +227,7 @@ public:
 	int GetFirstLength(void);        // 获得第一个token数据长度
 	int GetTokenCount(void);        //获得token总数
 	void PrintInside(void);         //打印搜有队列内部token数据
-	int AddLast(char *szData       //数据指针
+	int AddLast(const char *szData       //数据指针
 		,int nDataLen,             //数据长度
 		int nLimit=-1);              //防止递归长度过神
 	int GetFirst(char *szBuffer,int nBufferSize);
@@ -244,15 +244,15 @@ public:
 	int PushToLast(char *szData,int nDataLen);
 
      //队列数据写入磁盘
-	void WriteToFile(char *szFileName);
+	void WriteToFile(const char *szFileName);
 	//队列数据从磁盘读出
-	int ReadFromFile(char *szFileName);
+	int ReadFromFile(const char *szFileName);
 private:
 	void PrintAToken(SNEOQueueTokenHead *pToken);
 	void WriteATokenToFile(SNEOQueueTokenHead *pToken,FILE *fp);
 	int PopFromFirst4NEOPopBuffer(CNEOPopBuffer *pPopBuffer);
 	//申请用来存储数据的内存
-	int AddLastToThisToken(SNEOQueueTokenHead *pToken,char *szData,int nDataLen);
+	int AddLastToThisToken(SNEOQueueTokenHead *pToken,const char *szData,int nDataLen);
 	//申请一个token头
 	SNEOQueueTokenHead *GetAToken(void);//返回指针，不遵守谁申请谁释放的原则
 	bool DeleteATokenAndHisNext(SNEOQueueTokenHead *pToken);
@@ -271,7 +271,7 @@ public:
 	~CNEOMemQueueWithLock();
 public:
 	bool ICanWork(void);
-	int AddLast(char *szData,int nDataLen);
+	int AddLast(const char *szData,int nDataLen);
 	int GetFirst(CNEODynamicBuffer *pBuffer);
 	int GetFirst(char *szBuffer,int nBufferSize);
 	int GetFirstLen(void);
@@ -281,8 +281,8 @@ public:
 	int PushToLast(char *szData,int nDataLen);
 	void CleanAll(void);
 	bool DeleteFirst(void);
-	void WriteToFile(char *szFileName);
-	int ReadFromFile(char *szFileName);
+	void WriteToFile(const char *szFileName);
+	int ReadFromFile(const char *szFileName);
 	void PrintInside();
 private:
 	CNEOMemPoolWithLock *m_pMemPool;

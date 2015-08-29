@@ -113,7 +113,7 @@ int main()
 
 	printf(">>>>>>>>>>>>>>>>>>>>>>>>CNEOPopBuffer>>>>>>>>>>>>>>>>>>>>>>>>\n");
 	char pop[1000] = {""};
-	char * pop1 = "a";
+	const char * pop1 = "a";
 	CNEOPopBuffer *pbufer = new CNEOPopBuffer(pop,1000);
 	pbufer->AddLast(pop1,strlen(pop1));
 	pbufer->PrintInside();

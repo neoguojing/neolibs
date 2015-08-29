@@ -3,7 +3,7 @@
 #include "neoindex.h"
 #include "neosafefunc.h"
 
-void neosafestrncpy(char *pD,char *pS,int nDestSize)
+void neosafestrncpy(char *pD,const char *pS,int nDestSize)
 {
     int nLen=strlen(pS)+1;
     if(nLen>nDestSize)
@@ -12,7 +12,7 @@ void neosafestrncpy(char *pD,char *pS,int nDestSize)
     *(pD+nLen-1)='\0';
 }
 
-int neosafesprintf(char *szBuf,int nDestSize,char *szFormat,...)
+int neosafesprintf(char *szBuf,int nDestSize,const char *szFormat,...)
 {
     int nListCount=0;
     va_list pArgList;
@@ -22,7 +22,7 @@ int neosafesprintf(char *szBuf,int nDestSize,char *szFormat,...)
     *(szBuf+nDestSize-1)='\0';
     return strlen(szBuf);
 }
-void SafeStrcpy(char *pDest,char *pSource,int nCount)
+void SafeStrcpy(char *pDest,const char *pSource,int nCount)
 {
     int nLen=(int)strlen(pSource)+1;
     if(!pDest)

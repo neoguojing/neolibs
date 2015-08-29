@@ -279,7 +279,7 @@ void CNEOMemStack::PrintInfo(void)
 //设置关闭标志，为真时调用系统free
 void CNEOMemStack::SetCloseFlag(bool bFlag)
 {
-    m_CloseFlag.Set(true);
+    m_CloseFlag.Set(bFlag);
 }
 
 
@@ -324,7 +324,7 @@ CMemRegister::~CMemRegister()
 //内部工具，拷贝数据
 void CMemRegister::RegisterCopy(SNEOMemRegister *pDest//目的拷贝指针
     ,void *pPoint                       //待拷贝的指针
-    ,char *szInfo)                      //待拷贝的描述
+    ,const char *szInfo)                      //待拷贝的描述
 {
     pDest->m_pPoint=pPoint;
     if(szInfo)
@@ -338,7 +338,7 @@ void CMemRegister::RegisterCopy(SNEOMemRegister *pDest//目的拷贝指针
     }
 }
 //添加一个指针及其说明
-void CMemRegister::Add(void *pPoint,char *szInfo)
+void CMemRegister::Add(void *pPoint,const char *szInfo)
 {
     int i=0;
     m_Lock.Lock();
@@ -607,7 +607,7 @@ CNEOMemPoolWithLock::~CNEOMemPoolWithLock()
 }
 //指针管理
 
-void CNEOMemPoolWithLock::Register(void *pPoint,char *szInfo)
+void CNEOMemPoolWithLock::Register(void *pPoint,const char *szInfo)
 {
     if(m_pRegister)
     {
@@ -639,7 +639,7 @@ void CNEOMemPoolWithLock::CloseSocket(WIN_LINUX_SOCKET &s)
         {
             if(!m_pSocketRegister->Del(s))
             {
-            m_pDebug->DebugToFile("CNEOMemPoolWithLock::CloseSocket():\Socket%d is not registed !But I have close it yet!\n",s);
+            m_pDebug->DebugToFile("CNEOMemPoolWithLock::CloseSocket():Socket%d is not registed !But I have close it yet!\n",s);
             }
             WIN_LINUX_CloseSocket(s);
             s=WIN_LINUX_InvalidSocket;
@@ -672,7 +672,7 @@ void *CNEOMemPoolWithLock::ReMalloc(void *pPoint,int nNewSize,bool bCopyOldDataF
     return pRet;
 }
 //分配一块内存
-void *CNEOMemPoolWithLock::Malloc(int nSize,char *szInfo)
+void *CNEOMemPoolWithLock::Malloc(int nSize,const char *szInfo)
 {
     void *pRet=NULL;
     if(m_pMemPool)

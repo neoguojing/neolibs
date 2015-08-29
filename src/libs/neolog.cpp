@@ -68,7 +68,7 @@ CNEOLog::~CNEOLog()
     }
     m_pDebug->DebugToFile("CNEOLog:stop~\n");
 }
-int CNEOLog::_Printf(char *szFormat,...)
+int CNEOLog::_Printf(const char *szFormat,...)
  {
     char szTime[LOG_ITEM_LENGTH_MAX] = {"\0"};
     char szTemp[LOG_ITEM_LENGTH_MAX] = {"\0"};
@@ -204,7 +204,7 @@ int CNEOLog::MakeATimeString(char *szBuffer,int nBufferSize)
 CNEOLog_MakeATimeString_End:
     return nLength;
 }
-void CNEOLog::_XGDebugForBin(char *pBuffer,int nLength)
+void CNEOLog::_XGDebugForBin(const char *pBuffer,int nLength)
 {
     m_Lock.Lock();
     {
@@ -214,7 +214,7 @@ void CNEOLog::_XGDebugForBin(char *pBuffer,int nLength)
     }
     m_Lock.UnLock();
 }
-int CNEOLog::_XGSysLog(char *szFormat,...)
+int CNEOLog::_XGSysLog(const char *szFormat,...)
 {
     char szBuf[LOG_ITEM_LENGTH_MAX] = "\0";
     int nMaxLength=LOG_ITEM_LENGTH_MAX;
@@ -236,7 +236,7 @@ int CNEOLog::_XGSysLog(char *szFormat,...)
     }
     return nListCount;
 }
-int CNEOLog::_XGDebug(char *szFormat,...)
+int CNEOLog::_XGDebug(const char *szFormat,...)
 {
     char szBuf[LOG_ITEM_LENGTH_MAX] = "\0";
     int nMaxLength=LOG_ITEM_LENGTH_MAX;
@@ -258,7 +258,7 @@ int CNEOLog::_XGDebug(char *szFormat,...)
     }
     return nListCount;
 }
-int CNEOLog::_XGDebug2(char *szFormat,...)
+int CNEOLog::_XGDebug2(const char *szFormat,...)
 {
     char szBuf[LOG_ITEM_LENGTH_MAX] = "\0";
     int nMaxLength=LOG_ITEM_LENGTH_MAX;
@@ -280,7 +280,7 @@ int CNEOLog::_XGDebug2(char *szFormat,...)
     }
     return nListCount;
 }
-int CNEOLog::_XGDebug3(char *szFormat,...)
+int CNEOLog::_XGDebug3(const char *szFormat,...)
 {
     char szBuf[LOG_ITEM_LENGTH_MAX] = "\0";
     int nMaxLength=LOG_ITEM_LENGTH_MAX;

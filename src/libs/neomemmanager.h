@@ -136,10 +136,10 @@ private:
 	//内部工具，拷贝数据
 	void RegisterCopy(SNEOMemRegister *pDest//目的拷贝指针
 		,void *pPoint                       //待拷贝的指针
-		,char *szInfo);                      //待拷贝的描述
+		,const char *szInfo);                      //待拷贝的描述
 public:
 	//添加一个指针及其说明
-	void Add(void *pPoint,char *szInfo);
+	void Add(void *pPoint,const char *szInfo);
 	//删除一个指针（内存被释放，失效）
 	void Del(void *pPoint);
 	//remalloc的时候更新指针
@@ -187,7 +187,7 @@ public:
 private:
 	CMemRegister *m_pRegister;
 public:
-	void Register(void *pPoint,char *szInfo);
+	void Register(void *pPoint,const char *szInfo);
 	void UnRegister(void *pPoint);
 	//socket   管理
 private:
@@ -203,7 +203,7 @@ public:
 	//重新分配指针的空间，默认拷贝原始数据到新空间
 	void *ReMalloc(void *pPoint,int nNewSize,bool bCopyOldDataFlag=true);
 	//分配一块内存
-	void *Malloc(int nSize,char *szInfo=NULL);
+	void *Malloc(int nSize,const char *szInfo=NULL);
 	void Free(void *pBlock);
 	//显示整棵内存树的内容
 	void PrintTree(void);

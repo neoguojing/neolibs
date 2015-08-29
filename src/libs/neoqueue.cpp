@@ -133,7 +133,7 @@ int CNEODynamicBuffer::GetInt(void)//以整数方式获得缓冲区的数值
 {
     if(!m_pData)
         return 0;
-    if((sizeof(int)>m_nDataLen))
+    if((sizeof(int)>(size_t)m_nDataLen))
         return 0;
     return ntohl(*(int *)m_pData);//用这种方式取得前四字节
 }
@@ -147,7 +147,7 @@ short CNEODynamicBuffer::GetShort(void)//端口号
 {
     if(!m_pData)
         return 0;
-    if(sizeof(short)>m_nDataLen)
+    if(sizeof(short)>(size_t)m_nDataLen)
         return 0;
     return ntohs(*(short *)m_pData);
 }
@@ -159,7 +159,7 @@ char CNEODynamicBuffer::GetChar(void)//以字节方式获得缓冲区的数值
 {
     if(!m_pData)
         return 0;
-    if(sizeof(char)>m_nDataLen)
+    if(sizeof(char)>(size_t)m_nDataLen)
         return 0;
     return *(char *)m_pData;
 }
@@ -232,7 +232,7 @@ int CNEODynamicBuffer::StrCopyFrom(char *szString)
     n++;//流出“\0”
     return BinCopyFrom(szString,n);
 }
-int CNEODynamicBuffer::Printf(char *szFormat,...)
+int CNEODynamicBuffer::Printf(const char *szFormat,...)
 {
     char szBuf[NEO_BUFFER_STRING_MAX];
     int nListCount=0;
@@ -566,6 +566,10 @@ bool CNEOStaticBuffer::IHaveData(void)
     int nDataLen//数据长度
     ,void* pCallParam);//代传的参数
 static bool EnumDataCallback(char *szData,int nDataLen,void *pCallParam);*/
+static bool EnumDataCallback(char *szData,int nDataLen,void *pCallParam)
+{
+	return true;
+}
 //基本队列模型
 
 CNEOPopBuffer::CNEOPopBuffer(char *szBuffer,           //缓冲区指针
@@ -631,7 +635,7 @@ bool CNEOPopBuffer::ICanWork(void)
     return true;
 }
 //队列最经典的功能，追加到末尾，
-int CNEOPopBuffer::AddLast(char *szData,int nDataLength)
+int CNEOPopBuffer::AddLast(const char *szData,int nDataLength)
 {
     int nRet=0;
     if(!szData)
@@ -883,7 +887,7 @@ void CNEOMemQueue::PrintInside(void)         //打印搜有队列内部token数据
     if(m_pHead)
         PrintAToken(m_pHead);//从队列头开始递归
 }
-int CNEOMemQueue::AddLast(char *szData       //数据指针
+int CNEOMemQueue::AddLast(const char *szData       //数据指针
     ,int nDataLen,             //数据长度
     int nLimit)              //防止递归长度过神
 {          
@@ -1040,7 +1044,7 @@ CNEOMemQueue_PushToLast_End:
     return nRet;
 }
     //队列数据写入磁盘
-void CNEOMemQueue::WriteToFile(char *szFileName)
+void CNEOMemQueue::WriteToFile(const char *szFileName)
 {
     FILE *fp=NULL;
     if(!ICanWork())
@@ -1058,7 +1062,7 @@ void CNEOMemQueue::WriteToFile(char *szFileName)
     }
 }
 //队列数据从磁盘读出
-int CNEOMemQueue::ReadFromFile(char *szFileName)
+int CNEOMemQueue::ReadFromFile(const char *szFileName)
 {
     FILE *fp=NULL;
     int n=0;
@@ -1196,7 +1200,7 @@ CNEOMemQueue_PopFromFirst4NEOPopBuffer_End:
     return nRet;
 }
 //申请用来存储数据的内存
-int CNEOMemQueue::AddLastToThisToken(SNEOQueueTokenHead *pToken,char *szData,int nDataLen)
+int CNEOMemQueue::AddLastToThisToken(SNEOQueueTokenHead *pToken,const char *szData,int nDataLen)
 {
     int nRet=0;
     char szNameBuffer[256];
@@ -1346,7 +1350,7 @@ bool CNEOMemQueueWithLock::ICanWork(void)
     m_Lock.DecRead();
     return bRet;
 }
-int CNEOMemQueueWithLock::AddLast(char *szData,int nDataLen)
+int CNEOMemQueueWithLock::AddLast(const char *szData,int nDataLen)
 {
     int nRet=0;
     m_Lock.EnableWrite();
@@ -1444,7 +1448,7 @@ bool CNEOMemQueueWithLock::DeleteFirst(void)
     m_Lock.DisableWrite();
     return bRet;
 }
-void CNEOMemQueueWithLock::WriteToFile(char *szFileName)
+void CNEOMemQueueWithLock::WriteToFile(const char *szFileName)
 {
     m_Lock.AddRead();
     {
@@ -1452,7 +1456,7 @@ void CNEOMemQueueWithLock::WriteToFile(char *szFileName)
     }
     m_Lock.DecRead();
 }
-int CNEOMemQueueWithLock::ReadFromFile(char *szFileName)
+int CNEOMemQueueWithLock::ReadFromFile(const char *szFileName)
 {
     int nRet=0;
     m_Lock.EnableWrite();

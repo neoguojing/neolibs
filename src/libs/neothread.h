@@ -115,7 +115,7 @@ private:
 public:
 	bool ICanWork(void);
 	void PrintInfo();
-	void XGSysLog(char *szFormat,...);
+	void XGSysLog(const char *szFormat,...);
 	bool isTaskPoolContinue(void);
 	int getMaxThread(void);
 	int getThreadID(void);
@@ -193,7 +193,7 @@ private:
 	 CThreadManager m_ThreadManager;  
 	 CNEOBaseLibrary *m_pNEOBaseLib;
 public:
-	void XGSysLog(char *szFormat,...);
+	void XGSysLog(const char *szFormat,...);
 	//启动一个任务
 	bool StartTask(_TASKPOOL_CALLBACK pCallback,void *pCallParam=NULL,char *szAppName=NULL);
 	//利用Info描述启动多次任务
