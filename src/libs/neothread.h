@@ -1,7 +1,7 @@
 #ifndef NEOTHREAD
 
 #define NEOTHREAD
-
+namespace NEOLIB {
 class CNEOLog;
 class  CNEOThreadPool;
 class CNEOBaseLibrary;
@@ -14,34 +14,6 @@ class CThreadManager;
 //每个回调函数有一次运行权
 //运行结束，线程不退出，进入空闲状态
 typedef void(*_TPOOL_CALLBACK)(void *pCallParam,MBOOL &bThreadContinue);
-
-////各种常量设计
-//#define OPEN_THREAD_DELAY 250         //连续开启线程的最小时间间隔
-//#define WHILE_THREAD_COUNT 10         //最多开启10个空闲线程
-//#define DEFAULT_THREAD_SLEEP 500      //通常建议的线程睡眠时间
-//#define THREAD_POOL_EXIT_CODE 10000   //线程池退出代码
-////线程上限数
-//#ifdef _ARM_                          //嵌入式arm系统
-//#define THIS_POOLTHREAD_MAX 30
-//#else
-//#ifdef WIN32_NEO
-//#define THIS_POOLTHREAD_MAX 2000
-//#else
-//#define THIS_POOLTHREAD_MAX 300
-//#endif
-//#endif
-/////////////////////////////////////////////////////////////////
-////线程状态
-//#define TPOOL_THREAD_STATE_NOT_RUN 0    //线程未运行
-//#define TPOOL_THREAD_STATE_IDLE 1    //线程空闲
-//#define TPOOL_THREAD_STATE_BUSY 2    //线程运行
-/////////////////////////////////////////////////////////////////
-////注册返回结果定义
-//#define _THREADPOOL_CAN_NOT_USE 2    //线程池未初始化，无法工作
-//#define _THREADPOOL_OVERFLOW -1      //线程池溢出标志，无法注册
-//#define _THREADPOOL_PLEASE_WAIT 0    //线程池没有备用线程，请等待
-//#define _THREADPOOL_OK          1    //线程池注册成功
-//////////////////////////////////////////////////////////////
 
 //线程池管理数据结构
 typedef struct _THREAD_TOKEN_
@@ -234,5 +206,5 @@ public:
 	void PrintInfo(void);
 };
 
-
+}
 #endif

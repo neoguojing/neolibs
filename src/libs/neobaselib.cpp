@@ -9,6 +9,8 @@
 #include "neothread.h"                                      
 #include "neolog.h"
 #include "neobaselib.h"
+
+namespace NEOLIB {
 /////////////////////////////////////////////////////////////////////
 CNEOBaseLibrary::CNEOBaseLibrary(char *szAppName,
     char *szLogPath,
@@ -178,4 +180,6 @@ bool CNEOBaseLibrary::InfoPrintTaskCallback(void *pCallParam,int &nStatus)
        NEO_PRINTF("\n");
     }
     return false;
+}
+
 }

@@ -6,6 +6,7 @@
 #include "neolock.h"      
 #include "neodebug.h"        
 #include "neosafefunc.h"
+namespace NEOLIB {
 ///////////////////////////////////////////////export func
 // void neosafestrncpy(char *pD,char *pS,int nDestSize);
 // int neosafesprintf(char *szBuf,int nDestSize,char *szFormat,...);
@@ -212,5 +213,5 @@ public:
 	CNEOMemStack *m_pMemPool;//ÄÚ´æÕ»¶ÔÏó
 	CNEOLowDebug *m_pDebug;
 };
-
+}
 #endif

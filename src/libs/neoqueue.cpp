@@ -9,6 +9,8 @@
 #include "neolock.h"         
 #include "neosafefunc.h"
 #include "neoqueue.h"
+
+namespace NEOLIB {
 //主要为了实现报文拼接和信令构建（依赖内存池）
 //动态buffer
 
@@ -559,11 +561,11 @@ bool CNEOStaticBuffer::IHaveData(void)
 ///////////////////////////////////////////////////////////////
 //用于通信双方的操作系统一样的情况（效率偏低）
 //回调函数构型
-typedef bool(*_NEO_ENUM_DATA_CALLBACK)(
+/*typedef bool(*_NEO_ENUM_DATA_CALLBACK)(
     char *szData,//数据指针
     int nDataLen//数据长度
     ,void* pCallParam);//代传的参数
-static bool EnumDataCallback(char *szData,int nDataLen,void *pCallParam);
+static bool EnumDataCallback(char *szData,int nDataLen,void *pCallParam);*/
 //基本队列模型
 
 CNEOPopBuffer::CNEOPopBuffer(char *szBuffer,           //缓冲区指针
@@ -1471,3 +1473,4 @@ void CNEOMemQueueWithLock::PrintInside()
 
 //#else 
 //#endif
+}

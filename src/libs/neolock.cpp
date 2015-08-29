@@ -16,6 +16,7 @@
 ////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////
 //基本加锁类
+namespace NEOLIB {
 
 CMutexLock::CMutexLock(void)
 {
@@ -468,4 +469,6 @@ int CThreadManager::GetThreadCount(void)
 int CThreadManager::GetID(void)
 {
     return m_nThreadID.Add()-1;
+}
+
 }

@@ -14,6 +14,7 @@
 #include "neobaselib.h"
 #include "neolog.h"
 #include "neothread.h"
+namespace NEOLIB {
 ////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////
@@ -285,7 +286,7 @@ bool CNEOThreadPool::TPALLThreadIsIdle(void)
 /////////////////////////////////////////////////////////////////////////
 bool CNEOThreadPool::ThreadPoolIsContinue(void)
 {
-    return MvarGet(m_bThreadContinue);
+    return (bool)MvarGet(m_bThreadContinue);
 }
 
 int CNEOThreadPool::getThreadPoolThreadCount(void)
@@ -492,7 +493,7 @@ void CNEOTaskPool::TaskServiceThread(void *pCallParam,
     //获得本对象指针
     CNEOTaskPool *pThis=(CNEOTaskPool *)pCallParam;
     int nID=pThis->m_nThreadID.Add()-1;
-    pThis->XGSysLog("CNEOTaskPool::TaskServiceThread():start %d!\n",nID);
+	//pThis->XGSysLog("CNEOTaskPool::TaskServiceThread():start %d!\n",nID);
 
     while(MvarGet(bThreadContinue))          // 标准的线程池守候循环
     {
@@ -786,3 +787,4 @@ bool CNEOTaskRun::NEOTestRunTaskCallback(void *pCallParam,int &nStatus)
 }
 //#else
 //#endif
+}

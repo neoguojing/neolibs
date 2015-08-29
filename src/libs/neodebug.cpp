@@ -16,6 +16,7 @@
 ///////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////
+namespace NEOLIB {
 int SafePrintf(char *szBuf,int nMaxlength,char *szFormat,...)
 {
     int nListCount=0;
@@ -302,11 +303,11 @@ CCount::~CCount(){}
 
 void CCount::SCountReset(unsigned long n)
 {
-    ::SCountReset(m_Count,n);
+    NEOLIB::SCountReset(m_Count,n);
 }
 unsigned long CCount::SCountSum(void)
 {
-    return ::SCountSum(m_Count);
+    return NEOLIB::SCountSum(m_Count);
 }
 unsigned long CCount::SCountSetSum(unsigned long n)
 {
@@ -315,19 +316,19 @@ unsigned long CCount::SCountSetSum(unsigned long n)
 }
 unsigned long CCount::SCountGetSum(void)
 {
-    return ::SCountGetSum(m_Count);
+    return NEOLIB::SCountGetSum(m_Count);
 }
 unsigned long CCount::SCountGetX(void)
 {
-    return ::SCountGetX(m_Count);
+    return NEOLIB::SCountGetX(m_Count);
 }
 void CCount::SCountSetBegin(unsigned long n)
 {
-    ::SCountSetBegin(m_Count,n);
+    NEOLIB::SCountSetBegin(m_Count,n);
 }
 unsigned long CCount::SCountSetEnd(unsigned long n)
 {
-    return ::SCountSetEnd(m_Count,n);
+    return NEOLIB::SCountSetEnd(m_Count,n);
 }
 
 //////////////////////////////////////////////////////////
@@ -386,48 +387,6 @@ inline int GetRandomBeteen(int nBegin,int nEnd)
 ////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
-////回调函数原型
-//typedef void (*_APP_INFO_OUT_CALLBACK)(char *szInfo,void *pCallParam);
-////构建文件名的宏
-//#define FILENAME_STRING_LENGTH 256//文件名的统一长度
-//#define FULL_NAME(path,name,fullname,ext_name/*扩展名*/)\
-//{\
-//  if(strlen(path))\
-//    {\
-//     if(strlen(ext_name))\
-//          SafePrintf(fullname,\
-//          FILENAME_STRING_LENGTH,\
-//          "%s%s%s.%s",\
-//          path,\
-//          PATH_CHAR,\
-//          name,\
-//          ext_name);\
-//  else\
-//      SafePrintf(fullname,\
-//      FILENAME_STRING_LENGTH,\
-//      "%s%s.%s",\
-//      path,\
-//      PATH_CHAR,\
-//      name);\
-//    }\
-//  else\
-//   {\
-//        if(strlen(ext_name))\
-//          SafePrintf(fullname,\
-//          FILENAME_STRING_LENGTH,\
-//          "%s.%s",\
-//          path,\
-//          PATH_CHAR,\
-//          name,\
-//          ext_name);\
-//      else\
-//          SafePrintf(fullname,\
-//          FILENAME_STRING_LENGTH,\
-//          "%s",\
-//          name);\
-//    }\
-//}\
-
 //CLowDebug类，用于具体功能的输出
 
     //删除一个文件
@@ -468,7 +427,7 @@ int CNEOLowDebug::DebugToFile(char *szFormat,...)
     FILE *fp=NULL;
     int nListCount=0;
     va_list pArgList;
-    time_t t;
+    //time_t t;
     struct tm *pTM=NULL;
     int nLength=0;
     //构建时间戳
@@ -550,7 +509,7 @@ CNEOLowDebug::~CNEOLowDebug()
     DebugToFile("CNeoLowDebug:stop\n");
 }
 
-
+}
 //#else 
 //#define WIN_LINUX_vsnprintf vsprintf
 //#define PATH_CHAR "/"

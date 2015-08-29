@@ -3,22 +3,7 @@
 #define NEOLOCK
 #include "neoindex.h"
 
-////锁变量重定义
-//#ifdef WIN32_NEO
-//#define MUTEX CRITICAL_SECTION
-//#define MUTEXINIT(m) InitializeCriticalSection(m)
-//#define MUTEXLOCK(m) EnterCriticalSection(m)
-//#define MUTEXUNLOCK(m) LeaveCriticalSection(m)
-//#define MUTEXDESTROY(m) DeleteCriticalSection(m)
-//
-//#else
-//#define MUTEX pthread_mutex_t
-//#define MUTEXINIT(m) pthread_mutex_init(m,NULL)
-//#define MUTEXLOCK(m) pthread_mutex_lock(m)
-//#define MUTEXUNLOCK(m) pthread_mutex_unlock(m)
-//#define MUTEXDESTROY(m) pthread_mutex_destroy(m)
-//
-//#endif
+namespace NEOLIB {
 //c语言的加锁结构体
 typedef struct _MINT_
 {
@@ -185,5 +170,6 @@ public:
 	int GetID(void);
 };
 
+}
 
 #endif

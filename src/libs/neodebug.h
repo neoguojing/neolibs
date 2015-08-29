@@ -3,6 +3,8 @@
 #define NEODEBUG  
 #include "neoindex.h"
 #include "neolock.h"
+
+namespace NEOLIB {
 ///////////////////////////////////////////////export fun
 typedef struct COUNT_SUB//差值的数据结构
 {
@@ -105,46 +107,6 @@ public:
 ////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
-////构建文件名的宏
-//#define FILENAME_STRING_LENGTH 256//文件名的统一长度
-//#define FULL_NAME(path,name,fullname,ext_name/*扩展名*/)\
-//{\
-//  if(strlen(path))\
-//    {\
-//     if(strlen(ext_name))\
-//          SafePrintf(fullname,\
-//          FILENAME_STRING_LENGTH,\
-//          "%s%s%s.%s",\
-//          path,\
-//          PATH_CHAR,\
-//          name,\
-//          ext_name);\
-//  else\
-//      SafePrintf(fullname,\
-//      FILENAME_STRING_LENGTH,\
-//      "%s%s.%s",\
-//      path,\
-//      PATH_CHAR,\
-//      name);\
-//    }\
-//  else\
-//   {\
-//        if(strlen(ext_name))\
-//          SafePrintf(fullname,\
-//          FILENAME_STRING_LENGTH,\
-//          "%s.%s",\
-//          path,\
-//          PATH_CHAR,\
-//          name,\
-//          ext_name);\
-//      else\
-//          SafePrintf(fullname,\
-//          FILENAME_STRING_LENGTH,\
-//          "%s",\
-//          name);\
-//    }\
-//}\
-//
 //CLowDebug类，用于具体功能的输出
 class  CNEOLowDebug
 {
@@ -179,5 +141,5 @@ private:
     CMutexLock m_Lock;                           //线程安全锁
 };
 
-
+}
 #endif

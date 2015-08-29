@@ -2,16 +2,7 @@
 
 #define NEOQUEUE 
 
-//base lib
-//#ifndef NEOBASELIB                                
-//#include "neobaselib.h"
-//#define NEOBASELIB                                
-//#endif
-//#define NEO_BUFFER_STRING_MAX 1024
-//#define NEO_SAFE_BUFFER_MAX_SIZE (132*1024)
-////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////
+namespace NEOLIB {
 //pop buffer数据结构
 //队列的头
 typedef struct _NEO_POP_BUFFER_HEAD_
@@ -27,14 +18,6 @@ typedef struct _NEO_POP_BUFFER_TOKEN_HEAD_
 	int m_nDataLen;              //标示该单元的数据长度
 }SNEOPopBufferTokenHead;
 const unsigned long SNEOPopBufferTokenHeadSize=sizeof(SNEOPopBufferTokenHead);
-////求元素的长度
-//#define NEO_POP_BUFFER_TOKEN_LENGTH(n) (n+SNEOPopBufferTokenHeadSize)
-////元素的数据开始位置
-//#define NEO_POP_BUFFER_FIRST_TOKEN_BEGIN(p) \
-//	(((char*)p)+SNEOPopBufferHeadSize)
-////求数据开始位置的宏
-//#define NEO_POP_BUFFER_TOKEN_DATA_BEGIN(p)\
-//	(((char*)p)+SNEOPopBufferTokenHeadSize)
 ////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////
@@ -308,4 +291,5 @@ private:
 	char m_szAppName[NEO_APPLICATION_NAME_SIZE];
 };
 
+}
 #endif

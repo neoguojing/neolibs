@@ -1,12 +1,13 @@
 #include <iostream>
 using namespace std;
+
 #include "neodebug.h"
 #include "neomemmanager.h"
 #include "neoqueue.h"
 #include "neolog.h"
 #include "neothread.h"
 #include "neobaselib.h"
-
+using namespace NEOLIB;
 int main()
 {
 	char str[50] = "\0";

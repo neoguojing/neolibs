@@ -3,6 +3,8 @@
 #define NEOLOG
 #include "neoindex.h"
 
+namespace NEOLIB {
+
 class CNEOMemPoolWithLock;
 class CNEOLowDebug;
 class CMutexLock;
@@ -70,5 +72,5 @@ public:
 	bool m_bDebug3Flag;
 };
 
-
+}
 #endif
