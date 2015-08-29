@@ -1,0 +1,2 @@
+#!/bin/bash
+make  >tgt.out  2>&1
