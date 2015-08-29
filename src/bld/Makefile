@@ -22,6 +22,7 @@ clean :
 
 
 print: $(LIB_PATH)*.cpp $(LIB_PATH)*.cpp $(APP_PATH)main/*.cpp $(APP_PATH)util/*.cpp 
-	lpr -p $?
+	#lpr -p $?
+	@echo $?
 	touch print
 	
