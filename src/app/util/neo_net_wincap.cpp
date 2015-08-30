@@ -10,7 +10,7 @@
 #include <tchar.h>
 #include <WinSock2.h>
 
-#include "../include/neo_net_wincap.h"
+#include "../../include/neo_net_wincap.h"
 #include "../../include/neo_net_common_head.h"
 
 #define DATA_READ_TIME_OUT                           300

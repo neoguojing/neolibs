@@ -4,8 +4,8 @@
 #endif
 #include <stdio.h>
 #include <tchar.h>
-#include "../include/neo_net_wincap.h"
-#include "../include/neo_net_index,h.h"
+#include "../../include/neo_net_wincap.h"
+#include "../../include/neo_net_index,h.h"
 int _tmain(int argc, _TCHAR* argv[])
 {
     //slDevInfo sinfo={0};
