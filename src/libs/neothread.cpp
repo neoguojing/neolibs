@@ -448,7 +448,7 @@ bool CNEOTaskPool::RegisterATask(_TASKPOOL_CALLBACK pCallback,void *pUserParam)
 bool CNEOTaskPool::RegisterATaskDolt(STaskPoolToken *pToken,int nLimit)
 {
     bool bRet=false;
-    if(STaskPoolTokenSize==m_pTaskQueue->AddLast((char *)pToken,STaskPoolTokenSize),nLimit)
+    if(STaskPoolTokenSize==m_pTaskQueue->AddLast((char *)pToken,STaskPoolTokenSize) && nLimit)
         bRet=true;
     return bRet;
 }

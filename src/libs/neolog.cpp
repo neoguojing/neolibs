@@ -121,7 +121,7 @@ CNEOLog_DeleteFirstFile_End:
 }
 void CNEOLog::FixFileInfo(void)
 {
-    int nAddLastRet=0;
+    //int nAddLastRet=0;
     while(m_pFileInfoQueue->GetTokenCount()>=m_nHoldFileMax)
     {
        DeleteFirstFile();

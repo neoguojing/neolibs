@@ -559,17 +559,7 @@ bool CNEOStaticBuffer::IHaveData(void)
 ///////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////
-//用于通信双方的操作系统一样的情况（效率偏低）
-//回调函数构型
-/*typedef bool(*_NEO_ENUM_DATA_CALLBACK)(
-    char *szData,//数据指针
-    int nDataLen//数据长度
-    ,void* pCallParam);//代传的参数
-static bool EnumDataCallback(char *szData,int nDataLen,void *pCallParam);*/
-static bool EnumDataCallback(char *szData,int nDataLen,void *pCallParam)
-{
-	return true;
-}
+
 //基本队列模型
 
 CNEOPopBuffer::CNEOPopBuffer(char *szBuffer,           //缓冲区指针
@@ -618,7 +608,9 @@ void CNEOPopBuffer::PrintInside()
     NEO_PRINTF("CNEOPopBuffer::PrintInside():Token:%d Bytes:%d\n",m_pHead->m_nTokenCount,m_pHead->m_nAllByteSCount);
     for(i=0;i<m_pHead->m_nTokenCount;i++)
     {
-        pTokenBegin+=NEO_POP_BUFFER_TOKEN_LENGTH(pTokenHead->m_nDataLen);
+        NEO_PRINTF("[%d]-%s\n",pTokenHead->m_nDataLen,pTokenData);
+		//Debug_bin(pTokenData,pTokenHead->m_nDataLen);
+		pTokenBegin+=NEO_POP_BUFFER_TOKEN_LENGTH(pTokenHead->m_nDataLen);
         pTokenHead=(SNEOPopBufferTokenHead*)pTokenBegin;
         pTokenData=NEO_POP_BUFFER_TOKEN_DATA_BEGIN(pTokenBegin);
     }

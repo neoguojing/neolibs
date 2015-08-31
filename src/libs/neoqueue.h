@@ -152,7 +152,7 @@ typedef bool(*_NEO_ENUM_DATA_CALLBACK)(
 	char *szData,//数据指针
 	int nDataLen//数据长度
 	,void* pCallParam);//代传的参数
-static bool EnumDataCallback(char *szData,int nDataLen,void *pCallParam);
+//static bool EnumDataCallback(char *szData,int nDataLen,void *pCallParam);
 //基本队列模型
 class  CNEOPopBuffer
 {
