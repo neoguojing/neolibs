@@ -11,7 +11,7 @@
 #include "neosafefunc.h"                  
 #include "neomemmanager.h"                          
 #include "neoqueue.h"                               
-#include "neobaselib.h"
+//#include "neobaselib.h"
 #include "neolog.h"
 #include "neothread.h"
 namespace NEOLIB {
@@ -644,9 +644,16 @@ void CNEOTaskRunInfo::CopyFrom(SNEOTaskRunInfo *pInfo)
 //////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////
-CNEOTaskRun::CNEOTaskRun(CNEOBaseLibrary *pNEOBaseLib)
+/*CNEOTaskRun::CNEOTaskRun(CNEOBaseLibrary *pNEOBaseLib)
 {
     m_pNEOBaseLib=pNEOBaseLib;
+}*/
+
+CNEOTaskRun::CNEOTaskRun(CNEOMemPoolWithLock *pMemPool,CNEOLog *pLog,CNEOTaskPool *pTaskPool)
+{
+	m_pMemPool = pMemPool;
+	m_pLog = pLog;
+	m_pTaskPool = pTaskPool;
 }
 
 CNEOTaskRun::~CNEOTaskRun()
@@ -667,7 +674,7 @@ void CNEOTaskRun::XGSysLog(const char *szFormat,...)
     if(nListCount>(nMaxLength-1))
         nListCount=nMaxLength-1;
     *(szBuf+nListCount)='\0';
-    m_pNEOBaseLib->m_pLog->_XGSysLog("%s\n",szBuf);
+    m_pLog->_XGSysLog("%s\n",szBuf);
     return;
 }
 
@@ -693,11 +700,11 @@ bool CNEOTaskRun::StartTask(SNEOTaskRunInfo *pInfoStruct,char *szAppName)
     if( !m_ThreadManager.ThreadContinue())//本对象为启动
         m_ThreadManager.Open();
     //远端传参，动态分配
-    SNEOTestRunTaskCallbackParam *pParam=(SNEOTestRunTaskCallbackParam*)m_pNEOBaseLib->m_pMemPool->Malloc(
+    SNEOTestRunTaskCallbackParam *pParam=(SNEOTestRunTaskCallbackParam*)m_pMemPool->Malloc(
         SNEOTestRunTaskCallbackParamSize,"CNEOTaskRun::pParam");
     if(pParam)
     {
-       pParam->m_pNEOBaseLib=m_pNEOBaseLib;
+       //pParam->m_pNEOBaseLib=m_pNEOBaseLib;
        pParam->m_pThis=this;
        pParam->m_nRunIndex=0;              //状态机回归
        if(szAppName)
@@ -708,7 +715,7 @@ bool CNEOTaskRun::StartTask(SNEOTaskRunInfo *pInfoStruct,char *szAppName)
        CNEOTaskRunInfo InfoObj(&(pParam->m_Info));
        InfoObj.CopyFrom(pInfoStruct);
        //注册任务
-       bRet=m_pNEOBaseLib->m_pTaskPool->RegisterATask(NEOTestRunTaskCallback,pParam);
+       bRet=m_pTaskPool->RegisterATask(NEOTestRunTaskCallback,pParam);
        if(bRet)
        {
           m_ThreadManager.AddThread();
@@ -778,7 +785,7 @@ bool CNEOTaskRun::NEOTestRunTaskCallback(void *pCallParam,int &nStatus)
         if(0<strlen(pParam->szAppName))
             pThis->XGSysLog("%s stop!\n",pParam->szAppName);
         pThis->m_ThreadManager.DecAThread();
-        pThis->m_pNEOBaseLib->m_pMemPool->Free(pParam);
+        pThis->m_pMemPool->Free(pParam);
         return false;
     }
     if(bGotoNextStatus)

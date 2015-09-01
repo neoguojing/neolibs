@@ -1,5 +1,4 @@
 #include <iostream>
-using namespace std;
 
 #include "neodebug.h"
 #include "neomemmanager.h"
@@ -7,7 +6,11 @@ using namespace std;
 #include "neolog.h"
 #include "neothread.h"
 #include "neobaselib.h"
+
+
 using namespace NEOLIB;
+using namespace std;
+
 int main()
 {
 	char str[50] = "\0";
@@ -224,7 +227,7 @@ int main()
 	mlbufer->ReadFromFile("queue1");
 	mlbufer->PrintInside();
 
-	printf(">>>>>>>>>>>>>>>>>>>>>>>>CNEOMemQueueWithLock>>>>>>>>>>>>>>>>>>>>>>>>\n");
+	printf(">>>>>>>>>>>>>>>>>>>>>>>>CNEOLog>>>>>>>>>>>>>>>>>>>>>>>>\n");
 	CNEOLog *plog = new CNEOLog(debug,mempool,".","test");
 	plog->_XGDebugForBin("_XGDebugForBin",15);
 	plog->_XGSysLog("_XGSysLog:%d",15);
@@ -264,11 +267,13 @@ int main()
 	SNEOTaskRunInfo taskInfo;
 	CNEOTaskRunInfo *pTaskRunInfo = new CNEOTaskRunInfo(&taskInfo);
 	Sleep(OPEN_THREAD_DELAY);
+
+	printf(">>>>>>>>>>>>>>>>>>>>>>>>CNEOTaskRun>>>>>>>>>>>>>>>>>>>>>>>>\n");
+    CNEOTaskRun *pTaskRun = new CNEOTaskRun(mempool,plog,ptaskpool);
+
 	printf(">>>>>>>>>>>>>>>>>>>>>>>>CNEOBaseLibrary>>>>>>>>>>>>>>>>>>>>>>>>\n");
 	CNEOBaseLibrary *pBaseLib = new CNEOBaseLibrary("baselib",".","log",NULL);
-
-    printf(">>>>>>>>>>>>>>>>>>>>>>>>CNEOTaskRun>>>>>>>>>>>>>>>>>>>>>>>>\n");
-    CNEOTaskRun *pTaskRun = new CNEOTaskRun(pBaseLib);
+    
 #ifdef WIN32
     system("pause");
 #else

@@ -88,7 +88,7 @@ CNEOBaseLibrary::CNEOBaseLibrary(const char *szAppName,
     //此时可以利用内存池的注册机制
     m_pMemPool->Register(m_pTaskPool,"CNEOBaseLibrary::m_pTaskPool");
 
-    m_pTaskRun=new CNEOTaskRun(this);
+    m_pTaskRun=new CNEOTaskRun(m_pMemPool,m_pLog,m_pTaskPool);
     if(!m_pTaskRun)
     {
         m_pDebug->DebugToFile("CNEOBaseLibrary():m_pTaskRun new fail\n");

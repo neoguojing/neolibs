@@ -4,6 +4,30 @@
 #include "neoindex.h"
 
 namespace NEOLIB {
+
+template <class mType>
+struct MVALUE
+{
+	mType m_nValue;
+	MUTEX m_MyLock;
+};
+
+template <class cmType>
+class  CMutexTemplate
+{
+public:
+	CMutexTemplate(cmType nValue);
+	~CMutexTemplate(void);
+public:
+	cmType Get(void);
+	cmType Set(cmType nValue);
+	cmType Add(int nValue=1);
+	cmType Dec(int nValue=1);
+public:
+	MVALUE<cmType> m_cmValue;
+};
+
+
 //c语言的加锁结构体
 typedef struct _MINT_
 {

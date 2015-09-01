@@ -1,22 +1,69 @@
 
 #include "neolock.h"
 
-//锁定义
-//#ifdef WIN32_NEO
-//
-////#pragma once 
-////#include <Windows.h>
-//
-//
-//#else
-//#include <pthread.h>
-//#endif
-
-/////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////
 //基本加锁类
 namespace NEOLIB {
+
+template<class cmType>
+CMutexTemplate<cmType>::CMutexTemplate(cmType nValue)
+{
+
+	MUTEXINIT(&m_cmValue.m_MyLock);
+    m_cmValue.m_nValue=nValue;
+}
+
+template<class cmType>
+CMutexTemplate<cmType>::~CMutexTemplate(void)
+{
+	MUTEXLOCK(&m_cmValue.m_MyLock);
+    MUTEXUNLOCK(&m_cmValue.m_MyLock);
+    /////////////////////////////////
+    MUTEXDESTROY(&m_cmValue.m_MyLock);
+}
+
+template <class cmType>
+cmType CMutexTemplate<cmType>::Get(void)
+{
+	cmType nValue;
+    MUTEXLOCK(&m_cmValue.m_MyLock);
+    nValue=m_cmValue.m_nValue;
+    MUTEXUNLOCK(&m_cmValue.m_MyLock);
+    return nValue;
+}
+
+template <class cmType>
+cmType CMutexTemplate<cmType>::Set(cmType nValue)
+{
+	MUTEXLOCK(&m_cmValue.m_MyLock);
+    m_cmValue.m_nValue=nValue;
+    MUTEXUNLOCK(&m_cmValue.m_MyLock);
+    return nValue;
+}
+
+template <class cmType>
+cmType CMutexTemplate<cmType>::Add(int nValue=1)
+{
+	cmType nRet;
+    MUTEXLOCK(&m_cmValue.m_MyLock);
+    m_cmValue.m_nValue+=nValue;
+    nRet=m_cmValue.m_nValue;
+    MUTEXUNLOCK(&m_cmValue.m_MyLock);
+    return nRet;
+}
+
+template <class cmType>
+cmType CMutexTemplate<cmType>::Dec(int nValue=1)
+{
+	int nRet;
+    MUTEXLOCK(&m_cmValue.m_MyLock);
+    m_cmValue.m_nValue-=nValue;
+    nRet=m_cmValue.m_nValue;
+    MUTEXUNLOCK(&m_cmValue.m_MyLock);
+    return nRet;
+}
+
 
 CMutexLock::CMutexLock(void)
 {
@@ -140,19 +187,7 @@ int CMbool::Set(int nValue)
 
 //////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////
-//void NEOMinSleep(void)
-//{
-//#ifdef WIN32_NEO
-//  Sleep(1);
-//#else
-//  struct timespec sleeptm;
-//  sleeptm.tv_sec=0;
-//  sleeptm.tv_nsec=1000;//1000ns=1us
-//  if(nanosleep(&sleeptm,NULL)==-1)
-//      usleep(1);
-//#endif 
-//}
+
 //单写多读锁,只是单独的锁
 void MRSWLock_Create(SNeoMultiReadSingleWriteLock *pLock)
 {

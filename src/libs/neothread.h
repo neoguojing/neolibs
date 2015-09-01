@@ -4,8 +4,9 @@
 namespace NEOLIB {
 class CNEOLog;
 class  CNEOThreadPool;
-class CNEOBaseLibrary;
+//class CNEOBaseLibrary;
 class CNEOTaskRun;
+class CNEOMemPoolWithLock;
 class CThreadManager;
 ////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////
@@ -146,7 +147,7 @@ const unsigned long SNEOTaskRunInfoSize=sizeof(SNEOTaskRunInfo);
 typedef struct _NEOTeskRunTaskCallback_Param_
 {
 	SNEOTaskRunInfo m_Info;                  //任务结构描述体
-	CNEOBaseLibrary *m_pNEOBaseLib;          //基本聚合工具类
+	//CNEOBaseLibrary *m_pNEOBaseLib;          //基本聚合工具类
 	CNEOTaskRun *m_pThis;                    //任务运行体对象指针
 	int m_nRunIndex;                         //当前执行的步据
 	char szAppName[256];                     //应用名
@@ -185,13 +186,20 @@ public:
 class  CNEOTaskRun
 {
 public:
-	CNEOTaskRun(CNEOBaseLibrary *pNEOBaseLib);
+	//CNEOTaskRun(CNEOBaseLibrary *pNEOBaseLib);
+	CNEOTaskRun(CNEOMemPoolWithLock *pMemPool,CNEOLog *pLog,CNEOTaskPool *pTaskPool);
 	~CNEOTaskRun();
 private:
 	//任务回调函数
 	 static bool NEOTestRunTaskCallback(void *pCallParam,int &nStatus);
-	 CThreadManager m_ThreadManager;  
-	 CNEOBaseLibrary *m_pNEOBaseLib;
+	CThreadManager m_ThreadManager;  
+	//CNEOBaseLibrary *m_pNEOBaseLib;
+	  //日志模块
+    CNEOLog *m_pLog;
+    //内存池
+    CNEOMemPoolWithLock *m_pMemPool;
+    //线程池
+    CNEOTaskPool *m_pTaskPool;
 public:
 	void XGSysLog(const char *szFormat,...);
 	//启动一个任务
