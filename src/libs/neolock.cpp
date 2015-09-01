@@ -43,7 +43,7 @@ cmType CMutexTemplate<cmType>::Set(cmType nValue)
 }
 
 template <class cmType>
-cmType CMutexTemplate<cmType>::Add(int nValue=1)
+cmType CMutexTemplate<cmType>::Add(int nValue)
 {
 	cmType nRet;
     MUTEXLOCK(&m_cmValue.m_MyLock);
@@ -54,7 +54,7 @@ cmType CMutexTemplate<cmType>::Add(int nValue=1)
 }
 
 template <class cmType>
-cmType CMutexTemplate<cmType>::Dec(int nValue=1)
+cmType CMutexTemplate<cmType>::Dec(int nValue)
 {
 	int nRet;
     MUTEXLOCK(&m_cmValue.m_MyLock);

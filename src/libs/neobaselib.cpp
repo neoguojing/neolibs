@@ -11,6 +11,9 @@
 #include "neobaselib.h"
 
 namespace NEOLIB {
+
+CMutexLock m_Lock;
+CNEOBaseLibrary* CNEOBaseLibrary::m_Instance = NULL;
 /////////////////////////////////////////////////////////////////////
 CNEOBaseLibrary::CNEOBaseLibrary(const char *szAppName,
     const char *szLogPath,
@@ -180,6 +183,31 @@ bool CNEOBaseLibrary::InfoPrintTaskCallback(void *pCallParam,int &nStatus)
        NEO_PRINTF("\n");
     }
     return false;
+}
+
+CNEOBaseLibrary *CNEOBaseLibrary::getInstance(const char *szAppName,
+    const char *szLogPath,
+    const char *szTempPath,
+    _BASE_LIBRARY_PRINT_INFO_CALLBACK pPrintInfoCallback, //info输出回调函数指针
+    int nTaskPoolThreadMax, //任务池最大的线程数
+    bool bDebugToTTYFlag,                 //debug输出到屏幕开关
+    void* pPrintInfoCallbackParam,       //info回调函数指针
+    _APP_INFO_OUT_CALLBACK pInfoOutCallback,// 应用程序回调函数
+    void *pInfoOutCallbackParam)
+{
+	if(m_Instance==NULL)
+	{
+		m_Lock.Lock();
+		{
+			if(m_Instance==NULL)
+			{
+				m_Instance = new CNEOBaseLibrary(szAppName,szLogPath,szTempPath,pPrintInfoCallback,nTaskPoolThreadMax, \
+					bDebugToTTYFlag,pPrintInfoCallbackParam,pInfoOutCallback,pInfoOutCallbackParam);
+			}
+		}
+		m_Lock.UnLock();
+	}
+	return m_Instance;
 }
 
 }

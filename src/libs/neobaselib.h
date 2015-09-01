@@ -19,7 +19,8 @@ class CNEOLowDebug;
 
 class  CNEOBaseLibrary
 {
-public:
+private:
+	static CNEOBaseLibrary* m_Instance;
     CNEOBaseLibrary(const char *szAppName,
         const char *szLogPath,
         const char *szTempPath,
@@ -30,6 +31,8 @@ public:
         _APP_INFO_OUT_CALLBACK pInfoOutCallback=NULL,// 应用程序回调函数
         void *pInfoOutCallbackParam=NULL
         );
+
+public:
     ~CNEOBaseLibrary();
 private:
     //info打印任务
@@ -37,7 +40,7 @@ private:
     time_t m_tLastPrint;
     //打印信息回调函数
     _BASE_LIBRARY_PRINT_INFO_CALLBACK m_pPrintInfoCallback;
-    void *m_pInfoOutCallbackParam;
+    void *m_pInfoOutCallbackParam;  
 public:
     //应用名的备份保存
     char m_szAppName[NEO_APPLICATION_NAME_SIZE];
@@ -55,6 +58,16 @@ public:
     CNEOTaskRun *m_pTaskRun;
     //debug没运行一次，覆盖上次
     CNEOLowDebug *m_pDebug;
+	//安全锁
+	static CNEOBaseLibrary *getInstance(const char *szAppName,
+								const char *szLogPath,
+								const char *szTempPath,
+								 _BASE_LIBRARY_PRINT_INFO_CALLBACK pPrintInfoCallback, //info输出回调函数指针
+								int nTaskPoolThreadMax=DEFAULT_THREAD_MAX, //任务池最大的线程数
+								bool bDebugToTTYFlag=true,                 //debug输出到屏幕开关
+								void* pPrintInfoCallbackParam=NULL,       //info回调函数指针
+								_APP_INFO_OUT_CALLBACK pInfoOutCallback=NULL,// 应用程序回调函数
+								void *pInfoOutCallbackParam=NULL);
 
 #ifdef WIN32
        bool m_bSocketInitFlag;
@@ -65,5 +78,7 @@ public:
 #endif
 };
 
+
 }
 #endif
+
