@@ -16,12 +16,13 @@ class CNEOMemPoolWithLock;
 class CNEOTaskPool;
 class CNEOTaskRun;
 class CNEOLowDebug;
+
 class  CNEOBaseLibrary
 {
 public:
-    CNEOBaseLibrary(char *szAppName,
-        char *szLogPath,
-        char *szTempPath,
+    CNEOBaseLibrary(const char *szAppName,
+        const char *szLogPath,
+        const char *szTempPath,
          _BASE_LIBRARY_PRINT_INFO_CALLBACK pPrintInfoCallback, //info输出回调函数指针
         int nTaskPoolThreadMax=DEFAULT_THREAD_MAX, //任务池最大的线程数
         bool bDebugToTTYFlag=true,                 //debug输出到屏幕开关

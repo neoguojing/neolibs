@@ -821,7 +821,7 @@ CNEOPopBuffer_MoveAllData_End:
 /////////////////////////////////////////////////////////////
 //动态内存分配，队列采用列表的(依赖内存池)
 CNEOMemQueue::CNEOMemQueue(CNEOLowDebug *pDebug,CNEOMemPoolWithLock *pMemPool,
-    char *szAppName,                    // 应用程序名，代表队列名
+    const char *szAppName,                    // 应用程序名，代表队列名
     int nMaxToken  //最大token上限
     ):m_nMaxToken(nMaxToken),m_nTokenCount(0),
     m_pHead(NULL),m_pLast(NULL),
@@ -1301,7 +1301,7 @@ bool CNEOMemQueue::PushDataCallback(char *szData,int nDataLen,void *pCallParam)
 //带安全锁的类
 CNEOMemQueueWithLock::CNEOMemQueueWithLock(CNEOLowDebug *pDebug,
     CNEOMemPoolWithLock *pMemPool,
-    char *szAppName,                    // 应用程序名，代表队列名
+    const char *szAppName,                    // 应用程序名，代表队列名
     int nMaxToken
     )
 {

@@ -17,8 +17,8 @@ namespace NEOLIB {
 ///////////////////////////////////////////////////////////////////
 CNEOLog::CNEOLog(CNEOLowDebug *pDebug,
         CNEOMemPoolWithLock *pMemPool,        //内存指针池
-        char *szLogPath,                      //日志路径
-        char *szAppName,                      //应用名
+        const char *szLogPath,                      //日志路径
+        const char *szAppName,                      //应用名
         int nHoldFileMax,                 //保存的最大文件数
         bool bSyslogFlag,                //日志级别开关
         bool bDebugFlag,

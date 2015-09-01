@@ -200,6 +200,7 @@ public:
 	//枚举遍历所有数据，提交回调函数处理，并删除数据
 	int MoveAllData(_NEO_ENUM_DATA_CALLBACK pCallBack,void *pCallParam);
 };
+
 //////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -217,7 +218,7 @@ private:
 	char m_szAppName[NEO_APPLICATION_NAME_SIZE];
 public:
 	CNEOMemQueue(CNEOLowDebug *pDebug,CNEOMemPoolWithLock *pMemPool,
-		char *szAppName,                    // 应用程序名，代表队列名
+		const char *szAppName,                    // 应用程序名，代表队列名
 		int nMaxToken=NEO_CHAIN_TOKEN_MAX  //最大token上限
 		);
 	~CNEOMemQueue();
@@ -259,13 +260,14 @@ private:
 	//回调函数申明
 	static bool PushDataCallback(char *szData,int nDataLen,void *pCallParam);
 };
+
 //带安全锁的类
 class  CNEOMemQueueWithLock
 {
 public:
 	CNEOMemQueueWithLock(CNEOLowDebug *pDebug,
 		CNEOMemPoolWithLock *pMemPool,
-		char *szAppName,                    // 应用程序名，代表队列名
+		const char *szAppName,                    // 应用程序名，代表队列名
 		int nMaxToken=NEO_CHAIN_TOKEN_MAX
 		);
 	~CNEOMemQueueWithLock();
