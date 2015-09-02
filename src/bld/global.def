@@ -1,0 +1,2 @@
+export DEPEND_LIST = depend_list
+export LD_LIBRARY_PATH+=$(LIB_TARGET_PATH)

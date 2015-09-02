@@ -1,5 +1,10 @@
 #need man to modify this file
-.PHONY :neolib
+
+$(DEPEND_LIST):neolib app
+
 neolib:
 	cd $(LIB_PATH) && $(MAKE) 
+	
+app:
+	cd $(APP_PATH)main/ && $(MAKE)
 	

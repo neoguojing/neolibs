@@ -1,17 +1,13 @@
-
 include tool.def
 include mkpath.def
-include mklist
+include global.def
 
 
-
-TESTS =
-
-all : $(TESTS)
+all : $(DEPEND_LIST)
 	@echo $(NEO_ROOT)
 
-
-
+include mklist
+	
 .PHONY :clean
 clean :
 	rm -rf $(OBJECT_PATH)*.o; \
