@@ -1,11 +1,11 @@
 #neolib makefile
-export NEOLIB_TGT = $(LIB_TARGET_PATH)libneolib.so
+export NEOLIB_TGT = $(LIB_TARGET_PATH)libneo.so
 export SOURCES= $(wildcard *.cpp)
 
 TMP_OBJS = $(patsubst %.cpp, %.o,$(SOURCES))
 export OBJS = $(addprefix $(OBJECT_PATH),$(TMP_OBJS))
 
-NEOLIB_TGT:$(TMP_OBJS) 
+$(NEOLIB_TGT):$(TMP_OBJS) 
 	@echo "source files:" $(SOURCES)
 	@echo "object files:" $(TMP_OBJS)
 	#编译程序
