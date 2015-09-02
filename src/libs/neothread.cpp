@@ -320,7 +320,7 @@ void printThreadInfo(void *pCallParam,MBOOL &bThreadContinue)
         if(TPOOL_THREAD_STATE_NOT_RUN != (pPoint[i].m_nState.m_nValue))
         {
             printf("m_hThread=%u,m_nExitCode=%d,m_nState=%d,m_nThreadID=%d,m_pCallback=%p,m_pCallParam=%p,m_pThreadPoolObjext=%p,\r\n",\
-                    pPoint[i].m_hThread,pPoint[i].m_nExitCode,pPoint[i].m_nState.m_nValue,pPoint[i].m_nThreadID,\
+                    (unsigned int)pPoint[i].m_hThread,pPoint[i].m_nExitCode,pPoint[i].m_nState.m_nValue,pPoint[i].m_nThreadID,\
                     pPoint[i].m_pCallback,pPoint[i].m_pCallParam,pPoint[i].m_pThreadPoolObjext
                     );
         }

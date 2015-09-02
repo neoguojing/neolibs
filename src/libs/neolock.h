@@ -5,14 +5,14 @@
 
 namespace NEOLIB {
 
-template <class mType>
+template<class mType>
 struct MVALUE
 {
 	mType m_nValue;
 	MUTEX m_MyLock;
 };
 
-template <class cmType>
+template<class cmType>
 class  CMutexTemplate
 {
 public:
@@ -26,6 +26,64 @@ public:
 public:
 	MVALUE<cmType> m_cmValue;
 };
+
+template<class cmType>
+CMutexTemplate<cmType>::CMutexTemplate(cmType nValue)
+{
+
+	MUTEXINIT(&m_cmValue.m_MyLock);
+    m_cmValue.m_nValue=nValue;
+}
+
+template<class cmType>
+CMutexTemplate<cmType>::~CMutexTemplate(void)
+{
+	MUTEXLOCK(&m_cmValue.m_MyLock);
+    MUTEXUNLOCK(&m_cmValue.m_MyLock);
+    /////////////////////////////////
+    MUTEXDESTROY(&m_cmValue.m_MyLock);
+}
+
+template <class cmType>
+cmType CMutexTemplate<cmType>::Get(void)
+{
+	cmType nValue;
+    MUTEXLOCK(&m_cmValue.m_MyLock);
+    nValue=m_cmValue.m_nValue;
+    MUTEXUNLOCK(&m_cmValue.m_MyLock);
+    return nValue;
+}
+
+template <class cmType>
+cmType CMutexTemplate<cmType>::Set(cmType nValue)
+{
+	MUTEXLOCK(&m_cmValue.m_MyLock);
+    m_cmValue.m_nValue=nValue;
+    MUTEXUNLOCK(&m_cmValue.m_MyLock);
+    return nValue;
+}
+
+template <class cmType>
+cmType CMutexTemplate<cmType>::Add(int nValue)
+{
+	cmType nRet;
+    MUTEXLOCK(&m_cmValue.m_MyLock);
+    m_cmValue.m_nValue+=nValue;
+    nRet=m_cmValue.m_nValue;
+    MUTEXUNLOCK(&m_cmValue.m_MyLock);
+    return nRet;
+}
+
+template <class cmType>
+cmType CMutexTemplate<cmType>::Dec(int nValue)
+{
+	int nRet;
+    MUTEXLOCK(&m_cmValue.m_MyLock);
+    m_cmValue.m_nValue-=nValue;
+    nRet=m_cmValue.m_nValue;
+    MUTEXUNLOCK(&m_cmValue.m_MyLock);
+    return nRet;
+}
 
 
 //c语言的加锁结构体

@@ -95,7 +95,8 @@ public:
 	~CNEOMemStack();
 private:
 	CNEOMemStackToken *m_pHead;//左枝树的以一个节点
-	CMRSWint m_pMaxPoint;//统计当前用到的最大内存指针
+	//CMRSWint m_pMaxPoint;//统计当前用到的最大内存指针
+	CMutexTemplate<void *> m_pMaxPoint;
 	CMRSWint m_nAllBlockCount;//统计当前用到的所有内存块
 	CMRSWint m_nMemoryUse;//统计当前使用的内存总字节数
 	CMRSWbool m_CloseFlag;//关闭标签

@@ -179,7 +179,8 @@ void CNEOMemStackToken::DestroySon(SNeoMemroryBlockHead *pSon)
 //聚合，实现左枝树的管理
 
 CNEOMemStack::CNEOMemStack(CNEOLowDebug *pDebug):
-    m_pDebug(pDebug)
+    m_pMaxPoint(0),m_nAllBlockCount(),m_nMemoryUse(),
+		m_CloseFlag(),m_pDebug(pDebug)
 {
     m_CloseFlag.Set(false);//关闭标志清空
     //m_pDebug=pDebug;
@@ -249,8 +250,8 @@ void *CNEOMemStack::Malloc(int nSize)
         //递归分配
         pRet=m_pHead->Malloc(nSize,m_nAllBlockCount,m_nMemoryUse);
         //统计最大的指针
-        if(m_pMaxPoint.Get()<(int)pRet)
-            m_pMaxPoint.Set((int)pRet);
+        if(m_pMaxPoint.Get()<pRet)
+            m_pMaxPoint.Set(pRet);
     }
     return pRet;
 }

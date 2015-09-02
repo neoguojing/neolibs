@@ -274,6 +274,7 @@ int main()
 	printf(">>>>>>>>>>>>>>>>>>>>>>>>CNEOBaseLibrary>>>>>>>>>>>>>>>>>>>>>>>>\n");
 	//CNEOBaseLibrary *pBaseLib = new CNEOBaseLibrary("baselib",".","log",NULL);
 	CNEOBaseLibrary *pBaseLib = CNEOBaseLibrary::getInstance("baselib",".","log",NULL);
+	CNEOBaseLibrary *pBaseLib1 = CNEOBaseLibrary::getInstance("baselib",".","log",NULL);
     
 #ifdef WIN32
     system("pause");
