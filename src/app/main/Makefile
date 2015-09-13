@@ -8,8 +8,8 @@ export OBJS = $(addprefix $(OBJECT_PATH),$(TMP_OBJS))
 $(APP_TGT):$(TMP_OBJS) 
 	@echo "source files:" $(SOURCES)
 	@echo "object files:" $(TMP_OBJS)
-	$(CXX) $(TMP_OBJS) $(CXXFLAGS) -L $(LIB_TARGET_PATH) -lneolib -o $(APP_TGT)
-	#$(CXX) $(TMP_OBJS) $(CXXFLAGS) -L. -lneo -o $(APP_TGT)	   
+	$(CXX) -o $(APP_TGT) $(TMP_OBJS) $(CXXFLAGS) -I$(PUB_INCLUDE) -L$(LIB_TARGET_PATH) -lneolib -Wl,-rpath=$(LIB_TARGET_PATH)
+   
 #sinclude $(SOURCES:.cpp=.d)
 sinclude $(addprefix $(OBJECT_PATH),$(SOURCES:.cpp=.d))
 
