@@ -1,7 +1,11 @@
 #need man to modify this file
 
-$(DEPEND_LIST):neolib app
+$(DEPEND_LIST):various neolib app 
 
+various:
+	@echo "set the eviroment"
+	export LD_LIBRARY_PATH=$(LIB_TARGET_PATH)
+	export
 neolib:
 	cd $(LIB_PATH) && $(MAKE) 
 	
