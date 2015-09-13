@@ -34,8 +34,11 @@ export TOOL_ROOT_PATH = $(NEO_ROOT)/tools/
 #	@echo $(TOOL_ROOT_PATH)
 export GTEST_PATH = $(TOOL_ROOT_PATH)gtest/
 #	@echo $(GTEST_PATH)
+###################include path############################
+export PUB_INCLUDE = $(SRC_ROOT_PATH)include/
+export APP_INCLUDE = $(APP_PATH)include/
 ###################vpath############################
 vpath %.o $(OBJECT_PATH)
-vpath %.h $(SRC_ROOT_PATH)include/ $(APP_PATH)include/
+vpath %.h $(APP_INCLUDE) $(APP_INCLUDE)
 vpath %.a $(LIB_TARGET_PATH)
 vpath %.so $(LIB_TARGET_PATH)
