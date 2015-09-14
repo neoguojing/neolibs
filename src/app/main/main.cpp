@@ -11,7 +11,7 @@
 using namespace NEOLIB;
 using namespace std;
 
-int main()
+int main(int argc,char **argv,char *env[])
 {
 	char str[50] = "\0";
 	char buffer[50] = "\0";
