@@ -5,7 +5,8 @@ $(DEPEND_LIST):various neolib app
 various:
 	@echo "set the eviroment"
 	export LD_LIBRARY_PATH=$(LIB_TARGET_PATH)
-	#export PATH=$PATH:$LIB_TARGET_PATH
+	#export PATH="$PATH:/cygdrive/f/neogithub/neolibs.git/trunk/build/libs"
+	#./syspath.sh
 	export
 neolib:
 	cd $(LIB_PATH) && $(MAKE) 
