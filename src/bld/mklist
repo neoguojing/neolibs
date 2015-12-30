@@ -9,6 +9,7 @@ various:
 	#./syspath.sh
 	export
 neolib:
+	cp -r $(LIB_PATH)*.h $(PUB_INCLUDE)
 	cd $(LIB_PATH) && $(MAKE) 
 	
 app:

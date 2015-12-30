@@ -16,7 +16,8 @@ clean :
 	rm -rf $(LIB_TARGET_PATH)*;\
 	rm -rf $(APP_PATH)main/*.o;\
 	rm -rf $(APP_PATH)util/*.o;\
-	rm -rf $(LIB_PATH)*.o
+	rm -rf $(LIB_PATH)*.o;\
+	rm -rf $(PUB_INCLUDE)*.h
 
 
 
