@@ -1,11 +1,25 @@
 #include <iostream>
 
-#include "../../include/neodebug.h"
-#include "../../include/neomemmanager.h"
-#include "../../include/neoqueue.h"
-#include "../../include/neolog.h"
-#include "../../include/neothread.h"
-#include "../../include/neobaselib.h"
+#include "../../libs/neodebug.h"
+#include "../../libs/neomemmanager.h"
+#include "../../libs/neoqueue.h"
+#include "../../libs/neolog.h"
+#include "../../libs/neothread.h"
+#include "../../libs/neobaselib.h"
+#include "../../libs/factory.h"
+#include "../../libs/singleton.h"
+#include "../../libs/bridge.h"
+#include "../../libs/adapter.h"
+#include "../../libs/decorator.h"
+#include "../../libs/composite.h"
+#include "../../libs/proxy.h"
+#include "../../libs/observer.h"
+#include "../../libs/state.h"
+#include "../../libs/memento.h"
+#include "../../libs/neoreflect.h"
+#include "../../libs/chainofresp.h"
+#include "../../libs/iterator.h"
+
 
 
 using namespace NEOLIB;
@@ -275,6 +289,139 @@ int main(int argc,char **argv,char *env[])
 	//CNEOBaseLibrary *pBaseLib = new CNEOBaseLibrary("baselib",".","log",NULL);
 	CNEOBaseLibrary *pBaseLib = CNEOBaseLibrary::getInstance("baselib",".","log",NULL);
 	CNEOBaseLibrary *pBaseLib1 = CNEOBaseLibrary::getInstance("baselib",".","log",NULL);
+
+
+	printf(">>>>>>>>>>>>>>>>>>>>>>Factory>>>>>>>>>>>>>>>>>>>>>>>>>>\n");
+	class pro{
+	public:
+		pro()
+		{
+			printf("pro was created!\n");
+		}
+	
+	};
+
+	Factory<pro> factory;
+	factory.createProduct1();
+	Factory<pro,pro,pro,pro,pro> factory5;
+	factory5.createProduct1();
+	factory5.createProduct4();
+
+	printf(">>>>>>>>>>>>>>>>>>>>>>Singleton>>>>>>>>>>>>>>>>>>>>>>>>>>\n");
+	SingletonWithLock<CNEOBaseLibrary>::getInstance()->m_szAppName;
+
+	printf(">>>>>>>>>>>>>>>>>>>>>>bridge>>>>>>>>>>>>>>>>>>>>>>>>>>\n");
+	AbstractBridgeImp* imp = new ConcreteAbstractionImpA();
+	AbstractBridge* abs = new RefinedAbstraction(imp);
+	abs->Print(); 
+	imp->Print();
+
+    printf(">>>>>>>>>>>>>>>>>>>>>>adapter>>>>>>>>>>>>>>>>>>>>>>>>>>\n");
+    //classadapter
+    AdapterTargetTest* adt = new AdpterTest1();
+    adt->request1();
+    adt->request2();
+
+    //objectadapter
+    AdapteeTest* ade = new AdapteeTest;
+    AdapterTargetTest* adt2 = new AdpterTest2(ade);
+    adt2->request1();
+    adt2->request2();
+
+    printf(">>>>>>>>>>>>>>>>>>>>>>decorator>>>>>>>>>>>>>>>>>>>>>>>>>>\n");
+    Component* com = new ConcreteComponent();
+
+    //以下相当于把Component（七天大圣）装饰成为鱼儿
+    Component *dec1 = new ConcreteDecorator(com);
+    dec1->Print();
+    delete dec1;
+
+    printf(">>>>>>>>>>>>>>>>>>>>>>composite>>>>>>>>>>>>>>>>>>>>>>>>>>\n");
+    Leaf* l = new Leaf(); 
+    l->Print();
+    Composite<ComponentTest>* com1 = new Composite<ComponentTest>();
+    com1->Add(l);
+    com1->Print();
+    ComponentTest* ll = com1->GetChild(0);
+    ll->Print();
+
+    printf(">>>>>>>>>>>>>>>>>>>>>>proxy>>>>>>>>>>>>>>>>>>>>>>>>>>\n");
+    Subject *sub = new ConcreteSubject();
+    ProxyTest *proxy = new ProxyTest(sub);
+    proxy->PreRequest();
+    proxy->Request();
+    proxy->PostRequest();
+
+    printf(">>>>>>>>>>>>>>>>>>>>>>observer>>>>>>>>>>>>>>>>>>>>>>>>>>\n");
+    Watched *watched = new Watched();
+    Watcher *watcher = new Watcher(watched);
+    Watcher1 *watcher1 = new Watcher1(watched);
+    //watched改变数据，会通过Watcher打印出来
+    watched->SetData("hello world!");
+    watched->SetData("grow up!");
+    watched->SetData("grow up!");
+
+    printf(">>>>>>>>>>>>>>>>>>>>>>observer>>>>>>>>>>>>>>>>>>>>>>>>>>\n");
+    StateTestA *sa = new StateTestA();
+    ContextTest *ct = new ContextTest();
+    ct->SetState(sa);
+    ct->Print();
+
+    printf(">>>>>>>>>>>>>>>>>>>>>>memento>>>>>>>>>>>>>>>>>>>>>>>>>>\n");
+    Originator<string> *o = new Originator<string>();
+    Caretaker *caretaker = new Caretaker();
+
+    o->SetState("on");
+    caretaker->SetMemento(o->CreateBackups());
+    o->Print();
+    caretaker->GetMemento()->Print();
+    o->SetState("off");
+    o->Print();
+    o->RestoreBackups(caretaker->GetMemento());
+    o->Print();
+    caretaker->GetMemento()->Print();
+     printf(">>>>>>>>>>>>>>>>>>>>>>neoreflect>>>>>>>>>>>>>>>>>>>>>>>>>>\n");
+    NEODynBaseClass *pVar1 = (NEODynBaseClass*)ClassFactory::getInstance()->GetClassByName("NEODynBaseClass") ;  
+    NEODynBaseClass *pVar = (NEODynBaseClass*)ClassFactory::getInstance()->GetClassByName("CKHelloClass") ;
+    pVar->RegistProperty();  
+   
+    int pValue = 123456 ;  
+   
+    pVar->m_PropertyMap["setm_pValue"](pVar, &pValue) ;  
+    pVar->Print() ;  
+
+    printf(">>>>>>>>>>>>>>>>>>>>>>chain of responsibility>>>>>>>>>>>>>>>>>>>>>>>>>>\n");
+    Handle* h1 = new ConcreteHandle();
+    Handle* h2 = new ConcreteHandle();
+    h1->SetSuccessor(h2);
+    h1->HandleRequest();
+
+    printf(">>>>>>>>>>>>>>>>>>>>>>iterator>>>>>>>>>>>>>>>>>>>>>>>>>>\n");
+    int tempofit = 0;
+    NEOList<int> *nlist = new NEOList<int>(0,tempofit);
+    GlobalList<int> *glist = new GlobalList<int>(0,tempofit);
+    int tempofit1 = 1;
+    NEOList<int> *nlist1 = new NEOList<int>(1,tempofit1);
+    GlobalList<int> *glist1 = new GlobalList<int>(1,tempofit1);
+    int tempofit8 = 8;
+    NEOList<int> *nlist8 = new NEOList<int>(8,tempofit8);
+    GlobalList<int> *glist8 = new GlobalList<int>(8,tempofit8);
+    int tempofit3 = 3;
+    NEOList<int> *nlist3 = new NEOList<int>(3,tempofit3);
+    GlobalList<int> *glist3 = new GlobalList<int>(3,tempofit3);
+    GlobalList<int>::iterator glt =  GlobalList<int>::begin();
+    ++glt;
+    printf("%d\r\n",*glt);
+    nlist->Print();
+    NEOList<int>::iterator lt = NEOList<int>::begin();
+    printf("%d\r\n",*lt);
+    ++lt;
+    printf("%d\r\n",*lt);
+    ++lt;
+    printf("%d\r\n",*lt);
+    ++lt;
+    printf("%d\r\n",*lt);
+    ++lt;
     
 #ifdef WIN32
     system("pause");
