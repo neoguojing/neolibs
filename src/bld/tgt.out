@@ -1,0 +1,112 @@
+cd /cygdrive/f/neogithub/neolibs.git/trunk/src/libs/ && make 
+make[1]: Entering directory '/cygdrive/f/neogithub/neolibs.git/trunk/src/libs'
+create depend
+g++ -M -g -Wall -Wextra -pthread neobaselib.cpp > /cygdrive/f/neogithub/neolibs.git/trunk/build/object/neobaselib.d.$$; \
+#sed -i 's,\(neobaselib.\)\.o,/cygdrive/f/neogithub/neolibs.git/trunk/build/object/\1.o ,g' /cygdrive/f/neogithub/neolibs.git/trunk/build/object/neobaselib.d.$$; \
+sed 's,\(neobaselib.\)\.o[ :]*,\1.o /cygdrive/f/neogithub/neolibs.git/trunk/build/object/neobaselib.d ,g' < /cygdrive/f/neogithub/neolibs.git/trunk/build/object/neobaselib.d.$$ > /cygdrive/f/neogithub/neolibs.git/trunk/build/object/neobaselib.d; \
+rm -f /cygdrive/f/neogithub/neolibs.git/trunk/build/object/neobaselib.d.$$
+create depend
+g++ -M -g -Wall -Wextra -pthread neolog.cpp > /cygdrive/f/neogithub/neolibs.git/trunk/build/object/neolog.d.$$; \
+#sed -i 's,\(neolog.\)\.o,/cygdrive/f/neogithub/neolibs.git/trunk/build/object/\1.o ,g' /cygdrive/f/neogithub/neolibs.git/trunk/build/object/neolog.d.$$; \
+sed 's,\(neolog.\)\.o[ :]*,\1.o /cygdrive/f/neogithub/neolibs.git/trunk/build/object/neolog.d ,g' < /cygdrive/f/neogithub/neolibs.git/trunk/build/object/neolog.d.$$ > /cygdrive/f/neogithub/neolibs.git/trunk/build/object/neolog.d; \
+rm -f /cygdrive/f/neogithub/neolibs.git/trunk/build/object/neolog.d.$$
+create depend
+g++ -M -g -Wall -Wextra -pthread neolock.cpp > /cygdrive/f/neogithub/neolibs.git/trunk/build/object/neolock.d.$$; \
+#sed -i 's,\(neolock.\)\.o,/cygdrive/f/neogithub/neolibs.git/trunk/build/object/\1.o ,g' /cygdrive/f/neogithub/neolibs.git/trunk/build/object/neolock.d.$$; \
+sed 's,\(neolock.\)\.o[ :]*,\1.o /cygdrive/f/neogithub/neolibs.git/trunk/build/object/neolock.d ,g' < /cygdrive/f/neogithub/neolibs.git/trunk/build/object/neolock.d.$$ > /cygdrive/f/neogithub/neolibs.git/trunk/build/object/neolock.d; \
+rm -f /cygdrive/f/neogithub/neolibs.git/trunk/build/object/neolock.d.$$
+create depend
+g++ -M -g -Wall -Wextra -pthread neoqueue.cpp > /cygdrive/f/neogithub/neolibs.git/trunk/build/object/neoqueue.d.$$; \
+#sed -i 's,\(neoqueue.\)\.o,/cygdrive/f/neogithub/neolibs.git/trunk/build/object/\1.o ,g' /cygdrive/f/neogithub/neolibs.git/trunk/build/object/neoqueue.d.$$; \
+sed 's,\(neoqueue.\)\.o[ :]*,\1.o /cygdrive/f/neogithub/neolibs.git/trunk/build/object/neoqueue.d ,g' < /cygdrive/f/neogithub/neolibs.git/trunk/build/object/neoqueue.d.$$ > /cygdrive/f/neogithub/neolibs.git/trunk/build/object/neoqueue.d; \
+rm -f /cygdrive/f/neogithub/neolibs.git/trunk/build/object/neoqueue.d.$$
+create depend
+g++ -M -g -Wall -Wextra -pthread neosafefunc.cpp > /cygdrive/f/neogithub/neolibs.git/trunk/build/object/neosafefunc.d.$$; \
+#sed -i 's,\(neosafefunc.\)\.o,/cygdrive/f/neogithub/neolibs.git/trunk/build/object/\1.o ,g' /cygdrive/f/neogithub/neolibs.git/trunk/build/object/neosafefunc.d.$$; \
+sed 's,\(neosafefunc.\)\.o[ :]*,\1.o /cygdrive/f/neogithub/neolibs.git/trunk/build/object/neosafefunc.d ,g' < /cygdrive/f/neogithub/neolibs.git/trunk/build/object/neosafefunc.d.$$ > /cygdrive/f/neogithub/neolibs.git/trunk/build/object/neosafefunc.d; \
+rm -f /cygdrive/f/neogithub/neolibs.git/trunk/build/object/neosafefunc.d.$$
+create depend
+g++ -M -g -Wall -Wextra -pthread neomemmanager.cpp > /cygdrive/f/neogithub/neolibs.git/trunk/build/object/neomemmanager.d.$$; \
+#sed -i 's,\(neomemmanager.\)\.o,/cygdrive/f/neogithub/neolibs.git/trunk/build/object/\1.o ,g' /cygdrive/f/neogithub/neolibs.git/trunk/build/object/neomemmanager.d.$$; \
+sed 's,\(neomemmanager.\)\.o[ :]*,\1.o /cygdrive/f/neogithub/neolibs.git/trunk/build/object/neomemmanager.d ,g' < /cygdrive/f/neogithub/neolibs.git/trunk/build/object/neomemmanager.d.$$ > /cygdrive/f/neogithub/neolibs.git/trunk/build/object/neomemmanager.d; \
+rm -f /cygdrive/f/neogithub/neolibs.git/trunk/build/object/neomemmanager.d.$$
+create depend
+g++ -M -g -Wall -Wextra -pthread neodebug.cpp > /cygdrive/f/neogithub/neolibs.git/trunk/build/object/neodebug.d.$$; \
+#sed -i 's,\(neodebug.\)\.o,/cygdrive/f/neogithub/neolibs.git/trunk/build/object/\1.o ,g' /cygdrive/f/neogithub/neolibs.git/trunk/build/object/neodebug.d.$$; \
+sed 's,\(neodebug.\)\.o[ :]*,\1.o /cygdrive/f/neogithub/neolibs.git/trunk/build/object/neodebug.d ,g' < /cygdrive/f/neogithub/neolibs.git/trunk/build/object/neodebug.d.$$ > /cygdrive/f/neogithub/neolibs.git/trunk/build/object/neodebug.d; \
+rm -f /cygdrive/f/neogithub/neolibs.git/trunk/build/object/neodebug.d.$$
+create depend
+g++ -M -g -Wall -Wextra -pthread model.cpp > /cygdrive/f/neogithub/neolibs.git/trunk/build/object/model.d.$$; \
+#sed -i 's,\(model.\)\.o,/cygdrive/f/neogithub/neolibs.git/trunk/build/object/\1.o ,g' /cygdrive/f/neogithub/neolibs.git/trunk/build/object/model.d.$$; \
+sed 's,\(model.\)\.o[ :]*,\1.o /cygdrive/f/neogithub/neolibs.git/trunk/build/object/model.d ,g' < /cygdrive/f/neogithub/neolibs.git/trunk/build/object/model.d.$$ > /cygdrive/f/neogithub/neolibs.git/trunk/build/object/model.d; \
+rm -f /cygdrive/f/neogithub/neolibs.git/trunk/build/object/model.d.$$
+create depend
+g++ -M -g -Wall -Wextra -pthread neothread.cpp > /cygdrive/f/neogithub/neolibs.git/trunk/build/object/neothread.d.$$; \
+#sed -i 's,\(neothread.\)\.o,/cygdrive/f/neogithub/neolibs.git/trunk/build/object/\1.o ,g' /cygdrive/f/neogithub/neolibs.git/trunk/build/object/neothread.d.$$; \
+sed 's,\(neothread.\)\.o[ :]*,\1.o /cygdrive/f/neogithub/neolibs.git/trunk/build/object/neothread.d ,g' < /cygdrive/f/neogithub/neolibs.git/trunk/build/object/neothread.d.$$ > /cygdrive/f/neogithub/neolibs.git/trunk/build/object/neothread.d; \
+rm -f /cygdrive/f/neogithub/neolibs.git/trunk/build/object/neothread.d.$$
+create depend
+g++ -M -g -Wall -Wextra -pthread main.cpp > /cygdrive/f/neogithub/neolibs.git/trunk/build/object/main.d.$$; \
+#sed -i 's,\(main.\)\.o,/cygdrive/f/neogithub/neolibs.git/trunk/build/object/\1.o ,g' /cygdrive/f/neogithub/neolibs.git/trunk/build/object/main.d.$$; \
+sed 's,\(main.\)\.o[ :]*,\1.o /cygdrive/f/neogithub/neolibs.git/trunk/build/object/main.d ,g' < /cygdrive/f/neogithub/neolibs.git/trunk/build/object/main.d.$$ > /cygdrive/f/neogithub/neolibs.git/trunk/build/object/main.d; \
+rm -f /cygdrive/f/neogithub/neolibs.git/trunk/build/object/main.d.$$
+g++ -g -Wall -Wextra -pthread   -c -o main.o main.cpp
+main.cpp: 在函数‘int main()’中:
+main.cpp:265:19: 警告：未使用的变量‘pTaskRunInfo’ [-Wunused-variable]
+  CNEOTaskRunInfo *pTaskRunInfo = new CNEOTaskRunInfo(&taskInfo);
+                   ^
+main.cpp:271:18: 警告：未使用的变量‘pTaskRun’ [-Wunused-variable]
+     CNEOTaskRun *pTaskRun = new CNEOTaskRun(pBaseLib);
+                  ^
+g++ -g -Wall -Wextra -pthread   -c -o neothread.o neothread.cpp
+neothread.cpp: 在构造函数‘NEOLIB::CNEOThreadPool::CNEOThreadPool(NEOLIB::CNEOLowDebug*)’中:
+neothread.cpp:26:14: 警告：未使用的变量‘id’ [-Wunused-variable]
+     THREADID id = 0;
+              ^
+neothread.cpp: 在函数‘void NEOLIB::printThreadInfo(void*, NEOLIB::MBOOL&)’中:
+neothread.cpp:325:21: 警告：格式 ‘%u’ expects argument of type ‘unsigned int’, but argument 2 has type ‘pthread_t {aka __pthread_t*}’ [-Wformat=]
+                     );
+                     ^
+neothread.cpp:325:21: 警告：格式 ‘%u’ expects argument of type ‘unsigned int’, but argument 2 has type ‘pthread_t {aka __pthread_t*}’ [-Wformat=]
+neothread.cpp: 在全局域：
+neothread.cpp:309:46: 警告：未使用的参数‘bThreadContinue’ [-Wunused-parameter]
+ void printThreadInfo(void *pCallParam,MBOOL &bThreadContinue)
+                                              ^
+neothread.cpp:462:16: 警告：未使用的参数‘bThreadContinue’ [-Wunused-parameter]
+         MBOOL &bThreadContinue)
+                ^
+g++ -g -Wall -Wextra -pthread   -c -o model.o model.cpp
+g++ -g -Wall -Wextra -pthread   -c -o neodebug.o neodebug.cpp
+g++ -g -Wall -Wextra -pthread   -c -o neomemmanager.o neomemmanager.cpp
+In file included from neomemmanager.cpp:4:0:
+neomemmanager.h: 在构造函数‘NEOLIB::CNEOMemStackToken::CNEOMemStackToken(int, NEOLIB::CNEOLowDebug*)’中:
+neomemmanager.h:81:16: 警告：‘NEOLIB::CNEOMemStackToken::m_pDebug’将在 [-Wreorder]
+  CNEOLowDebug *m_pDebug;
+                ^
+neomemmanager.h:76:28: 警告：‘NEOLIB::CMultiReadSingleWriteLock NEOLIB::CNEOMemStackToken::m_Lock’ [-Wreorder]
+  CMultiReadSingleWriteLock m_Lock;//����������������
+                            ^
+neomemmanager.cpp:9:1: 警告：在此处初始化后被初始化 [-Wreorder]
+ CNEOMemStackToken::CNEOMemStackToken(int nBlockSize/*Ҫ�����Ļ����ڴ���С*/,CNEOLowDebug *pDebug):
+ ^
+neomemmanager.cpp: 在成员函数‘void NEOLIB::CNEOMemStack::PrintInfo()’中:
+neomemmanager.cpp:277:26: 警告：格式 ‘%p’ expects argument of type ‘void*’, but argument 4 has type ‘int’ [-Wformat=]
+         m_pMaxPoint.Get());
+                          ^
+neomemmanager.cpp:277:26: 警告：格式 ‘%p’ expects argument of type ‘void*’, but argument 4 has type ‘int’ [-Wformat=]
+g++ -g -Wall -Wextra -pthread   -c -o neosafefunc.o neosafefunc.cpp
+g++ -g -Wall -Wextra -pthread   -c -o neoqueue.o neoqueue.cpp
+g++ -g -Wall -Wextra -pthread   -c -o neolock.o neolock.cpp
+g++ -g -Wall -Wextra -pthread   -c -o neolog.o neolog.cpp
+g++ -g -Wall -Wextra -pthread   -c -o neobaselib.o neobaselib.cpp
+neobaselib.cpp:21:11: 警告：未使用的参数‘pPrintInfoCallbackParam’ [-Wunused-parameter]
+     void* pPrintInfoCallbackParam,       //info�ص�����ָ��
+           ^
+neobaselib.cpp:165:67: 警告：未使用的参数‘nStatus’ [-Wunused-parameter]
+ bool CNEOBaseLibrary::InfoPrintTaskCallback(void *pCallParam,int &nStatus)
+                                                                   ^
+source files: main.cpp neothread.cpp model.cpp neodebug.cpp neomemmanager.cpp neosafefunc.cpp neoqueue.cpp neolock.cpp neolog.cpp neobaselib.cpp
+object files: main.o neothread.o model.o neodebug.o neomemmanager.o neosafefunc.o neoqueue.o neolock.o neolog.o neobaselib.o
+g++  main.o  neothread.o  model.o  neodebug.o  neomemmanager.o  neosafefunc.o  neoqueue.o  neolock.o  neolog.o  neobaselib.o -g -Wall -Wextra -pthread -o /cygdrive/f/neogithub/neolibs.git/trunk/build/libs/neolib -lpthread; \
+mv *.o /cygdrive/f/neogithub/neolibs.git/trunk/build/object/
+make[1]: Leaving directory '/cygdrive/f/neogithub/neolibs.git/trunk/src/libs'
