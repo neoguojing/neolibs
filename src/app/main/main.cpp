@@ -409,11 +409,11 @@ int main(int argc,char **argv,char *env[])
     int tempofit3 = 3;
     NEOList<int> *nlist3 = new NEOList<int>(3,tempofit3);
     GlobalList<int> *glist3 = new GlobalList<int>(3,tempofit3);
-    GlobalList<int>::iterator glt =  GlobalList<int>::begin();
+    GlobalList<int>::myiterator glt =  GlobalList<int>::begin();
     ++glt;
     printf("%d\r\n",*glt);
     nlist->Print();
-    NEOList<int>::iterator lt = NEOList<int>::begin();
+    NEOList<int>::myiterator lt = NEOList<int>::begin();
     printf("%d\r\n",*lt);
     ++lt;
     printf("%d\r\n",*lt);
