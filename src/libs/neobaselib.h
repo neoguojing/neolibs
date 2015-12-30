@@ -3,6 +3,7 @@
 #define NEOBASELIB 
 
 namespace NEOLIB {
+
 ////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////// 
@@ -31,6 +32,12 @@ private:
         _APP_INFO_OUT_CALLBACK pInfoOutCallback=NULL,// 应用程序回调函数
         void *pInfoOutCallbackParam=NULL
         );
+
+protected:
+	CNEOBaseLibrary()
+	{
+		printf("create by singleton!\n");
+	}
 
 public:
     ~CNEOBaseLibrary();

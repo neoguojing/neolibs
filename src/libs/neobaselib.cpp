@@ -10,9 +10,14 @@
 #include "neolog.h"
 #include "neobaselib.h"
 
+
 namespace NEOLIB {
 
-CMutexLock m_Lock;
+namespace
+{
+	CMutexLock g_Lock;
+}
+
 CNEOBaseLibrary* CNEOBaseLibrary::m_Instance = NULL;
 /////////////////////////////////////////////////////////////////////
 CNEOBaseLibrary::CNEOBaseLibrary(const char *szAppName,
@@ -197,7 +202,7 @@ CNEOBaseLibrary *CNEOBaseLibrary::getInstance(const char *szAppName,
 {
 	if(m_Instance==NULL)
 	{
-		m_Lock.Lock();
+		g_Lock.Lock();
 		{
 			if(m_Instance==NULL)
 			{
@@ -205,7 +210,7 @@ CNEOBaseLibrary *CNEOBaseLibrary::getInstance(const char *szAppName,
 					bDebugToTTYFlag,pPrintInfoCallbackParam,pInfoOutCallback,pInfoOutCallbackParam);
 			}
 		}
-		m_Lock.UnLock();
+		g_Lock.UnLock();
 	}
 	return m_Instance;
 }

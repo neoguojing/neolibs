@@ -252,6 +252,7 @@ public:
 	int GetID(void);
 };
 
+
 }
 
 #endif
