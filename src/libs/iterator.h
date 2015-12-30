@@ -58,7 +58,7 @@ template <class ITERATOR>
 class NEOAggregate
 {
 public:
-    typedef ITERATOR  iterator;
+    typedef ITERATOR  myiterator;
     
 };
 
@@ -130,7 +130,7 @@ public:
         unregisterListener();
     }
     //此处调用了NEOListIterator(NEOListNode<_Tp>* pNode)构造函数，并非强转
-    static iterator begin(){ return first_m; }
+    static myiterator begin(){ return first_m; }
     
     /*获取内置数据和索引*/
     _Tp& getItem(){return this->m_Node->item_m;};
@@ -264,7 +264,7 @@ class GlobalList:public NEOAggregate<GlobalIterator<I>>
 public:
     GlobalList(unsigned short id,I& item):id_m(id),item_m(item),next_m(0){registerListener();};
     ~GlobalList(){unregisterListener();};
-    static iterator begin(){return first_m;};
+    static myiterator begin(){return first_m;};
     static GlobalList* getFirst(){return first_m;};
     GlobalList* getNext(){return next_m;};
     I& getItem(){return item_m;};
