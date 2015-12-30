@@ -98,7 +98,7 @@ public:
 
 
 template <class _Tp>
-class NEOListBase:public NEOAggregate<NEOListIterator<_Tp>>
+class NEOListBase:public NEOAggregate<NEOListIterator<_Tp> >
 {
 public:
     NEOListBase(unsigned short id,_Tp& item)
@@ -133,12 +133,12 @@ public:
     static iterator begin(){ return first_m; }
     
     /*获取内置数据和索引*/
-    _Tp& getItem(){return m_Node->item_m;};
-    unsigned short getId()const {return m_Node->id_m;};
+    _Tp& getItem(){return this->m_Node->item_m;};
+    unsigned short getId()const {return this->m_Node->id_m;};
     
     void Print()
     {
-        printf("this=%p,next_m=%p,previous_m=%p,\r\nitem_m=%d,id_m=%d,first_m=%p\r\n", first_m,first_m->next_m,first_m->previous_m,first_m->item_m,first_m->id_m,first_m);
+        printf("this=%p,next_m=%p,previous_m=%p,\r\nitem_m=%d,id_m=%d,first_m=%p\r\n", NEOList::first_m,first_m->next_m,first_m->previous_m,first_m->item_m,first_m->id_m,NEOList::first_m);
         NEOListNode<_Tp>* iterator = (NEOListNode<_Tp>*)first_m->next_m;
         //需找合适的位置
         while((iterator!=first_m)){
@@ -152,7 +152,7 @@ protected:
 
     void registerListener()
     {
-        if (first_m==NULL){
+        if (NEOList::first_m==NULL){
             first_m = this->m_Node;
             first_m->next_m = first_m;
             first_m->previous_m = first_m;
@@ -161,7 +161,7 @@ protected:
         {
             NEOListNode<_Tp>* iterator = (NEOListNode<_Tp>*)first_m->next_m;
             //需找合适的位置
-            while((iterator!=first_m) && (m_Node->id_m > iterator->id_m)){
+            while((iterator!=first_m) && (this->m_Node->id_m > iterator->id_m)){
                 iterator = (NEOListNode<_Tp>*)iterator->next_m;
             }
 
@@ -193,7 +193,7 @@ protected:
         if (iterator!=first_m) 
         {
             iterator->previous_m->next_m = iterator->next_m;
-            iterator->next_m->previous_m = iterator->previous_m
+            iterator->next_m->previous_m = iterator->previous_m;
         }
         else if (first_m!=NULL) 
         {
