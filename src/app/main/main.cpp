@@ -25,6 +25,17 @@
 using namespace NEOLIB;
 using namespace std;
 
+#ifndef WIN32
+	class pro{
+	public:
+		pro()
+		{
+			printf("pro was created!\n");
+		}
+	
+	};
+#endif
+
 int main(int argc,char **argv,char *env[])
 {
 	char str[50] = "\0";
@@ -292,6 +303,7 @@ int main(int argc,char **argv,char *env[])
 
 
 	printf(">>>>>>>>>>>>>>>>>>>>>>Factory>>>>>>>>>>>>>>>>>>>>>>>>>>\n");
+#ifdef WIN32
 	class pro{
 	public:
 		pro()
@@ -300,6 +312,7 @@ int main(int argc,char **argv,char *env[])
 		}
 	
 	};
+#endif
 
 	Factory<pro> factory;
 	factory.createProduct1();
@@ -409,11 +422,11 @@ int main(int argc,char **argv,char *env[])
     int tempofit3 = 3;
     NEOList<int> *nlist3 = new NEOList<int>(3,tempofit3);
     GlobalList<int> *glist3 = new GlobalList<int>(3,tempofit3);
-    GlobalList<int>::myiterator glt =  GlobalList<int>::begin();
+    GlobalList<int>::iterator glt =  GlobalList<int>::begin();
     ++glt;
     printf("%d\r\n",*glt);
     nlist->Print();
-    NEOList<int>::myiterator lt = NEOList<int>::begin();
+    NEOList<int>::iterator lt = NEOList<int>::begin();
     printf("%d\r\n",*lt);
     ++lt;
     printf("%d\r\n",*lt);
