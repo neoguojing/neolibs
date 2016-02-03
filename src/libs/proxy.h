@@ -65,7 +65,7 @@ private:
 class ProxyTest:public AbstactProxy<Subject>
 { 
 public: 
-    ProxyTest(Subject *sub):AbstactProxy(sub)
+    ProxyTest(Subject *sub):AbstactProxy<Subject>(sub)
     {}
     ~ProxyTest(){}
     void Request()

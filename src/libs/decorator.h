@@ -63,7 +63,7 @@ private:
 class ConcreteDecorator:public Decorator<Component>
 { 
 public: 
-    ConcreteDecorator(Component* com):Decorator(com)
+    ConcreteDecorator(Component* com):Decorator<Component>(com)
     {}
     ~ConcreteDecorator(){}
     void Print()

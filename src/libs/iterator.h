@@ -3,19 +3,19 @@
 
 /*
 
-    迭代器模式：
-    1.容器类：
-    包含用户需要操作的数据，并提供next，prev和begin，end等函数，以辅助迭代子类实现步进操作；用户需要继承NEOAggregate类，以提供
-    迭代子的类型定义；
-    参照：class GlobalList
-    2.迭代子类：实现++，--，*，->等操作，必须针对容器类要操作的data进行设计；在创建迭代子类的时候，需要使用容器类为迭代子附初值；
-    用户需要继承NEOIteratorBase，使得与STL兼容；参照:class GlobalIterator
-    提供够着函数，使得能够使用容器类为迭代子附初值，是比较好的实现：
+    ?¨??¨??????????
+    1.??????¨¤??
+    ??¨???????ì?¨¨???????????????????¨???next??prev??begin??end????????????§?¨??¨??¨?????¨¤????????????????????ì?¨¨??????NEOAggregate?¨¤?????¨???
+    ?¨??¨???????¨¤????§????
+    ??????class GlobalList
+    2.?¨??¨?????¨¤??????++??--??*??->?????????????????????????¨¤??????????data?????¨¨??????????§?¨??¨?????¨¤??????¨°???¨¨????????????¨¤???¨??¨????????????
+    ????ì?¨¨??????NEOIteratorBase????????STL??????????:class GlobalIterator
+    ?¨????????????????????????????????¨¤???¨??¨?????????????????????????????
     GlobalIterator(GlobalList<I>* pList)
     {
         iterator_m = pList;
     }
-    迭代器型别
+    ?¨??¨?????????
     struct input_iterator_tag {};
     struct output_iterator_tag {};
     struct forward_iterator_tag : public input_iterator_tag {};
@@ -42,8 +42,9 @@ public:
     typedef _Distance  difference_type;
     typedef _Pointer   pointer;
     typedef _Reference reference;
-
+#ifdef WIN32
     typedef NEOIteratorBase<_Tp, _Category> _Self;
+#endif
     /*
     virtual _Self& operator++() = 0;
     virtual _Self& operator--() = 0;
@@ -53,17 +54,19 @@ public:
     virtual pointer operator->() = 0;*/
 };
 
-/*ITERATOR 必须是最终的迭代器本身*/
+/*ITERATOR ???????????????¨??¨????????¨?*/
 template <class ITERATOR>
 class NEOAggregate
 {
 public:
-    typedef ITERATOR  myiterator;
+#ifdef WIN32
+    typedef ITERATOR  iterator;
+#endif
     
 };
 
 /////////////////////////test/////////////////////
-template <typename _Tp>
+template <typename _Tp,class _Category = bidirectional_iterator_tag>
 class NEOListIterator;
 
 class NEOListNodeBase
@@ -98,7 +101,7 @@ public:
 
 
 template <class _Tp>
-class NEOListBase:public NEOAggregate<NEOListIterator<_Tp> >
+class NEOListBase:public NEOAggregate< NEOListIterator<_Tp> >
 {
 public:
     NEOListBase(unsigned short id,_Tp& item)
@@ -129,18 +132,25 @@ public:
     {
         unregisterListener();
     }
-    //此处调用了NEOListIterator(NEOListNode<_Tp>* pNode)构造函数，并非强转
-    static myiterator begin(){ return first_m; }
+#ifndef WIN32    
+    typedef NEOListIterator<_Tp> iterator;
+    typedef NEOListBase<_Tp> _Base;
+
+    using _Base::first_m;
+    using _Base::m_Node;
+#endif
+    //?????÷????NEOListIterator(NEOListNode<_Tp>* pNode)???ì????????????×?
+    static iterator begin(){ return first_m; }
     
     /*获取内置数据和索引*/
-    _Tp& getItem(){return this->m_Node->item_m;};
-    unsigned short getId()const {return this->m_Node->id_m;};
+    _Tp& getItem(){return m_Node->item_m;};
+    unsigned short getId()const {return m_Node->id_m;};
     
     void Print()
     {
         printf("this=%p,next_m=%p,previous_m=%p,\r\nitem_m=%d,id_m=%d,first_m=%p\r\n", NEOList::first_m,first_m->next_m,first_m->previous_m,first_m->item_m,first_m->id_m,NEOList::first_m);
         NEOListNode<_Tp>* iterator = (NEOListNode<_Tp>*)first_m->next_m;
-        //需找合适的位置
+        //?¨¨????????????
         while((iterator!=first_m)){
             printf("this=%p,next_m=%p,previous_m=%p,\r\nitem_m=%d,id_m=%d,first_m=%p\r\n",
                         iterator,iterator->next_m,iterator->previous_m,iterator->item_m,
@@ -152,7 +162,7 @@ protected:
 
     void registerListener()
     {
-        if (NEOList::first_m==NULL){
+        if (first_m==NULL){
             first_m = this->m_Node;
             first_m->next_m = first_m;
             first_m->previous_m = first_m;
@@ -160,7 +170,7 @@ protected:
         else
         {
             NEOListNode<_Tp>* iterator = (NEOListNode<_Tp>*)first_m->next_m;
-            //需找合适的位置
+            //?¨¨????????????
             while((iterator!=first_m) && (this->m_Node->id_m > iterator->id_m)){
                 iterator = (NEOListNode<_Tp>*)iterator->next_m;
             }
@@ -174,7 +184,7 @@ protected:
             }
             else
             {
-                //将元素插入到合适的位置
+                //??????????????????????
                 this->m_Node->previous_m = iterator->previous_m;
                 this->m_Node->next_m = iterator;
                 iterator->previous_m->next_m = this->m_Node;
@@ -203,16 +213,23 @@ protected:
 
 };
 
-template <typename _Tp>
+template <typename _Tp,class _Category>
 class NEOListIterator:public NEOListIteratorBase<_Tp>
 {
 public:
     NEOListIterator(){}
     NEOListIterator(NEOListNode<_Tp>* pNode):NEOListIteratorBase<_Tp>(pNode){}
     NEOListIterator(const NEOListIterator *lt):NEOListIteratorBase<_Tp>(lt->m_Node){}
+#ifndef WIN32    
+    typedef NEOIteratorBase<_Tp, _Category> _Self;
+    typedef _Tp& reference;
+    typedef _Tp* pointer;
+    typedef NEOListIteratorBase<_Tp> _Base;
 
-    /*运算符重载在使用是必须是对象而非指针*/
-    //前缀形式++i
+    using _Base::m_Node;
+#endif
+    /*??????????????????±????????ó????????*/
+    //?°×?????++i
     virtual _Self& operator++()
     {
         this->next();
@@ -223,7 +240,7 @@ public:
         this->previous();
         return *this;
     }
-    //后缀形式i++
+    //?¨????????i++
     virtual _Self operator++(int)
     {
         NEOListIterator old = *this;
@@ -259,12 +276,15 @@ template <typename I,typename C=I>
 class GlobalIterator;
 
 template <typename I,typename C=I>
-class GlobalList:public NEOAggregate<GlobalIterator<I>>
+class GlobalList:public NEOAggregate< GlobalIterator<I> >
 {
 public:
     GlobalList(unsigned short id,I& item):id_m(id),item_m(item),next_m(0){registerListener();};
     ~GlobalList(){unregisterListener();};
-    static myiterator begin(){return first_m;};
+#ifndef WIN32
+    typedef GlobalIterator<I> iterator;
+#endif
+    static iterator begin(){return first_m;};
     static GlobalList* getFirst(){return first_m;};
     GlobalList* getNext(){return next_m;};
     I& getItem(){return item_m;};
@@ -312,7 +332,7 @@ protected:
 template <typename I,typename C>
 GlobalList<I,C>* GlobalList<I,C>::first_m=0;
 
-template <typename I,typename C=I>
+template <typename I,typename C>
 class GlobalIterator
 {
 public:
