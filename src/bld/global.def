@@ -1,1 +1,7 @@
 export DEPEND_LIST = depend_list
+
+export APP_SOURCES= $(wildcard $(APP_PATH)main/*.cpp)
+export APP_OBJS = $(patsubst %.cpp, %.o,$(APP_SOURCES))
+
+export LIB_SOURCES= $(wildcard $(LIB_PATH)*.cpp)
+export LIB_OBJS = $(patsubst %.cpp, %.o,$(LIB_SOURCES))

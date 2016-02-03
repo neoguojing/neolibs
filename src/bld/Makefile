@@ -12,12 +12,11 @@ include mklist
 clean :
 	rm -rf $(OBJECT_PATH)*.o; \
 	rm -rf $(OBJECT_PATH)*.d; \
-	rm -rf $(TARGET_PATH)*; \
-	rm -rf $(LIB_TARGET_PATH)*;\
+	rm -rf $(TARGET_PATH)*.exe; \
+	rm -rf $(LIB_TARGET_PATH)*.so;\
 	rm -rf $(APP_PATH)main/*.o;\
 	rm -rf $(APP_PATH)util/*.o;\
-	rm -rf $(LIB_PATH)*.o;\
-	rm -rf $(PUB_INCLUDE)*.h
+	rm -rf $(LIB_PATH)*.o
 
 
 

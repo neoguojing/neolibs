@@ -1,6 +1,8 @@
 #need man to modify this file
 
-$(DEPEND_LIST):various neolib app 
+$(DEPEND_LIST):various neolib app
+
+#$(DEPEND_LIST):various app
 
 various:
 	@echo "set the eviroment"
@@ -9,9 +11,10 @@ various:
 	#./syspath.sh
 	#export
 neolib:
-	cp -r $(LIB_PATH)*.h $(PUB_INCLUDE)
-	cd $(LIB_PATH) && $(MAKE) 
-	
+	cd $(LIB_PATH) && $(MAKE)
+	cd $(LIB_TARGET_PATH) && $(MAKE) 
+			
 app:
 	cd $(APP_PATH)main/ && $(MAKE)
+	cd $(TARGET_PATH) && $(MAKE)	
 	
