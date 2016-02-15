@@ -1,5 +1,5 @@
 #include <iostream>
-
+/*
 #include "../../libs/neodebug.h"
 #include "../../libs/neomemmanager.h"
 #include "../../libs/neoqueue.h"
@@ -20,7 +20,27 @@
 #include "../../libs/chainofresp.h"
 #include "../../libs/iterator.h"
 
+*/
 
+#include "../../include/neodebug.h"
+#include "../../include/neomemmanager.h"
+#include "../../include/neoqueue.h"
+#include "../../include/neolog.h"
+#include "../../include/neothread.h"
+#include "../../include/neobaselib.h"
+#include "../../include/factory.h"
+#include "../../include/singleton.h"
+#include "../../include/bridge.h"
+#include "../../include/adapter.h"
+#include "../../include/decorator.h"
+#include "../../include/composite.h"
+#include "../../include/proxy.h"
+#include "../../include/observer.h"
+#include "../../include/state.h"
+#include "../../include/memento.h"
+#include "../../include/neoreflect.h"
+#include "../../include/chainofresp.h"
+#include "../../include/iterator.h"
 
 using namespace NEOLIB;
 using namespace std;
