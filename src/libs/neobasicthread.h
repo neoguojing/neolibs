@@ -8,7 +8,8 @@
 
 namespace NEOLIB {
 #ifndef WIN32
-typedef void(__stdcall *NEO_THREAD_CALLBACK)(void *pCallParam);
+//typedef void(__stdcall *NEO_THREAD_CALLBACK)(void *pCallParam);
+typedef void(*NEO_THREAD_CALLBACK)(void *pCallParam);
 #else
 typedef unsigned (__stdcall *NEO_THREAD_CALLBACK)(void *pCallParam);
 #endif
