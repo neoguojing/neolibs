@@ -5,8 +5,6 @@
 //导入加锁的队列类
 //导入工具类
 #include "neoindex.h"    
-
-#include "neolock.h"    
 #include "neodebug.h"         
 #include "neosafefunc.h"                  
 #include "neomemmanager.h"                          
@@ -514,7 +512,9 @@ CNEOTaskPool_TaskServiceThread_End:
 //服务者线程
 bool CNEOTaskPool::TaskServiceThreadDolt(STaskPoolToken &sTask)
 {
+    //真正的执行任务
     bool bCallbackRet=sTask.m_pCallback(sTask.m_pUserParam,sTask.m_nUserStatus);
+
     if(!bCallbackRet)
         return bCallbackRet;           //返回假，表示任务结束
     bCallbackRet=RegisterATaskDolt(&sTask);//返回真表示任务尚未完成，试图重新注册

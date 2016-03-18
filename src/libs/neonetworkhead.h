@@ -15,6 +15,7 @@
     #include<Windows.h>
     #include<process.h>
     #include<WinSock.h>
+    #include <WinBase.h>
 #else
     #include<unistd.h>
     #include<errno.h>
@@ -23,6 +24,7 @@
     #include<netinet/in.h>
     #include<string.h>
     #include<sys/time.h>
+    #include<sys/epoll.h>
     #include<arpa/inet.h>
     #include<termios.h>
     #include<netdb.h>
@@ -31,7 +33,7 @@
 #endif
 
 #ifdef NEO_DEBUG
-/*¶ÏÑÔ¶¨Òå*/
+/*æ–­è¨€å®šä¹‰*/
 #define ASSERT(exp)   \
 	if(!(exp))        \
 	{                 \
@@ -44,7 +46,7 @@
 
 #endif
 
-//Ëø¶¨Òå
+//é”å®šä¹‰
 #ifdef WIN32
 
 #define MUTEX CRITICAL_SECTION
@@ -63,7 +65,7 @@
 #endif
 
 
-//»ñÈ¡¿ª»úµÄºÁÃëÊı
+//è·å–å¼€æœºçš„æ¯«ç§’æ•°
 #ifdef WIN32
 
 #else
@@ -88,11 +90,17 @@ inline unsigned long GetTickCount(void)
 #define THREADCREATE(func,args,thread,id)\
 	thread=(HANDLE)_beginthreadex(NULL,0,func,(PVOID)args,0,&id);
 #define THREADCREATE_ERROR NULL
-//Ïß³Ìº¯Êı±ê×¼¹¹ĞÍ
+//çº¿ç¨‹å‡½æ•°æ ‡å‡†æ„å‹
 #define THREADFUNC(func,args) unsigned _stdcall func(PVOID args)
-//¼ì²â¿ª»úºÁÃëÊı
+//æ£€æµ‹å¼€æœºæ¯«ç§’æ•°
 #define _GetTimeOfDay GetTickCount
 #define MIN_SLEEP 10
+
+#define THREAD_LOCAL_KEY DWORD 
+#define CREATETHREADLOCALVAR(key) key=TlsAlloc();
+#define SETTHREADLOCALVAR(key,value) TlsSetValue(key,(LPVOID)value)
+#define GETTHREADLOCALVAR(key) TlsGetValue(key)
+#define DELETETHREADLOCALVAR(key) TlsFree(key)
 
 #else
 
@@ -108,8 +116,14 @@ unsigned long GetTickCount(void);
 //#include <sys/utime.h>
 #define _GetTimeOfDay GetTickCount
 #define MIN_SLEEP 1
+
+#define THREAD_LOCAL_KEY pthread_key_t
+#define CREATETHREADLOCALVAR(key) pthread_key_create(&key, NULL);
+#define SETTHREADLOCALVAR(key,value) pthread_setspecific(key,value)
+#define GETTHREADLOCALVAR(key) pthread_getspecific(key)
+#define DELETETHREADLOCALVAR(key) pthread_key_delete(key)
 #endif
-//Ì×½Ó×Ö¶¨Òå
+//å¥—æ¥å­—å®šä¹‰
 #ifdef WIN32
 //#pragma once
 #define WIN32_LEAN_AND_MEAN   // Exclude rarely-used stuff from Windows headers
@@ -122,7 +136,7 @@ unsigned long GetTickCount(void);
 #define WIN_LINUX_F_INET AF_INET
 #define WIN_LINUX_InvalidSocket INVALID_SOCKET
 #define WIN_LINUX_SocketError SOCKET_ERROR
-//setsockoptµÚËÄ¸ö±äÁ¿¶¨Òå
+//setsockoptç¬¬å››ä¸ªå˜é‡å®šä¹‰
 #define WIN_LINUX_SetSockOptArg4UseType const char
 #define WIN_LINUX_GetSockOptArg4UseType char
 #define WIN_LINUX_SendRecvLastArg 0
@@ -143,6 +157,20 @@ unsigned long GetTickCount(void);
 #define WIN_LINUX_vsnprintf vsnprintf
 #endif
 
-
-
+/*
+socketå®šä¹‰
+AF_UNIX, AF_LOCAL--æœ¬åœ°é€šä¿¡
+AF_INET          --IPv4ç½‘ç»œé€šä¿¡
+AF_INET6         --IPv6ç½‘ç»œé€šä¿¡
+AF_PACKET        --é“¾è·¯å±‚é€šä¿¡
+*/
+#define SOCKET_MAX_LISTENER 64
+#define SOCKET_ADDR_SIZE sizeof(struct sockaddr)
+//epoll å®šä¹‰
+#ifndef WIN32
+#define EPOLL_SIZE_HINT 1024
+#define EPOLL_MAX_EVENTS 64
+#define EPOLL_ET_IN (EPOLLIN | EPOLLET)
+#define EPOLL_ET_IN (EPOLLOUT | EPOLLET)
+#endif
 #endif

@@ -1,6 +1,8 @@
 #ifndef NEOTHREAD
 
 #define NEOTHREAD
+#include "neolock.h"
+
 namespace NEOLIB {
 class CNEOLog;
 class  CNEOThreadPool;
@@ -8,6 +10,8 @@ class  CNEOThreadPool;
 class CNEOTaskRun;
 class CNEOMemPoolWithLock;
 class CThreadManager;
+class CNEOLowDebug;
+class CNEOMemQueueWithLock;
 ////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////

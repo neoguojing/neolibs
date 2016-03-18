@@ -2,13 +2,12 @@
 
 
 //#ifdef WIN32_NEO
-#include "neoindex.h" 
-
+#include "neoqueue.h"
 #include "neomemmanager.h"     
 #include "neodebug.h"      
 #include "neolock.h"         
 #include "neosafefunc.h"
-#include "neoqueue.h"
+
 
 namespace NEOLIB {
 //主要为了实现报文拼接和信令构建（依赖内存池）
@@ -17,9 +16,6 @@ namespace NEOLIB {
 CNEODynamicBuffer::CNEODynamicBuffer(CNEOMemPoolWithLock *pMemPool)
     :m_pMemPool(pMemPool),m_pData(NULL),m_nDataLen(0)
 {
-    //m_pMemPool=pMemPool;
-    //m_pData=NULL;
-    //m_nDataLen=0;
 }
 CNEODynamicBuffer::~CNEODynamicBuffer()
 {

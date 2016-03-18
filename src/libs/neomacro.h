@@ -96,19 +96,73 @@ inline void NEOExchange(Parm &p1, Parm &p2)
 //lock
 //锁变量重定义
 #ifdef WIN32
+//临界区（它只可以在同一进程内部使用）
 #define MUTEX CRITICAL_SECTION
 #define MUTEXINIT(m) InitializeCriticalSection(m)
 #define MUTEXLOCK(m) EnterCriticalSection(m)
 #define MUTEXUNLOCK(m) LeaveCriticalSection(m)
 #define MUTEXDESTROY(m) DeleteCriticalSection(m)
-
+//信号灯
+#define SEM HANDLE
+#define SEM_INIT(sem,value) sem=CreateSemaphore(NULL,value,65535,"neo");
+#define SEM_GET(sem,value) OpenSemaphore(SEMAPHORE_ALL_ACCESS,FALSE,"neo")
+#define SEM_WAIT(sem) WaitForSingleObject(sem,INFINITE)
+#define SEM_POST(sem) ReleaseSemaphore(sem,1,NULL)
+#define SEM_FREE(sem) CloseHandle(sem)
+//管道（仅用于父子进程通信，不可用于网络通信，单向读写）
+#define PIPE HANDLE
+#define PIPE_INIT(fds) CreatePipe(&fds[0],&fds[2],NULL,0)
+//采用同步方式读写
+#define PIPE_WRITE(fd,buf,count) WriteFile(fd,buf,count,NULL,NULL)
+#define PIPE_READ(fd,buf,count) ReadFile(fd,buf,count,NULL,NULL)
+#define PIPE_CLOSE(fd) CloseHandle(fd)
+//命名管道
+#define PIPE_NAMED_INIT(name) CreateNamedPipe(name, PIPE_ACCESS_DUPLEX,\
+                                                PIPE_TYPE_BYTE|PIPE_READMODE_BYTE,1,0,0,1000, NULL)
+#define PIPE_NAMED_OPEN(name) CreateFile(name, GENERIC_READ | GENERIC_WRITE,\
+                                        0, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL)
+#define PIPE_NAMED_LISTEN(id) ConnectNamedPipe(id, NULL)
+#define PIPE_NAMED_WRITE(fd,buf,count) WriteFile(fd,buf,count,NULL,NULL)
+#define PIPE_NAMED_READ(fd,buf,count) ReadFile(fd,buf,count,NULL,NULL)
+//共享内存
+#define SHM HANDLE 
+#define SHM_INIT(id,key,len) HANDLE id = CreateFileMapping(INVALID_HANDLE_VALUE,NULL,PAGE_READWRITE,0,len,key);  
+#define SHM_FREE(id) CloseHandle(id)
+#define SHM_MATCH(id,addr) void* addr=MapViewOfFile(id,FILE_MAP_ALL_ACCESS,0,0,0);
+#define SHM_DIVIDE(addr) UnmapViewOfFile(addr)
 #else
+//互斥锁
 #define MUTEX pthread_mutex_t
 #define MUTEXINIT(m) pthread_mutex_init(m,NULL)
 #define MUTEXLOCK(m) pthread_mutex_lock(m)
 #define MUTEXUNLOCK(m) pthread_mutex_unlock(m)
 #define MUTEXDESTROY(m) pthread_mutex_destroy(m)
-
+//信号量
+#define SEM sem_t*
+#define SEM_INIT(sem,value) sem_init(sem,0,value);
+#define SEM_GET(sem,value) sem_getvalue(sem,value)
+#define SEM_WAIT(sem) sem_wait(sem)
+#define SEM_WAITNONBLOCK(sem) sem_trywait(sem)
+#define SEM_POST(sem) sem_post(sem)
+#define SEM_FREE(sem) sem_destroy(sem)
+//管道（仅用于关联进程通信）
+#define PIPE int
+#define PIPE_INIT(fds) pipe(fds)
+#define PIPE_WRITE(fd,buf,count) write(fd, buf,count)
+#define PIPE_READ(fd,buf,count) read(fd, buf,count)
+#define PIPE_NONBLOCK(fd) fcntl(fd,F_SETFL,O_NONBLOCK)
+#define PIPE_CLOSE(fd) close(fd)
+//命名管道
+#define PIPE_NAMED_INIT(name) mkfifo(name,0777)
+#define PIPE_NAMED_OPEN(name) open(name,O_RDONLY|O_NONBLOCK)
+#define PIPE_NAMED_WRITE(fd,buf,count) write(fd, buf,count)
+#define PIPE_NAMED_READ(fd,buf,count) write(fd, buf,count)
+//共享内存
+#define SHM int
+#define SHM_INIT(id,key,len) int id = shmget((key_t)key,len, 0777|IPC_CREAT);  
+#define SHM_FREE(id) shmctl(id, IPC_RMID, 0)
+#define SHM_MATCH(id,addr) shmat(id,addr,0);
+#define SHM_DIVIDE(addr) shmdt(addr)
 #endif
 
 inline void NEOMinSleep(void)
