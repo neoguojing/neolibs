@@ -22,6 +22,12 @@
 
 */
 
+#include "../../libs/neomessager.h"
+#include "../../libs/neohandler.h"
+#include "../../libs/neolooper.h"
+#include "../../libs/neobasicthread.h"
+#include "../../libs/neoprocesssync.h"
+
 #include "../../include/neodebug.h"
 #include "../../include/neomemmanager.h"
 #include "../../include/neoqueue.h"
@@ -456,6 +462,21 @@ int main(int argc,char **argv,char *env[])
     printf("%d\r\n",*lt);
     ++lt;
     
+    printf(">>>>>>>>>>>>>>>>>>>>>>handler looper test>>>>>>>>>>>>>>>>>>>>>>>>>>\n");
+    //Thread *t = new Thread();
+   // t->start();
+
+    ThreadWithLoop *tLoop = new ThreadWithLoop();
+    tLoop->start();
+    Looper * mainLooper= NULL;
+    tLoop->getMyLooper(&mainLooper);
+    //mainLooper = tLoop->getMyLooper();
+    Handler *handler = new Handler(mainLooper);
+    Message *msg2 = handler->obtainMessage(2);
+    handler->sendMessage(*msg2);
+    Message *msg = handler->obtainMessage(1);
+    handler->sendMessage(*msg);
+
 #ifdef WIN32
     system("pause");
 #else
