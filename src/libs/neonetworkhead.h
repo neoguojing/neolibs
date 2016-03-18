@@ -30,6 +30,7 @@
     #include<netdb.h>
     #include<getopt.h>
     #include<time.h>
+	#include <semaphore.h>
 #endif
 
 #ifdef NEO_DEBUG
