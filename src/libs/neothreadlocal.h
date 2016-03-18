@@ -12,7 +12,7 @@ class ThreadLocal{
 
 private:
     ThreadLocal(){
-        if (gThreadLocalKey==NULL)
+        if (gThreadLocalKey == NULL)
             CREATETHREADLOCALVAR(gThreadLocalKey)
     }
 public:

@@ -39,7 +39,7 @@ private:
     PIPE mWakeReadPipeFd;
     PIPE mWakeWritePipeFd;
 #ifndef WIN32
-    int mEpollFd
+    int mEpollFd;
 #endif
 };
 
