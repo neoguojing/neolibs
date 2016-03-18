@@ -1,6 +1,8 @@
 #ifndef NEOQUEUE 
 
 #define NEOQUEUE 
+#include "neoindex.h"
+#include "neolock.h"
 
 namespace NEOLIB {
 //pop buffer数据结构
@@ -34,6 +36,8 @@ const unsigned long SNEOQueueTokenHeadSize=sizeof(SNEOQueueTokenHead);
 //#define NEO_CHAIN_TOKEN_MAX 1024
 //主要为了实现报文拼接和信令构建（依赖内存池）
 //动态buffer
+class CNEOMemPoolWithLock;
+class CNEOLowDebug;
 class  CNEODynamicBuffer
 { 
 public:
@@ -236,7 +240,7 @@ public:
 	int GetFirst(CNEODynamicBuffer *pBuffer);
 	bool DeleteFirst(void);
 	int GetAndDeleteFirst(char *szBuffer,int nBufferSize);
-	int GetAndDeleteFirst(CNEOStaticBuffer *pBuffer);////////////////////////未完//////////////////////////////////////??????????
+	int GetAndDeleteFirst(CNEOStaticBuffer *pBuffer);
 	int GetAndDeleteFirst(CNEODynamicBuffer *pBuffer);
 
 	//从前面弹出一批数据，
