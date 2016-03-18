@@ -171,6 +171,6 @@ AF_PACKET        --链路层通信
 #define EPOLL_SIZE_HINT 1024
 #define EPOLL_MAX_EVENTS 64
 #define EPOLL_ET_IN (EPOLLIN | EPOLLET)
-#define EPOLL_ET_IN (EPOLLOUT | EPOLLET)
+#define EPOLL_ET_OUT (EPOLLOUT | EPOLLET)
 #endif
 #endif
