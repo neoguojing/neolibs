@@ -43,8 +43,8 @@ public:
     void LOCAL();
 #ifndef WIN32
     static int makeSocketNonBlocking (int sfd);
-    int addEvent(const int fd, const epoll_event &listened_evnet);
-    int modEvent(const int fd, const epoll_event &listened_evnet);
+    int addEvent(const int fd, epoll_event &listened_evnet);
+    int modEvent(const int fd, epoll_event &listened_evnet);
 #endif
     void loop();
     void send(ReadWriteParam& param);

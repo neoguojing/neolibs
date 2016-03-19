@@ -10,7 +10,18 @@ namespace
 
 #ifndef WIN32
 
-class WorkerThread;
+class WorkerThread:public Thread
+{
+public:
+    WorkerThread(NEO_THREAD_CALLBACK callback, ReadWriteParam param)
+    {
+        Thread(callback);
+        mpParam = param;
+    }
+
+    ReadWriteParam mpParam;
+};
+
 //void __stdcall* doReadTask(void *pParam)
 void* doReadTask(void *pParam)
 {
@@ -69,17 +80,6 @@ void * doWriteTask(void *pParam)
     close(pReadWriteParam.fd);
 }
 
-class WorkerThread:Thread
-{
-public:
-    WorkerThread(NEO_THREAD_CALLBACK callback, ReadWriteParam param)
-    {
-        Thread(callback);
-        mpParam = param;
-    }
-
-    ReadWriteParam mpParam;
-};
 #else
 
 #endif
@@ -188,14 +188,14 @@ public:
      void NeoServer::accept(int& size)
      {  
 #ifndef WIN32
-        while((m_connSocket = accept(m_Socket,(struct sockaddr *)&m_ClientAddr,&size)) > 0)
+        while((m_connSocket = ::accept(m_Socket,(struct sockaddr *)&m_ClientAddr,&size)) > 0)
         {
             makeSocketNonBlocking(m_connSocket);
 
             m_Event.events = EPOLL_ET_IN;
             m_Event.data.fd = m_connSocket;
 
-            addEvent(m_connSocket,&m_Event);
+            addEvent(m_connSocket,m_Event);
         }
 
         if (-1 == m_connSocket)
@@ -232,7 +232,7 @@ public:
          return 0;   
      }   
 
-    int NeoServer::addEvent(const int fd, const epoll_event &listened_evnet)
+    int NeoServer::addEvent(const int fd, epoll_event &listened_evnet)
     {
         int rtn = epoll_ctl(m_epollFd,EPOLL_CTL_ADD,fd,&listened_evnet);
         if (rtn==-1)
@@ -242,7 +242,7 @@ public:
         return rtn;
     }
 
-    int NeoServer::modEvent(const int fd, const epoll_event &listened_evnet)
+    int NeoServer::modEvent(const int fd, epoll_event &listened_evnet)
     {
         int rtn = epoll_ctl(m_epollFd, EPOLL_CTL_MOD,fd,&listened_evnet);
         if (rtn == -1)
@@ -272,8 +272,8 @@ public:
          }
 
          m_Event.events = EPOLLIN;
-         m_Event.fd = m_epollFd;
-         if (addEvent(m_Socket,&m_Event) == -1)
+         m_Event.data.fd = m_epollFd;
+         if (addEvent(m_Socket,m_Event) == -1)
          {
             return;
          }
