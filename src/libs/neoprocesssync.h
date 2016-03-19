@@ -52,7 +52,7 @@ public:
     LinuxCondVar(pthread_condattr_t *cattr = NULL)
     {
          pthread_cond_init(&mhCounter,cattr);
-         mLock = MUTEXINIT(&mLock);
+         MUTEXINIT(&mLock);
     }
 
     ~LinuxCondVar()
