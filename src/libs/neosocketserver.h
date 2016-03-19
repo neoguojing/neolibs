@@ -57,10 +57,10 @@ private:
 
 
 #ifdef WIN32
-    CNEOLowDebug *m_pDebug;
     WORD wVersionRequested;
     WSADATA m_wsaData;
 #endif
+	CNEOLowDebug *m_pDebug;
     WIN_LINUX_SOCKET m_Socket;
     WIN_LINUX_SOCKET m_connSocket;
     sockaddr_in m_ServerAddr;

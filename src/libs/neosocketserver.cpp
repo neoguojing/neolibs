@@ -18,7 +18,7 @@ void* doReadTask(void *pParam)
     int total = 0;
     struct epoll_event ev={0};  
 
-    ReadWriteParam pReadWriteParam = (WorkerThread)pParam->mpParam;
+    ReadWriteParam pReadWriteParam = (WorkerThread*)pParam->mpParam;
 
     while((result = read(pReadWriteParam.fd,pReadWriteParam.buffer+total, 
         pReadWriteParam.bufsize-1))>0)
@@ -28,11 +28,11 @@ void* doReadTask(void *pParam)
 
     if (result == -1 && errno != EAGAIN)
     {
-        m_pDebug->DebugToFile("doReadTask fail!\r\n");
+        printf("doReadTask fail!\r\n");
     }
 
-    if (pReadWriteParam->events & EPOLLOUT)
-        return;
+    if (pReadWriteParam.events & EPOLLOUT)
+        return 0;
 
     ev.data.fd = pReadWriteParam.fd;
     ev.events = pReadWriteParam.events | EPOLLOUT;
@@ -40,7 +40,7 @@ void* doReadTask(void *pParam)
     int rtn = epoll_ctl(pReadWriteParam.epollfd, EPOLL_CTL_MOD,pReadWriteParam.fd,&ev);
     if (rtn == -1)
     {
-        m_pDebug->DebugToFile("epoll_ctl in doReadTask fail!\r\n");
+        printf("epoll_ctl in doReadTask fail!\r\n");
     }
 }
 
@@ -49,7 +49,7 @@ void * doWriteTask(void *pParam)
 {
     int result = 0;
 
-    ReadWriteParam pReadWriteParam = (WorkerThread)pParam->mpParam;
+    ReadWriteParam pReadWriteParam = (WorkerThread*)pParam->mpParam;
 
     int n = pReadWriteParam.bufsize;
 
@@ -60,7 +60,7 @@ void * doWriteTask(void *pParam)
         {
             if (result == -1 && errno != EAGAIN)
             {
-                m_pDebug->DebugToFile("doWriteTask fail!\r\n");
+                printf("doWriteTask fail!\r\n");
             }
             break;
         }
@@ -71,11 +71,11 @@ void * doWriteTask(void *pParam)
 
 class WorkerThread:Thread
 {
-public;
-    WorkerThread(NEO_THREAD_CALLBACK callback, ReadWriteParam param):
+public:
+    WorkerThread(NEO_THREAD_CALLBACK callback, ReadWriteParam param)
     {
         Thread(callback);
-        mpParam = pParam;
+        mpParam = param;
     }
 
     ReadWriteParam mpParam;
@@ -239,7 +239,7 @@ public;
         {
             m_pDebug->DebugToFile("addEvent fail!\r\n");
         }
-        return rtn
+        return rtn;
     }
 
     int NeoServer::modEvent(const int fd, const epoll_event &listened_evnet)
