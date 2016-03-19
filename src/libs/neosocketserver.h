@@ -42,7 +42,7 @@ public:
     void RAW(string addr, unsigned short port);
     void LOCAL();
 #ifndef WIN32
-    static int NeoServer::makeSocketNonBlocking (int sfd);
+    static int makeSocketNonBlocking (int sfd);
     int addEvent(const int fd, const epoll_event &listened_evnet);
     int modEvent(const int fd, const epoll_event &listened_evnet);
 #endif
