@@ -10,14 +10,7 @@ class NeoSemaphore{
 public:
     NeoSemaphore(int num=1)
     {
-        
-#ifndef WIN32
-		int rtn = SEM_INIT(mSem,(unsigned int)num)
-		if(rtn != 0)
-			NEO_PRINTF("semphore init failed!\r\n");
-#else
 		SEM_INIT(mSem,num)
-#endif
     }
 
     ~NeoSemaphore()
