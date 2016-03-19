@@ -478,6 +478,7 @@ int main(int argc,char **argv,char *env[])
     Message *msg = handler->obtainMessage(1);
     handler->sendMessage(*msg);
 #ifndef WIN32
+	//linux 主线程退出之后，子线程也会退出
 	while(1)
 	{}
 #endif
