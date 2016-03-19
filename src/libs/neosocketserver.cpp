@@ -188,7 +188,7 @@ void * doWriteTask(void *pParam)
      void NeoServer::accept(int& size)
      {  
 #ifndef WIN32
-        while((m_connSocket = ::accept(m_Socket,(struct sockaddr *)&m_ClientAddr,&size)) > 0)
+        while((m_connSocket = ::accept(m_Socket,(struct sockaddr *)&m_ClientAddr,(socklen_t*)&size)) > 0)
         {
             makeSocketNonBlocking(m_connSocket);
 
@@ -258,7 +258,7 @@ void * doWriteTask(void *pParam)
      void NeoServer::loop()
      {
 #ifndef WIN32
-         int addrlen = 0;
+         socklen_t addrlen = 0;
          int tempfd = 0;
          int numofwaitingfds = 0;
 
