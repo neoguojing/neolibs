@@ -138,13 +138,13 @@ inline void NEOExchange(Parm &p1, Parm &p2)
 #define MUTEXUNLOCK(m) pthread_mutex_unlock(m)
 #define MUTEXDESTROY(m) pthread_mutex_destroy(m)
 //信号量
-#define SEM sem_t*
-#define SEM_INIT(sem,value) sem_init(sem,0,value);
-#define SEM_GET(sem,value) sem_getvalue(sem,value)
-#define SEM_WAIT(sem) sem_wait(sem)
-#define SEM_WAITNONBLOCK(sem) sem_trywait(sem)
-#define SEM_POST(sem) sem_post(sem)
-#define SEM_FREE(sem) sem_destroy(sem)
+#define SEM sem_t
+#define SEM_INIT(sem,value) sem_init(&sem,0,value);
+#define SEM_GET(sem,value) sem_getvalue(&sem,value)
+#define SEM_WAIT(sem) sem_wait(&sem)
+#define SEM_WAITNONBLOCK(sem) sem_trywait(&sem)
+#define SEM_POST(sem) sem_post(&sem)
+#define SEM_FREE(sem) sem_destroy(&sem)
 //管道（仅用于关联进程通信）
 #define PIPE int
 #define PIPE_INIT(fds) pipe(fds)
