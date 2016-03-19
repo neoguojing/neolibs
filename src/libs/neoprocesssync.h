@@ -12,7 +12,7 @@ public:
     {
         
 #ifndef WIN32
-		int rtn = SEM_INIT(mSem,num)
+		int rtn = SEM_INIT(mSem,(unsigned int)num)
 		if(rtn != 0)
 			NEO_PRINTF("semphore init failed!\r\n");
 #else
