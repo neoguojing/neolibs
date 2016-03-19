@@ -477,6 +477,10 @@ int main(int argc,char **argv,char *env[])
     handler->sendMessage(*msg2);
     Message *msg = handler->obtainMessage(1);
     handler->sendMessage(*msg);
+#ifndef WIN32
+	while(1)
+	{}
+#endif
 
 #ifdef WIN32
     system("pause");
