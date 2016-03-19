@@ -10,7 +10,7 @@
 //常用头文件,
 //包含线程宏定义
 //WIN_LINUX_vsnprintf
-#define NEO_DEBUG
+//#define NEO_DEBUG
 #define NEOLIB_C_PLUS_PLUS __cplusplus
 #include "neonetworkhead.h"
 //宏文件名

@@ -51,7 +51,8 @@ inline void NEOExchange(Parm &p1, Parm &p2)
 #ifdef NEO_DEBUG//debug开关用于判定是否是debug
 #define NEO_PRINTF printf
 #else
-#define NEO_PRINTF /\/printf //表明不是debug
+//#define NEO_PRINTF /\/printf //表明不是debug
+#define NEO_PRINTF //printf 
 #endif
 
 //构建文件名的宏
