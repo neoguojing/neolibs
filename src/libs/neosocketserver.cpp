@@ -11,7 +11,8 @@ namespace
 #ifndef WIN32
 
 class WorkerThread;
-void __stdcall* doReadTask(void *pParam)
+//void __stdcall* doReadTask(void *pParam)
+void* doReadTask(void *pParam)
 {
     int result = 0;
     int total = 0;
@@ -43,7 +44,8 @@ void __stdcall* doReadTask(void *pParam)
     }
 }
 
-void __stdcall* doWriteTask(void *pParam)
+//void __stdcall* doWriteTask(void *pParam)
+void * doWriteTask(void *pParam)
 {
     int result = 0;
 
@@ -77,7 +79,7 @@ public;
     }
 
     ReadWriteParam mpParam;
-}
+};
 #else
 
 #endif
