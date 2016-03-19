@@ -13,10 +13,9 @@ namespace
 class WorkerThread:public Thread
 {
 public:
-    WorkerThread(NEO_THREAD_CALLBACK callback, ReadWriteParam param)
+    WorkerThread(NEO_THREAD_CALLBACK callback, ReadWriteParam param):
+	  mpParam(param),Thread(callback)
     {
-        Thread(callback);
-        mpParam = param;
     }
 
     ReadWriteParam mpParam;
