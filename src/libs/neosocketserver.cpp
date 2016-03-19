@@ -258,7 +258,7 @@ void * doWriteTask(void *pParam)
      void NeoServer::loop()
      {
 #ifndef WIN32
-         socklen_t addrlen = 0;
+         int addrlen = 0;
          int tempfd = 0;
          int numofwaitingfds = 0;
 
