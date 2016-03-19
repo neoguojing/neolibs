@@ -27,6 +27,7 @@
 #include "../../libs/neolooper.h"
 #include "../../libs/neobasicthread.h"
 #include "../../libs/neoprocesssync.h"
+#include "../../libs/neosocketserver.h"
 
 #include "../../include/neodebug.h"
 #include "../../include/neomemmanager.h"
@@ -167,7 +168,7 @@ int main(int argc,char **argv,char *env[])
 
 	printf(">>>>>>>>>>>>>>>>>>>>>>>>CNEOPopBuffer>>>>>>>>>>>>>>>>>>>>>>>>\n");
 	char pop[1000] = {""};
-	const char * pop1 = "a";
+	const char * pop1 = "abb";
 	CNEOPopBuffer *pbufer = new CNEOPopBuffer(pop,1000);
 	pbufer->AddLast(pop1,strlen(pop1));
 	pbufer->PrintInside();
