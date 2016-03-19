@@ -6,6 +6,10 @@
 
 using namespace std;
 
+#ifndef WIN32
+extern int errno;
+#endif
+
 namespace NEOLIB {
 
 typedef enum 
@@ -25,10 +29,6 @@ typedef struct
     int epollfd; 
     void *buffer;
 }ReadWriteParam;
-
-#ifndef WIN32
-extern int errno;
-#endif
 
 class CNEOLowDebug;
 class NeoServer{
