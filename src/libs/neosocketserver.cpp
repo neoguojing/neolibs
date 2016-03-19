@@ -18,7 +18,7 @@ void* doReadTask(void *pParam)
     int total = 0;
     struct epoll_event ev={0};  
 
-    ReadWriteParam pReadWriteParam = (WorkerThread*)pParam->mpParam;
+    ReadWriteParam pReadWriteParam = ((WorkerThread*)pParam)->mpParam;
 
     while((result = read(pReadWriteParam.fd,pReadWriteParam.buffer+total, 
         pReadWriteParam.bufsize-1))>0)
@@ -49,7 +49,7 @@ void * doWriteTask(void *pParam)
 {
     int result = 0;
 
-    ReadWriteParam pReadWriteParam = (WorkerThread*)pParam->mpParam;
+    ReadWriteParam pReadWriteParam = ((WorkerThread*)pParam)->mpParam;
 
     int n = pReadWriteParam.bufsize;
 
@@ -91,20 +91,20 @@ public:
 
         init();
 
-        switch(svctyoe)
+        switch((int)svctyoe)
         {
-        case SERVICE_TYPE::TCP:
+        case 0:
             TCP(addr,port);
             break;
-        case SERVICE_TYPE::UDP:
+        case 1:
             UDP(addr,port);
             setInetAddr(addr,port);
             break;
-        case SERVICE_TYPE::RAW:
+        case 2:
             RAW(addr,port);
             setInetAddr(addr,port);
             break;
-        case SERVICE_TYPE::LOCAL:
+        case 3:
             LOCAL();
             break;
         }
@@ -188,7 +188,7 @@ public:
      void NeoServer::accept(int& size)
      {  
 #ifndef WIN32
-        while((m_connSocket = accept(m_Socket,,(struct sockaddr *)&m_ClientAddr,&size)) > 0)
+        while((m_connSocket = accept(m_Socket,(struct sockaddr *)&m_ClientAddr,&size)) > 0)
         {
             makeSocketNonBlocking(m_connSocket);
 
@@ -208,7 +208,7 @@ public:
      }
 
 #ifndef WIN32
-     static int NeoServer::makeSocketNonBlocking (int sfd)   
+     int NeoServer::makeSocketNonBlocking (int sfd)   
      {   
          int flags, s;   
     
