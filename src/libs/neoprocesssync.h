@@ -51,7 +51,7 @@ public:
 
     LinuxCondVar(pthread_condattr_t *cattr = NULL)
     {
-         mhCounter = pthread_cond_init(&mhCounter,cattr);
+         pthread_cond_init(&mhCounter,cattr);
          mLock = MUTEXINIT(&mLock);
     }
 
@@ -62,7 +62,7 @@ public:
 
     void init()
     {
-        mhCounter = pthread_cond_init(&mhCounter,NULL);
+        pthread_cond_init(&mhCounter,NULL);
     }
 
     void signal()
@@ -86,7 +86,7 @@ public:
         pthread_cond_wait(&mhCounter,&mLock);
     }
 
-    void waitbytime(const structtimespec * abstime=NULL)
+    void waitbytime(const struct timespec * abstime=NULL)
     {
         pthread_cond_timedwait(&mhCounter,&mLock,NULL);
     }
