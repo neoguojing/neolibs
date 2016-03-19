@@ -65,7 +65,9 @@ public:
         temp->setMyLooper(Looper::myLooper());
         temp->mSemaphore->post();
         Looper::loop();
+#ifdef WIN32
         return NULL;
+#endif
     }
 
     void start(){
