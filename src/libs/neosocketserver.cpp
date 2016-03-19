@@ -70,7 +70,7 @@ void __stdcall* doWriteTask(void *pParam)
 class WorkerThread:Thread
 {
 public;
-    WorkerThread(NEO_THREAD_CALLBACK callback, ReadWriteParam param)：
+    WorkerThread(NEO_THREAD_CALLBACK callback, ReadWriteParam param):
     {
         Thread(callback);
         mpParam = pParam;

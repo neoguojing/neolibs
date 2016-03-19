@@ -15,7 +15,7 @@ typedef enum
     RAW,
     LOCAL
 
-} SERVICE_TYPE;
+}SERVICE_TYPE;
 
 typedef struct
 {
@@ -29,6 +29,8 @@ typedef struct
 #ifndef WIN32
 extern int errno;
 #endif
+
+class CNEOLowDebug;
 class NeoServer{
 public:
     NeoServer(const string addr, const unsigned short port, const SERVICE_TYPE svctyoe=SERVICE_TYPE::TCP);
