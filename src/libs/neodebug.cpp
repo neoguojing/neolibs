@@ -452,14 +452,14 @@ int CNEOLowDebug::DebugToFile(const char *szFormat,...)
             if(m_bePrintToScreenFlag)
             {
                 //输出到屏幕
-            NEO_PRINTF("%s%s",szTime,szBuff);
-            if(pInfoOutCallback)
-            {
-                //回调函数供上层调用
-                char szInfoOut[DEBUG_BUFFER_LENGTH];
-                SafePrintf(szInfoOut,DEBUG_BUFFER_LENGTH,"%s%s",szTime,szBuff);
-                pInfoOutCallback(szInfoOut,pInfoOutCallbackParam);
-            }
+				NEO_PRINTF("%s%s",szTime,szBuff);
+				if(pInfoOutCallback)
+				{
+					//回调函数供上层调用
+					char szInfoOut[DEBUG_BUFFER_LENGTH];
+					SafePrintf(szInfoOut,DEBUG_BUFFER_LENGTH,"%s%s",szTime,szBuff);
+					pInfoOutCallback(szInfoOut,pInfoOutCallbackParam);
+				}
 
             }
             fclose(fp);
