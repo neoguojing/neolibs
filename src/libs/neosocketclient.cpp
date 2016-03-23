@@ -63,7 +63,7 @@ void NeoClient::setInetAddr(string addr, unsigned short port)
 
 void NeoClient::close()
 {
-    WIN_LINUX_CloseSocket(m_Socket);
+    ::WIN_LINUX_CloseSocket(m_Socket);
 }
 
 #ifndef WIN32
@@ -92,7 +92,7 @@ void NeoClient::close()
         }
         else if((int)svctype == 1)
         {
-            recvfrom(m_Socket,buf,len,0,(struct sockaddr *)&m_ServerAddr,&len);
+            recvfrom(m_Socket,buf,len,0,(struct sockaddr *)&m_ServerAddr,(socklen_t*)&len);
         }
 		return true;
     }
