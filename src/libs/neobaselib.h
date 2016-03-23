@@ -61,8 +61,6 @@ public:
     CNEOMemPoolWithLock *m_pMemPool;
     //线程池
     CNEOTaskPool *m_pTaskPool;
-    //线程池运行体
-    CNEOTaskRun *m_pTaskRun;
     //debug没运行一次，覆盖上次
     CNEOLowDebug *m_pDebug;
 	//安全锁

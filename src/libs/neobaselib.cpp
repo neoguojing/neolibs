@@ -96,20 +96,9 @@ CNEOBaseLibrary::CNEOBaseLibrary(const char *szAppName,
     //此时可以利用内存池的注册机制
     m_pMemPool->Register(m_pTaskPool,"CNEOBaseLibrary::m_pTaskPool");
 
-    m_pTaskRun=new CNEOTaskRun(m_pMemPool,m_pLog,m_pTaskPool);
-    if(!m_pTaskRun)
-    {
-        m_pDebug->DebugToFile("CNEOBaseLibrary():m_pTaskRun new fail\n");
-        return;
-    }
-    m_pMemPool->Register(m_pTaskRun,"CNEOBaseLibrary::m_pTaskRun");
-
     //启动线程打印信息任务
     TimeSetNow(m_tLastPrint);                 //计时因子/////////////////////////////////???????
-    if(!m_pTaskRun->StartTask(InfoPrintTaskCallback,this))
-    {
-       m_pLog->_XGSysLog("CNEOBaseLibrary::start print info task fail\n");
-    }
+
     m_pDebug->DebugToFile(">>>>>>>>>>>>>>>>>>>>>>>>>>>\n");
 }
 CNEOBaseLibrary::~CNEOBaseLibrary()
@@ -119,13 +108,6 @@ CNEOBaseLibrary::~CNEOBaseLibrary()
     m_pMemPool->SetCloseFlag();
     NEO_PRINTF("2\n");
     NEO_PRINTF("3\n");
-    if(m_pTaskRun)
-    {
-       m_pMemPool->UnRegister(m_pTaskRun);
-       delete m_pTaskRun;
-       m_pTaskRun=NULL;
-    }
-    NEO_PRINTF("4\n");
     NEO_PRINTF("5\n");
     if(m_pTaskPool)
     {
@@ -178,7 +160,6 @@ bool CNEOBaseLibrary::InfoPrintTaskCallback(void *pCallParam,int &nStatus)
        TimeSetNow(pThis->m_tLastPrint);
        NEO_PRINTF("*************************\n");
        pThis->m_pTaskPool->PrintInfo();      // 打印任务池信息
-       pThis->m_pTaskRun->PrintInfo();
        pThis->m_pMemPool->PrintInfo();
        if(pThis->m_pPrintInfoCallback)
        {
