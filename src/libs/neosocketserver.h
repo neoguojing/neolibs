@@ -29,9 +29,6 @@ typedef struct
     void *buffer;
 }ReadWriteParam;
 
-#ifndef WIN32
-extern int errno;
-#else
 typedef struct _completionKey   
 {  
     SOCKET s;  
