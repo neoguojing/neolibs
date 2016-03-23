@@ -91,6 +91,8 @@ void * doWriteTask(void *pParam)
     {
         m_pNEOBaseLib = CNEOBaseLibrary::getInstance("neoserver",".","log",NULL);
 
+		m_pNEOBaseLib->m_pDebug->DebugToFile("NeoServer\r\n");
+
         m_pNEOBaseLib->m_pMemPool->Register(m_pNEOBaseLib,"NeoServer::m_pNEOBaseLib");
 
         init();
