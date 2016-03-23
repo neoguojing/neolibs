@@ -27,7 +27,7 @@ typedef struct _io_operation_data
 class NeoClient{
 
 public:
-    NeoClient(const string addr, const unsigned short port,const SERVICE_TYPE svctype=SERVICE_TYPE::TCP);
+    NeoClient(const string addr, const unsigned short port,const SERVICE_TYPE svctype=(SERVICE_TYPE)0);
     ~NeoClient();
 
     void init(const SERVICE_TYPE svctype);

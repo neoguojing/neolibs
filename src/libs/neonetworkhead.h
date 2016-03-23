@@ -166,14 +166,14 @@ AF_INET          --IPv4网络通信
 AF_INET6         --IPv6网络通信
 AF_PACKET        --链路层通信
 */
-typedef enum 
+enum SERVICE_TYPE
 {
     TCP = 0,
     UDP,
     RAW,
     LOCAL
 
-} SERVICE_TYPE;
+} ;
 
 #define SOCKET_MAX_LISTENER 64
 #define SOCKET_ADDR_SIZE sizeof(struct sockaddr)

@@ -79,8 +79,10 @@ void NeoClient::close()
            if (rtn < 0)  
            {  
                m_pDebug->DebugToFile("send udp fail!\r\n"); 
+			   return false;
            }  
         }
+		return true;
     }
     bool NeoClient::recv(const SERVICE_TYPE svctype,char *buf, int &len)
     {
@@ -92,6 +94,7 @@ void NeoClient::close()
         {
             recvfrom(m_Socket,buf,len,0,(SOCKADDR*)&m_ServerAddr,&len);
         }
+		return true;
     }
 #else
     bool NeoClient::send(const SERVICE_TYPE svctype, char *buf, int len)

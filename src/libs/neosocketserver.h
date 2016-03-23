@@ -47,7 +47,7 @@ typedef struct _io_operation_data
 #endif
 class NeoServer{
 public:
-    NeoServer(const string addr, const unsigned short port, const SERVICE_TYPE svctype=SERVICE_TYPE::TCP);
+    NeoServer(const string addr, const unsigned short port, const SERVICE_TYPE svctype=(SERVICE_TYPE)0);
     ~NeoServer();
     
     void init();
