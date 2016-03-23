@@ -3,7 +3,13 @@
 #define NEOSOCKETSERVER
 #include "neoindex.h" 
 #include <string>
-
+/*
+    以下变量线程见共享的风险
+    WIN_LINUX_SOCKET m_Socket;
+    WIN_LINUX_SOCKET m_connSocket;
+    sockaddr_in m_ServerAddr;
+    sockaddr_in m_ClientAddr;
+*/
 using namespace std;
 
 #ifndef WIN32
@@ -12,14 +18,7 @@ extern int errno;
 
 namespace NEOLIB {
 
-typedef enum 
-{
-    TCP = 0,
-    UDP,
-    RAW,
-    LOCAL
-
-}SERVICE_TYPE;
+class CNEOBaseLibrary;
 
 typedef struct
 {
@@ -30,10 +29,25 @@ typedef struct
     void *buffer;
 }ReadWriteParam;
 
-class CNEOLowDebug;
+#ifndef WIN32
+extern int errno;
+#else
+typedef struct _completionKey   
+{  
+    SOCKET s;  
+    SOCKADDR_IN clientAddr;  
+}COMPLETIONKEY,*PCOMPLETIONKEY;  
+
+typedef struct _io_operation_data  
+{  
+    WSAOVERLAPPED overlapped;  
+    WSABUF dataBuf;   
+}IO_OPERATION_DATA;  
+
+#endif
 class NeoServer{
 public:
-	NeoServer(const string addr, const unsigned short port, const SERVICE_TYPE svctyoe=(SERVICE_TYPE)0);
+    NeoServer(const string addr, const unsigned short port, const SERVICE_TYPE svctype=SERVICE_TYPE::TCP);
     ~NeoServer();
     
     void init();
@@ -45,22 +59,27 @@ public:
     static int makeSocketNonBlocking (int sfd);
     int addEvent(const int fd, epoll_event &listened_evnet);
     int modEvent(const int fd, epoll_event &listened_evnet);
+#else
+    void waitingToclose();
 #endif
-    void loop();
+    static bool loop(void *pThis,int &nStatus);
     void send(ReadWriteParam& param);
     void recv(unsigned int events);
+
+    void close();
 
 private:
     void setInetAddr(string addr, unsigned short port);
     
-    void accept(int& size);
+    static bool accept(void *pThis,int &nStatus);
 
-
+    CNEOBaseLibrary *m_pNEOBaseLib;
 #ifdef WIN32
     WORD wVersionRequested;
     WSADATA m_wsaData;
+    HANDLE m_hIOPort;
+
 #endif
-	CNEOLowDebug *m_pDebug;
     WIN_LINUX_SOCKET m_Socket;
     WIN_LINUX_SOCKET m_connSocket;
     sockaddr_in m_ServerAddr;

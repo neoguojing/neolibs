@@ -10,12 +10,13 @@
 #include <signal.h>
 
 #ifdef WIN32
+    #include <WinSock2.h>
     #include<stdio.h>
     #include<conio.h>
     #include<Windows.h>
     #include<process.h>
-    #include<WinSock.h>
-    #include <WinBase.h>
+    //#include<WinSock.h>
+    #include <WinBase.h>  
 #else
     #include<unistd.h>
     #include<errno.h>
@@ -165,6 +166,15 @@ AF_INET          --IPv4网络通信
 AF_INET6         --IPv6网络通信
 AF_PACKET        --链路层通信
 */
+typedef enum 
+{
+    TCP = 0,
+    UDP,
+    RAW,
+    LOCAL
+
+} SERVICE_TYPE;
+
 #define SOCKET_MAX_LISTENER 64
 #define SOCKET_ADDR_SIZE sizeof(struct sockaddr)
 //epoll 定义

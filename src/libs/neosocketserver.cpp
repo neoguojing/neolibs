@@ -1,7 +1,10 @@
-﻿
-#include "neomemmanager.h"
-#include "neosocketserver.h"
+﻿#include "neosocketserver.h"
+#include "neobaselib.h"
 #include "neobasicthread.h"
+#include "neodebug.h"
+#include "neomemmanager.h"
+#include "neolog.h"
+#include "neothread.h"
 
 namespace NEOLIB{
 
@@ -86,7 +89,9 @@ void * doWriteTask(void *pParam)
 
     NeoServer::NeoServer(const string addr, const unsigned short port, const SERVICE_TYPE svctyoe)
     {
-        m_pDebug=new CNEOLowDebug( ".","socket_server",NULL,NULL,true);
+        m_pNEOBaseLib = CNEOBaseLibrary::getInstance("neoserver",".","log",NULL);
+
+        m_pNEOBaseLib->m_pMemPool->Register(m_pNEOBaseLib,"NeoServer::m_pNEOBaseLib");
 
         init();
 
@@ -108,22 +113,32 @@ void * doWriteTask(void *pParam)
             break;
         }
 
+        m_pNEOBaseLib->m_pMemPool->RegisterSocket(m_Socket,"NeoServer::m_Socket");
+
         if(0 > listen(m_Socket,SOCKET_MAX_LISTENER))
         {
-            m_pDebug->DebugToFile("Socket listen fail!\r\n");
+            m_pNEOBaseLib->m_pDebug->DebugToFile("Socket listen fail!\r\n");
             WIN_LINUX_CloseSocket(m_Socket);
         }
+
+#ifndef WIN32
+		m_pNEOBaseLib->m_pTaskPool->RegisterATask(loop,this);
+#else
+        m_pNEOBaseLib->m_pTaskPool->RegisterATask(accept,this);
+        m_pNEOBaseLib->m_pTaskPool->RegisterATask(loop,this);
+#endif
     }
 
     NeoServer::~NeoServer()
     {
-        if(m_pDebug)
+         m_pNEOBaseLib->m_pDebug->DebugToFile("~NeoServer\r\n");
+         m_pNEOBaseLib->m_pMemPool->UnRegister(m_pNEOBaseLib);
+        if(m_pNEOBaseLib)
         {
-           delete m_pDebug;
-           m_pDebug=NULL;
+           delete m_pNEOBaseLib;
+           m_pNEOBaseLib=NULL;
         }
-        m_pDebug->DebugToFile("~NeoServer\r\n");
-        WIN_LINUX_CloseSocket(m_Socket);
+        close();
     }
 
     void NeoServer::init()
@@ -134,8 +149,10 @@ void * doWriteTask(void *pParam)
        err=WSAStartup(wVersionRequested,&m_wsaData);
        if(err!=0)
        {
-           m_pDebug->DebugToFile("Socket Init fail!\r\n");
+            m_pNEOBaseLib->m_pDebug->DebugToFile("Socket Init fail!\r\n");
        }
+
+       m_hIOPort=CreateIoCompletionPort(INVALID_HANDLE_VALUE,NULL,0,0);  
 #endif
     }
 
@@ -145,7 +162,7 @@ void * doWriteTask(void *pParam)
         setInetAddr(addr,port);
         if(0 > bind(m_Socket,(struct sockaddr *)(&m_ServerAddr), sizeof(struct sockaddr)))
         {
-            m_pDebug->DebugToFile("Socket bind fail!\r\n");
+             m_pNEOBaseLib->m_pDebug->DebugToFile("Socket bind fail!\r\n");
             WIN_LINUX_CloseSocket(m_Socket);
         }
     }
@@ -156,7 +173,7 @@ void * doWriteTask(void *pParam)
         setInetAddr(addr,port);
         if(0 > bind(m_Socket,(struct sockaddr *)(&m_ServerAddr), sizeof(struct sockaddr)))
         {
-            m_pDebug->DebugToFile("Socket bind fail!\r\n");
+             m_pNEOBaseLib->m_pDebug->DebugToFile("Socket bind fail!\r\n");
             WIN_LINUX_CloseSocket(m_Socket);
         }
     }
@@ -167,7 +184,7 @@ void * doWriteTask(void *pParam)
         setInetAddr(addr,port);
         if(0 > bind(m_Socket,(struct sockaddr *)(&m_ServerAddr), sizeof(struct sockaddr)))
         {
-            m_pDebug->DebugToFile("Socket bind fail!\r\n");
+             m_pNEOBaseLib->m_pDebug->DebugToFile("Socket bind fail!\r\n");
             WIN_LINUX_CloseSocket(m_Socket);
         }
     }
@@ -184,26 +201,53 @@ void * doWriteTask(void *pParam)
         m_ServerAddr.sin_port=htons(port);
      }
 
-     void NeoServer::accept(int& size)
+     bool NeoServer::accept(void *pThis,int &nStatus)
      {  
+        int size = 0;
+        NeoServer *tThis = (NeoServer*)pThis;
+
+        tThis->m_pNEOBaseLib->m_pDebug->DebugToFile("accept thread started!\r\n");
 #ifndef WIN32
-        while((m_connSocket = ::accept(m_Socket,(struct sockaddr *)&m_ClientAddr,(socklen_t*)&size)) > 0)
+        while((tThis->m_connSocket = ::accept(tThis->m_Socket,(struct sockaddr *)&tThis->m_ClientAddr,(socklen_t*)&size)) > 0)
         {
-            makeSocketNonBlocking(m_connSocket);
+            makeSocketNonBlocking(tThis->m_connSocket);
 
-            m_Event.events = EPOLL_ET_IN;
-            m_Event.data.fd = m_connSocket;
+            tThis->m_Event.events = EPOLL_ET_IN;
+            tThis->m_Event.data.fd = tThis->m_connSocket;
 
-            addEvent(m_connSocket,m_Event);
+            addEvent(tThis->m_connSocket,m_Event);
         }
 
-        if (-1 == m_connSocket)
+        if (-1 == tThis->m_connSocket)
         {
             if(errno != EAGAIN && errno != ECONNABORTED
                 && errno != EPROTO && errno != EINTR)
-                m_pDebug->DebugToFile("accept fail!\r\n");
+                 tThis->m_pNEOBaseLib->m_pDebug->DebugToFile("accept fail!\r\n");
+        }
+#else
+        
+        while(tThis->m_connSocket= ::accept(tThis->m_Socket,(SOCKADDR*)&tThis->m_ClientAddr,&size) > 0) 
+        {
+            COMPLETIONKEY completionKey;  
+            completionKey.s=tThis->m_connSocket;  
+            completionKey.clientAddr=tThis->m_ClientAddr;   
+            HANDLE h=CreateIoCompletionPort((HANDLE)tThis->m_connSocket,tThis->m_hIOPort,(DWORD)&completionKey,0); 
+        }
+
+        if (-1 == tThis->m_connSocket)
+        {
+            tThis->m_pNEOBaseLib->m_pDebug->DebugToFile("accept fail and quit!\r\n");
         }
 #endif
+        return true;
+     }
+
+     void NeoServer::close()
+     {
+#ifdef WIN32
+        CancelIo(m_hIOPort);  
+#endif
+        m_pNEOBaseLib->m_pMemPool->CloseSocket(m_Socket);
      }
 
 #ifndef WIN32
@@ -236,7 +280,7 @@ void * doWriteTask(void *pParam)
         int rtn = epoll_ctl(m_epollFd,EPOLL_CTL_ADD,fd,&listened_evnet);
         if (rtn==-1)
         {
-            m_pDebug->DebugToFile("addEvent fail!\r\n");
+             m_pNEOBaseLib->m_pDebug->DebugToFile("addEvent fail!\r\n");
         }
         return rtn;
     }
@@ -246,7 +290,7 @@ void * doWriteTask(void *pParam)
         int rtn = epoll_ctl(m_epollFd, EPOLL_CTL_MOD,fd,&listened_evnet);
         if (rtn == -1)
         {
-            m_pDebug->DebugToFile("modEvent fail!\r\n");
+             m_pNEOBaseLib->m_pDebug->DebugToFile("modEvent fail!\r\n");
         }
 
         return rtn;
@@ -254,61 +298,106 @@ void * doWriteTask(void *pParam)
 
 #endif
 
-     void NeoServer::loop()
-     {
 #ifndef WIN32
+     bool NeoServer::loop(void *pThis,int &nStatus)
+     {
+         NeoServer *tThis = (NeoServer*)pThis;
+
+         tThis->m_pNEOBaseLib->m_pDebug->DebugToFile("NeoServer::loop thread started!\r\n");
+
          int addrlen = 0;
          int tempfd = 0;
          int numofwaitingfds = 0;
 
-         makeSocketNonBlocking(m_Socket);
+         makeSocketNonBlocking(tThis->m_Socket);
 
-         m_epollFd = epoll_create(EPOLL_SIZE_HINT);
+         tThis->m_epollFd = epoll_create(EPOLL_SIZE_HINT);
          if (m_epollFd == -1)
          {
-            m_pDebug->DebugToFile("m_epollFd create fail!\r\n");
+             tThis->m_pNEOBaseLib->m_pDebug->DebugToFile("m_epollFd create fail!\r\n");
             return;
          }
 
-         m_Event.events = EPOLLIN;
-         m_Event.data.fd = m_epollFd;
-         if (addEvent(m_Socket,m_Event) == -1)
+         tThis->m_Event.events = EPOLLIN;
+         tThis->m_Event.data.fd = m_epollFd;
+         if (addEvent(tThis->m_Socket,tThis->m_Event) == -1)
          {
-            return;
+              tThis->m_pNEOBaseLib->m_pDebug->DebugToFile("addEvent m_Socket fail!\r\n");
+             return;
          }
 
          for (;;)
          {
-            numofwaitingfds = epoll_wait(m_epollFd, m_Events, EPOLL_SIZE_HINT, -1);
+            numofwaitingfds = epoll_wait(tThis->m_epollFd, tThis->m_Events, EPOLL_SIZE_HINT, -1);
             if (-1 == numofwaitingfds)
             {
-                m_pDebug->DebugToFile("epoll_ctl fail!\r\n");
+                 tThis->m_pNEOBaseLib->m_pDebug->DebugToFile("epoll_ctl fail!\r\n");
             }
 
             int i = 0;
             for (;i < numofwaitingfds; ++i)
             {
-                tempfd = m_Events[i].data.fd;
-                if (tempfd == m_Socket)
+                tempfd = tThis->m_Events[i].data.fd;
+                if (tempfd == tThis->m_Socket)
                 {
-                    accept(addrlen);
+                    accept((void*)tThis,0);
 
                     continue;
                 }
-                else if (m_Events[i].events & EPOLLIN)
+                else if (tThis->m_Events[i].events & EPOLLIN)
                 {
-                    recv(m_Events[i].events);
+                    recv(tThis->m_Events[i].events);
                 }
-                else if (m_Events[i].events & EPOLLOUT)
+                else if (tThis->m_Events[i].events & EPOLLOUT)
                 {
                     
                 }
             }
 
          }
-#endif
+
+     }
+#else
+
+     void NeoServer::waitingToclose()
+     {
+        PostQueuedCompletionStatus(m_hIOPort,0,0,NULL);
+        WIN_LINUX_CloseSocket(m_Socket);
      }
 
+     bool NeoServer::loop(void *pThis,int &nStatus)
+     {
+         NeoServer *tThis = (NeoServer*)pThis;
+
+         tThis->m_pNEOBaseLib->m_pDebug->DebugToFile("NeoServer::loop thread started!\r\n");
+
+         COMPLETIONKEY completionKey;
+         DWORD dwNumberOfBytesTransferrd;
+         LPOVERLAPPED pOverlapped;
+         for(;;)
+         {
+             bool ret=GetQueuedCompletionStatus(tThis->m_hIOPort,&dwNumberOfBytesTransferrd,(LPDWORD)&completionKey,&pOverlapped,100);
+             if(ret&&(&completionKey)&&pOverlapped)
+             {
+                 //成功
+             }
+             else
+             {
+                 int err=WSAGetLastError();
+                 if(NULL!=pOverlapped)
+                 {
+                  //失败的IO操作。
+
+                 }
+                 else if(ret==WAIT_TIMEOUT)
+                 {
+                  //超时。
+
+                 }
+             }
+         }
+     }
+#endif
     void NeoServer::send(ReadWriteParam& param)
     {
 
@@ -321,7 +410,7 @@ void * doWriteTask(void *pParam)
     }
     void NeoServer::recv(unsigned int events)
     {
-        //也可以用task pool处    理
+        //也可以用task pool处理
 #ifndef WIN32   
         ReadWriteParam param;
         param.events = events;
@@ -329,6 +418,18 @@ void * doWriteTask(void *pParam)
         WorkerThread *readThread = new WorkerThread(doReadTask,param);
         readThread->start();
 #else
+        DWORD recvBytes = 0, flags =0;
+        IO_OPERATION_DATA *pIoData=new IO_OPERATION_DATA;  
+        pIoData->dataBuf.buf = new char[1024];  
+        pIoData->dataBuf.len=1014;  
+        ZeroMemory(&pIoData->overlapped,sizeof(WSAOVERLAPPED));  
+        if(WSARecv(m_connSocket,&(pIoData->dataBuf),1,&recvBytes,&flags,&(pIoData->overlapped),NULL)==SOCKET_ERROR)  
+        {   
+            if(WSAGetLastError()!=ERROR_IO_PENDING)  
+            {  
+                return;
+            }  
+        }  
 #endif
     }
 

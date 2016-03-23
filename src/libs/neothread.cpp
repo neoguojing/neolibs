@@ -9,7 +9,7 @@
 #include "neosafefunc.h"                  
 #include "neomemmanager.h"                          
 #include "neoqueue.h"                               
-//#include "neobaselib.h"
+#include "neobaselib.h"
 #include "neolog.h"
 #include "neothread.h"
 namespace NEOLIB {
@@ -644,10 +644,15 @@ void CNEOTaskRunInfo::CopyFrom(SNEOTaskRunInfo *pInfo)
 //////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////
-/*CNEOTaskRun::CNEOTaskRun(CNEOBaseLibrary *pNEOBaseLib)
+CNEOTaskRun::CNEOTaskRun(CNEOBaseLibrary *pNEOBaseLib)
 {
-    m_pNEOBaseLib=pNEOBaseLib;
-}*/
+    if(pNEOBaseLib != NULL)
+    {
+        m_pMemPool = pNEOBaseLib->m_pMemPool;
+	    m_pLog = pNEOBaseLib->m_pLog;
+	    m_pTaskPool = pNEOBaseLib->m_pTaskPool;
+    }
+}
 
 CNEOTaskRun::CNEOTaskRun(CNEOMemPoolWithLock *pMemPool,CNEOLog *pLog,CNEOTaskPool *pTaskPool)
 {
@@ -715,7 +720,8 @@ bool CNEOTaskRun::StartTask(SNEOTaskRunInfo *pInfoStruct,char *szAppName)
        CNEOTaskRunInfo InfoObj(&(pParam->m_Info));
        InfoObj.CopyFrom(pInfoStruct);
        //注册任务
-       bRet=m_pTaskPool->RegisterATask(NEOTestRunTaskCallback,pParam);
+       bRet=m_pTaskPool->RegisterATask(NEOTestRunTaskCallback,//本线程测试回调
+                                        pParam);//真正的回调
        if(bRet)
        {
           m_ThreadManager.AddThread();
@@ -749,6 +755,8 @@ void CNEOTaskRun::PrintInfo(void)
 //任务回调函数
 /*
     nStatus是task run的步骤依据
+    在此回调中执行注册的任务
+    nStatus在taskpool中被赋值为0
 
 */
 bool CNEOTaskRun::NEOTestRunTaskCallback(void *pCallParam,int &nStatus)
