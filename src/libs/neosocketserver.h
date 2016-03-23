@@ -29,6 +29,9 @@ typedef struct
     void *buffer;
 }ReadWriteParam;
 
+#ifndef WIN32
+
+#else
 typedef struct _completionKey   
 {  
     SOCKET s;  
@@ -42,6 +45,7 @@ typedef struct _io_operation_data
 }IO_OPERATION_DATA;  
 
 #endif
+
 class NeoServer{
 public:
     NeoServer(const string addr, const unsigned short port, const SERVICE_TYPE svctype=(SERVICE_TYPE)0);
