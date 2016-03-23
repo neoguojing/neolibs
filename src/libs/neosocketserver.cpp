@@ -328,10 +328,12 @@ void * doWriteTask(void *pParam)
 
          for (;;)
          {
+			tThis->m_pNEOBaseLib->m_pDebug->DebugToFile("epoll_wait loop!\r\n");
             numofwaitingfds = epoll_wait(tThis->m_epollFd, tThis->m_Events, EPOLL_SIZE_HINT, -1);
             if (-1 == numofwaitingfds)
             {
                  tThis->m_pNEOBaseLib->m_pDebug->DebugToFile("epoll_ctl fail!\r\n");
+				 continue;
             }
 
             int i = 0;
