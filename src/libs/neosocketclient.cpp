@@ -30,7 +30,7 @@ void NeoClient::init(const SERVICE_TYPE svctype)
         if(connect(m_Socket, (struct sockaddr*)&m_ServerAddr, sizeof(m_ServerAddr)) < 0)
         {
             m_pDebug->DebugToFile("connected to server fail!\r\n");
-            WIN_LINUX_CloseSocket(m_Socket);
+            ::WIN_LINUX_CloseSocket(m_Socket);
         }
         break;
     case 1:
