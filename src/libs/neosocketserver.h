@@ -57,8 +57,8 @@ public:
     void LOCAL();
 #ifndef WIN32
     static int makeSocketNonBlocking (int sfd);
-    int addEvent(const int fd, epoll_event &listened_evnet);
-    int modEvent(const int fd, epoll_event &listened_evnet);
+    static int addEvent(const int epollfd, const int fd, epoll_event &listened_evnet);
+    static int modEvent(const int epollfd,const int fd, epoll_event &listened_evnet);
 #else
     void waitingToclose();
 #endif

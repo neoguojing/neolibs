@@ -118,7 +118,7 @@ void * doWriteTask(void *pParam)
         if(0 > listen(m_Socket,SOCKET_MAX_LISTENER))
         {
             m_pNEOBaseLib->m_pDebug->DebugToFile("Socket listen fail!\r\n");
-            WIN_LINUX_CloseSocket(m_Socket);
+            ::WIN_LINUX_CloseSocket(m_Socket);
         }
 
 #ifndef WIN32
@@ -162,8 +162,8 @@ void * doWriteTask(void *pParam)
         setInetAddr(addr,port);
         if(0 > bind(m_Socket,(struct sockaddr *)(&m_ServerAddr), sizeof(struct sockaddr)))
         {
-             m_pNEOBaseLib->m_pDebug->DebugToFile("Socket bind fail!\r\n");
-            WIN_LINUX_CloseSocket(m_Socket);
+            m_pNEOBaseLib->m_pDebug->DebugToFile("Socket bind fail!\r\n");
+            ::WIN_LINUX_CloseSocket(m_Socket);
         }
     }
 
@@ -173,8 +173,8 @@ void * doWriteTask(void *pParam)
         setInetAddr(addr,port);
         if(0 > bind(m_Socket,(struct sockaddr *)(&m_ServerAddr), sizeof(struct sockaddr)))
         {
-             m_pNEOBaseLib->m_pDebug->DebugToFile("Socket bind fail!\r\n");
-            WIN_LINUX_CloseSocket(m_Socket);
+            m_pNEOBaseLib->m_pDebug->DebugToFile("Socket bind fail!\r\n");
+            ::WIN_LINUX_CloseSocket(m_Socket);
         }
     }
 
@@ -184,8 +184,8 @@ void * doWriteTask(void *pParam)
         setInetAddr(addr,port);
         if(0 > bind(m_Socket,(struct sockaddr *)(&m_ServerAddr), sizeof(struct sockaddr)))
         {
-             m_pNEOBaseLib->m_pDebug->DebugToFile("Socket bind fail!\r\n");
-            WIN_LINUX_CloseSocket(m_Socket);
+            m_pNEOBaseLib->m_pDebug->DebugToFile("Socket bind fail!\r\n");
+            ::WIN_LINUX_CloseSocket(m_Socket);
         }
     }
 
@@ -201,7 +201,7 @@ void * doWriteTask(void *pParam)
         m_ServerAddr.sin_port=htons(port);
      }
 
-     bool NeoServer::accept(void *pThis,int &nStatus)
+     bool NeoServer::accept(void *pThis,int& nStatus)
      {  
         int size = 0;
         NeoServer *tThis = (NeoServer*)pThis;
@@ -215,7 +215,7 @@ void * doWriteTask(void *pParam)
             tThis->m_Event.events = EPOLL_ET_IN;
             tThis->m_Event.data.fd = tThis->m_connSocket;
 
-            addEvent(tThis->m_connSocket,m_Event);
+           addEvent(tThis->m_epollFd, tThis->m_connSocket,tThis->m_Event);
         }
 
         if (-1 == tThis->m_connSocket)
@@ -275,22 +275,22 @@ void * doWriteTask(void *pParam)
          return 0;   
      }   
 
-    int NeoServer::addEvent(const int fd, epoll_event &listened_evnet)
+    int NeoServer::addEvent(const int epollfd, const int fd, epoll_event &listened_evnet)
     {
-        int rtn = epoll_ctl(m_epollFd,EPOLL_CTL_ADD,fd,&listened_evnet);
+        int rtn = epoll_ctl(epollfd,EPOLL_CTL_ADD,fd,&listened_evnet);
         if (rtn==-1)
         {
-             m_pNEOBaseLib->m_pDebug->DebugToFile("addEvent fail!\r\n");
+             printf("addEvent fail!\r\n");
         }
         return rtn;
     }
 
-    int NeoServer::modEvent(const int fd, epoll_event &listened_evnet)
+    int NeoServer::modEvent(const int epollfd, const int fd, epoll_event &listened_evnet)
     {
-        int rtn = epoll_ctl(m_epollFd, EPOLL_CTL_MOD,fd,&listened_evnet);
+        int rtn = epoll_ctl(epollfd, EPOLL_CTL_MOD,fd,&listened_evnet);
         if (rtn == -1)
         {
-             m_pNEOBaseLib->m_pDebug->DebugToFile("modEvent fail!\r\n");
+            printf("modEvent fail!\r\n");
         }
 
         return rtn;
@@ -312,18 +312,18 @@ void * doWriteTask(void *pParam)
          makeSocketNonBlocking(tThis->m_Socket);
 
          tThis->m_epollFd = epoll_create(EPOLL_SIZE_HINT);
-         if (m_epollFd == -1)
+         if (tThis->m_epollFd == -1)
          {
              tThis->m_pNEOBaseLib->m_pDebug->DebugToFile("m_epollFd create fail!\r\n");
-            return;
+            return false;
          }
 
          tThis->m_Event.events = EPOLLIN;
-         tThis->m_Event.data.fd = m_epollFd;
-         if (addEvent(tThis->m_Socket,tThis->m_Event) == -1)
+         tThis->m_Event.data.fd =  tThis->m_epollFd;
+         if (addEvent(tThis->m_epollFd,tThis->m_Socket,tThis->m_Event) == -1)
          {
-              tThis->m_pNEOBaseLib->m_pDebug->DebugToFile("addEvent m_Socket fail!\r\n");
-             return;
+             tThis->m_pNEOBaseLib->m_pDebug->DebugToFile("addEvent m_Socket fail!\r\n");
+             return false;
          }
 
          for (;;)
@@ -340,13 +340,13 @@ void * doWriteTask(void *pParam)
                 tempfd = tThis->m_Events[i].data.fd;
                 if (tempfd == tThis->m_Socket)
                 {
-                    accept((void*)tThis,0);
+                    accept((void*)tThis,nStatus);
 
                     continue;
                 }
                 else if (tThis->m_Events[i].events & EPOLLIN)
                 {
-                    recv(tThis->m_Events[i].events);
+                    tThis->recv(tThis->m_Events[i].events);
                 }
                 else if (tThis->m_Events[i].events & EPOLLOUT)
                 {
@@ -355,7 +355,7 @@ void * doWriteTask(void *pParam)
             }
 
          }
-
+		 return true;
      }
 #else
 
