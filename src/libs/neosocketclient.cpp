@@ -92,7 +92,7 @@ void NeoClient::close()
         }
         else if((int)svctype == 1)
         {
-            recvfrom(m_Socket,buf,len,0,(SOCKADDR*)&m_ServerAddr,&len);
+            recvfrom(m_Socket,buf,len,0,(struct sockaddr *)&m_ServerAddr,&len);
         }
 		return true;
     }
