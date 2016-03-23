@@ -477,6 +477,9 @@ int main(int argc,char **argv,char *env[])
     handler->sendMessage(*msg2);
     Message *msg = handler->obtainMessage(1);
     handler->sendMessage(*msg);
+    printf(">>>>>>>>>>>>>>>>>>>>>>socket test>>>>>>>>>>>>>>>>>>>>>>>>>>\n");
+    NeoServer * server =new  NeoServer("127.0.0.1",8888);
+
 #ifndef WIN32
 	//linux 主线程退出之后，子线程也会退出
 	while(1)
