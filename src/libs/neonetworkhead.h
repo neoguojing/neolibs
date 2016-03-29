@@ -183,5 +183,37 @@ enum SERVICE_TYPE
 #define EPOLL_MAX_EVENTS 64
 #define EPOLL_ET_IN (EPOLLIN | EPOLLET)
 #define EPOLL_ET_OUT (EPOLLOUT | EPOLLET)
+
+typedef enum _io_type
+{
+    IORead,
+    IOWrite,
+    IOLogOut
+}IOTYPE;
+
+typedef struct _io_operation_data
+
+{
+    char* dataBuf;
+    IOTYPE IoType;//IO操作类型：如READ或WRITE。
+    unsigned long len;//实际传输的数据长度。
+}IO_OPERATION_DATA;
+
+#else
+typedef enum _io_type
+{
+    IORead,
+    IOWrite,
+    IOLogOut
+}IOTYPE;
+
+typedef struct _io_operation_data
+
+{
+    OVERLAPPED overlapped;
+    WSABUF dataBuf;
+    IOTYPE IoType;//IO操作类型：如READ或WRITE。
+    unsigned long len;//实际传输的数据长度。
+}IO_OPERATION_DATA;
 #endif
 #endif

@@ -5,22 +5,13 @@
 #include <string>
 using namespace std;
 
-class CNEOLowDebug;
 namespace NEOLIB {
+
+class CNEOBaseLibrary;
 
 #ifndef WIN32
 
 #else
-
-#pragma once
-typedef struct _io_operation_data
-
-{
-    OVERLAPPED overlapped;
-    WSABUF dataBuf;
-    char IoType;//IO操作类型：如READ或WRITE。
-    BYTE len;//实际传输的数据长度。
-}IO_OPERATION_DATA;
 
 #endif
 
@@ -30,13 +21,18 @@ public:
     NeoClient(const string addr, const unsigned short port,const SERVICE_TYPE svctype=(SERVICE_TYPE)0);
     ~NeoClient();
 
-    void init(const SERVICE_TYPE svctype);
+    bool init(const SERVICE_TYPE svctype);
     void setInetAddr(string addr, unsigned short port);
     void close();
     bool send(const SERVICE_TYPE svctype, char *buf, int len);
     bool recv(const SERVICE_TYPE svctype, char *buf, int& len);
+
+    static bool recvTask(void *pThis,int &nStatus);
+    static bool myTask(void *pThis,int &nStatus);
+
 private:
-    CNEOLowDebug *m_pDebug;
+    bool clientSwitch;
+    CNEOBaseLibrary *m_pNEOBaseLib;
 #ifdef WIN32
     WORD wVersionRequested;
     WSADATA m_wsaData;
@@ -46,7 +42,7 @@ private:
 
 #endif
     WIN_LINUX_SOCKET m_Socket;
-    sockaddr_in m_ServerAddr;
+    struct sockaddr_in m_ServerAddr;
 };
 
 

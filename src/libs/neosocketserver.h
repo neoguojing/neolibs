@@ -3,6 +3,7 @@
 #define NEOSOCKETSERVER
 #include "neoindex.h" 
 #include <string>
+#include <set>
 /*
     以下变量线程见共享的风险
     WIN_LINUX_SOCKET m_Socket;
@@ -19,6 +20,7 @@ extern int errno;
 namespace NEOLIB {
 
 class CNEOBaseLibrary;
+class CClient;
 
 typedef struct
 {
@@ -38,13 +40,8 @@ typedef struct _completionKey
     SOCKADDR_IN clientAddr;  
 }COMPLETIONKEY,*PCOMPLETIONKEY;  
 
-typedef struct _io_operation_data  
-{  
-    WSAOVERLAPPED overlapped;  
-    WSABUF dataBuf;   
-}IO_OPERATION_DATA;  
-
 #endif
+
 
 class NeoServer{
 public:
@@ -64,8 +61,8 @@ public:
     void waitingToclose();
 #endif
     static bool loop(void *pThis,int &nStatus);
-    void send(ReadWriteParam& param);
-    void recv(unsigned int events);
+    bool send(ReadWriteParam& param);
+    bool recv(unsigned int events, WIN_LINUX_SOCKET socket);
 
     void close();
 
@@ -74,6 +71,8 @@ private:
     
     static bool accept(void *pThis,int &nStatus);
 
+    bool serverSwitch;
+    set<CClient*> g_clientManager;
     CNEOBaseLibrary *m_pNEOBaseLib;
 #ifdef WIN32
     WORD wVersionRequested;
