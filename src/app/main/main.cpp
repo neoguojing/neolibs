@@ -28,6 +28,7 @@
 #include "../../libs/neobasicthread.h"
 #include "../../libs/neoprocesssync.h"
 #include "../../libs/neosocketserver.h"
+#include "../../libs/neosocketclient.h"
 
 #include "../../include/neodebug.h"
 #include "../../include/neomemmanager.h"
@@ -467,7 +468,7 @@ int main(int argc,char **argv,char *env[])
     //Thread *t = new Thread();
    // t->start();
 
-    ThreadWithLoop *tLoop = new ThreadWithLoop();
+    /*ThreadWithLoop *tLoop = new ThreadWithLoop();
     tLoop->start();
     Looper * mainLooper= NULL;
     tLoop->getMyLooper(&mainLooper);
@@ -476,9 +477,12 @@ int main(int argc,char **argv,char *env[])
     Message *msg2 = handler->obtainMessage(2);
     handler->sendMessage(*msg2);
     Message *msg = handler->obtainMessage(1);
-    handler->sendMessage(*msg);
-    printf(">>>>>>>>>>>>>>>>>>>>>>socket test>>>>>>>>>>>>>>>>>>>>>>>>>>\n");
+    handler->sendMessage(*msg);*/
+    printf(">>>>>>>>>>>>>>>>>>>>>>socket test server>>>>>>>>>>>>>>>>>>>>>>>>>>\n");
     NeoServer * server =new  NeoServer("127.0.0.1",8888);
+
+    printf(">>>>>>>>>>>>>>>>>>>>>>socket test client>>>>>>>>>>>>>>>>>>>>>>>>>>\n");
+    //NeoClient * client =new  NeoClient("127.0.0.1",8888);
 
 #ifndef WIN32
 	//linux 主线程退出之后，子线程也会退出
