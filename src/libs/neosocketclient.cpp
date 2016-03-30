@@ -6,7 +6,6 @@
 #include "neomemmanager.h"
 #include "neolog.h"
 #include "neothread.h"
-#include "neosocketcommon.h"
 
 namespace NEOLIB{
 
@@ -23,9 +22,9 @@ NeoClient::NeoClient(const string addr, const unsigned short port,const SERVICE_
 
     if(init(svctype))
     {
-        m_pNEOBaseLib->m_pTaskPool->RegisterATask(recvTask,this);
-        NEOMinSleep();
-        m_pNEOBaseLib->m_pTaskPool->RegisterATask(myTask,this);
+        doConnection();
+        doRecv();
+        doSend();
     }
 }
 
@@ -80,152 +79,97 @@ void NeoClient::close()
     ::WIN_LINUX_CloseSocket(m_Socket);
 }
 
-#ifndef WIN32
-    bool NeoClient::send(const SERVICE_TYPE svctype, char *buf, int len)
-    {
-        if((int)svctype == 0)
-        {
-            if(0 > write(m_Socket, buf,len))
-                return false;
-        }
-        else if((int)svctype == 1)
-        {
-           int rtn = sendto(m_Socket, buf, len, 0, (struct sockaddr *)&m_ServerAddr, sizeof(m_ServerAddr));  
-           if (rtn < 0)  
-           {  
-               m_pNEOBaseLib->m_pDebug->DebugToFile("send udp fail!\r\n"); 
-			   return false;
-           }  
-        }
-		return true;
-    }
-    bool NeoClient::recv(const SERVICE_TYPE svctype,char *buf, int &len)
-    {
-        if((int)svctype == 0)
-        {
-            if(read(m_Socket,buf,len) < 0)
-                return false;
-        }
-        else if((int)svctype == 1)
-        {
-            recvfrom(m_Socket,buf,len,0,(struct sockaddr *)&m_ServerAddr,(socklen_t*)&len);
-        }
-		return true;
-    }
-#else
-    bool NeoClient::send(const SERVICE_TYPE svctype, char *buf, int len)
-    {
-        if((int)svctype == 0)
-        {
-            
-	        WSABUF wsabuf;
-            DWORD flag=0;
+bool NeoClient::doConnection()
+{
+    m_pNEOBaseLib->m_pTaskPool->RegisterATask(connTask,this);
+    return true;
+}
 
-            ZeroMemory(&m_IoSend,sizeof(IO_OPERATION_DATA));
-	        m_IoSend.IoType = IOWrite;
-            m_IoRecv.len = len;
+bool NeoClient::doSend()
+{
+    m_pNEOBaseLib->m_pTaskPool->RegisterATask(myTask,this);
+    return true;
+}
+bool NeoClient::doRecv()
+{
+    m_pNEOBaseLib->m_pTaskPool->RegisterATask(recvTask,this);
+    return true;
+}
+    
+bool NeoClient::connTask(void *pThis,int &nStatus)
+{
+    bool needContinue = false;
+    NeoClient *tThis = (NeoClient*)pThis;
 
-	        wsabuf.buf=buf;
-	        wsabuf.len=512;
-	        
-	        int ret=WSASend(m_Socket,&wsabuf,1,NULL,flag,&(m_IoSend.overlapped),NULL);
-	        if(ret==SOCKET_ERROR)
-	        {
-		        int err=WSAGetLastError();
-		        if(err!=WSA_IO_PENDING)
-		        {
-                    m_pNEOBaseLib->m_pDebug->DebugToFile("NeoClient::send send msg fail!\r\n"); 
-			        return false;
-		        }
-	        }
-	        return true;
-        }
-        else if((int)svctype == 1)
-        {
-           int rtn = sendto(m_Socket, buf, len, 0, (struct sockaddr *)&m_ServerAddr, sizeof(m_ServerAddr));  
-           if (rtn < 0)  
-           {  
-               m_pNEOBaseLib->m_pDebug->DebugToFile("send udp fail!\r\n");
-           }  
-        }
-	    
-
+    if(connect(tThis->m_Socket, (struct sockaddr*)&tThis->m_ServerAddr, sizeof(tThis->m_ServerAddr)) < 0)
+    {
+        tThis->m_pNEOBaseLib->m_pDebug->DebugToFile("connected to server fail!\r\n");
+        ::WIN_LINUX_CloseSocket(tThis->m_Socket);
+        NEOMinSleep();
+        needContinue = true;
     }
 
-    bool NeoClient::recv(const SERVICE_TYPE svctype, char *buf, int& len)
-    {
+    return needContinue;
+}
 
-        if((int)svctype == 0)
-        {
-            WSABUF wsabuf;
-	        ZeroMemory(&m_IoRecv,sizeof(IO_OPERATION_DATA));
-	        m_IoRecv.IoType = IORead;
-            m_IoRecv.len = len;
-	        wsabuf.buf= new char[1024];
-	        wsabuf.len=1024;
-	        DWORD flag=0;
-	        int ret=WSARecv(m_Socket,&wsabuf,1,NULL,&flag,&m_IoRecv.overlapped,NULL);
-	        if(ret==SOCKET_ERROR)
-	        {
-		        int err=WSAGetLastError();
-		        if(err!=WSA_IO_PENDING)
-		        {
-			        return false;
-		        }
-	        }
-	        return true;
-        }
-        else if((int)svctype == 1)
-        {
-            recvfrom(m_Socket,buf,len,0,(SOCKADDR*)&m_ServerAddr,&len);
-        }
-    }
-#endif
+bool NeoClient::recvTask(void *pThis,int &nStatus)
+{
+    bool needContinue = false;
+    int recvRet = 0;
+    NeoClient *tThis = (NeoClient*)pThis;
 
-    bool NeoClient::recvTask(void *pThis,int &nStatus)
+    tThis->m_pNEOBaseLib->m_pDebug->DebugToFile("receive task started!\r\n");
+    while(tThis->clientSwitch)
     {
-        bool needContinue = false;
-        NeoClient *tThis = (NeoClient*)pThis;
+        char buffer[1024] = {0};
 #ifdef WIN32
-        if(WSAConnect(tThis->m_Socket, (struct sockaddr*)&tThis->m_ServerAddr, sizeof(tThis->m_ServerAddr),
-            NULL,NULL,NULL,NULL) < 0)
+        while((recvRet = recv( tThis->m_Socket, buffer, 1024, 0)) > 0)
         {
-            tThis->m_pNEOBaseLib->m_pDebug->DebugToFile("connected to server fail!\r\n");
-            ::WIN_LINUX_CloseSocket(tThis->m_Socket);
-            NEOMinSleep();
+            tThis->m_pNEOBaseLib->m_pDebug->DebugToFile(
+                            "NeoClient::loop got msg:msg=%s,recvsize=%d,buffersize=1024!,\r\n",
+                            buffer,recvRet);
+        }//while
+
+        //server socket closed
+        if (0 == recvRet)
+        {
+            tThis->close();
+        }
+        else
+        {
+            int err=WSAGetLastError();
+            tThis->m_pNEOBaseLib->m_pDebug->DebugToFile("recv err=%d",err);
+			continue;
+        }
+
+#else
+
+#endif
+    }//while(tThis->clientSwitch)
+
+    return needContinue;
+}
+
+bool NeoClient::myTask(void *pThis,int &nStatus)
+{
+    bool needContinue = false;
+    int sendRet = 0;
+    NeoClient *tThis = (NeoClient*)pThis;
+
+    tThis->m_pNEOBaseLib->m_pDebug->DebugToFile("my task started!\r\n");
+
+#ifdef WIN32
+    if((sendRet = send(tThis->m_Socket, "i am a client", 14, 0)) < 0)
+    {
+            int err=WSAGetLastError();
+            tThis->m_pNEOBaseLib->m_pDebug->DebugToFile("send err=%d",err);
             return true;
-        }
+    }
+
 #else
 
 #endif
-        while(tThis->clientSwitch)
-        {
-            break;
-        }
+    return needContinue;
+}
 
-        return needContinue;
-    }
-
-    bool NeoClient::myTask(void *pThis,int &nStatus)
-    {
-        bool needContinue = false;
-        NeoClient *tThis = (NeoClient*)pThis;
-
-
-        tThis->m_pNEOBaseLib->m_pDebug->DebugToFile("client task started!\r\n");
-        CClient *pClient = new CClient(tThis->m_Socket,tThis->m_ServerAddr);
-#ifdef WIN32
-		pClient->setDataBuffer("i am a client",14,IOWrite);
-        if(!pClient->Send())
-        {
-             tThis->m_pNEOBaseLib->m_pDebug->DebugToFile("send fail!\r\n");
-             delete pClient;
-             return true;
-        }
-#else
-
-#endif
-        delete(pClient);
-        return needContinue;
-    }
 };

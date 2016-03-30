@@ -4,6 +4,85 @@
 
 namespace NEOLIB{
 
+namespace
+{
+#ifndef WIN32
+
+class WorkerThread:public Thread
+{
+public:
+    WorkerThread(NEO_THREAD_CALLBACK callback, ReadWriteParam param):
+	  mpParam(param),Thread(callback)
+    {
+    }
+
+    ReadWriteParam mpParam;
+};
+
+//void __stdcall* doReadTask(void *pParam)
+void* doReadTask(void *pParam)
+{
+    int result = 0;
+    int total = 0;
+    struct epoll_event ev={0};  
+
+    ReadWriteParam pReadWriteParam = ((WorkerThread*)pParam)->mpParam;
+
+    while((result = read(pReadWriteParam.fd,pReadWriteParam.buffer+total, 
+        pReadWriteParam.bufsize-1))>0)
+    {
+        total += result;
+    }
+
+    if (result == -1 && errno != EAGAIN)
+    {
+        printf("doReadTask fail!\r\n");
+    }
+
+    if (pReadWriteParam.events & EPOLLOUT)
+        return 0;
+
+    ev.data.fd = pReadWriteParam.fd;
+    ev.events = pReadWriteParam.events | EPOLLOUT;
+
+    int rtn = epoll_ctl(pReadWriteParam.epollfd, EPOLL_CTL_MOD,pReadWriteParam.fd,&ev);
+    if (rtn == -1)
+    {
+        printf("epoll_ctl in doReadTask fail!\r\n");
+    }
+}
+
+//void __stdcall* doWriteTask(void *pParam)
+void * doWriteTask(void *pParam)
+{
+    int result = 0;
+
+    ReadWriteParam pReadWriteParam = ((WorkerThread*)pParam)->mpParam;
+
+    int n = pReadWriteParam.bufsize;
+
+    while (n > 0)
+    {
+        result = write(pReadWriteParam.fd, pReadWriteParam.buffer,n);
+        if (result < n)
+        {
+            if (result == -1 && errno != EAGAIN)
+            {
+                printf("doWriteTask fail!\r\n");
+            }
+            break;
+        }
+        n -= result;
+    }
+    close(pReadWriteParam.fd);
+}
+
+#else
+
+#endif
+
+}//namespace
+
 CClient::CClient(const WIN_LINUX_SOCKET socket,const struct sockaddr_in clientaddr)
     :m_s(socket)
 {
@@ -24,14 +103,15 @@ void CClient::setDataBuffer(char *buf, const unsigned long buffsize,IOTYPE iotyp
 	{
 		ZeroMemory(&m_IoRecv,sizeof(IO_OPERATION_DATA));
 		m_IoRecv.IoType=IORead;
-		m_IoRecv.len = 1024;
-		m_IoRecv.dataBuf.buf = new char[1024];
-		m_IoRecv.dataBuf.len = 1024;
+		m_IoRecv.len = NEO_RECEIVE_BUFFER_SIZE;
+		m_IoRecv.dataBuf.buf = new char[NEO_RECEIVE_BUFFER_SIZE];
+		m_IoRecv.dataBuf.len = NEO_RECEIVE_BUFFER_SIZE;
 	}
 	else if (iotype == IOWrite)
 	{
 		ZeroMemory(&m_IoSend,sizeof(IO_OPERATION_DATA));
 		m_IoSend.IoType=IOWrite;
+        m_IoSend.len = buffsize;
 		m_IoSend.dataBuf.buf = buf;
 		m_IoSend.dataBuf.len = buffsize;
 	}

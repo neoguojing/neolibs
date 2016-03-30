@@ -434,17 +434,41 @@ void * doWriteTask(void *pParam)
              bool ret=GetQueuedCompletionStatus(tThis->m_hIOPort,&dwNumberOfBytesTransferrd,(ULONG_PTR *)&pClient,&pOverlapped,WSA_INFINITE);
              if(ret&&(&pClient)&&pOverlapped)
              {
+                 if (dwNumberOfBytesTransferrd == 0xFFFFFFFF)
+                 {
+                    continue;
+                 }
+
                  IO_OPERATION_DATA*pIO=(IO_OPERATION_DATA*)pOverlapped;
                  //成功
                  switch(pIO->IoType)
                  {
                  case IORead:
-                     char msg[14];
-                     memcpy(msg,pIO->dataBuf.buf,dwNumberOfBytesTransferrd);
+                    if (0 == dwNumberOfBytesTransferrd)
+                    {
+                        //client关闭socket
+                        if(!tThis->g_clientManager.empty())
+                        tThis->g_clientManager.erase(pClient);
+                        delete(pClient);
+                        break;
+                    }
+                    char msg[14];
+                    memcpy(msg,pIO->dataBuf.buf,dwNumberOfBytesTransferrd);
                         tThis->m_pNEOBaseLib->m_pDebug->DebugToFile(
-                            "NeoServer::loop got msg:msg=%s,dwNumberOfBytesTransferrd=%d,pIO->len=%d,pIO->dataBuf.len=%d!,\r\n",
-                            msg,dwNumberOfBytesTransferrd,pIO->len,pIO->dataBuf.len);
-                     break;
+                        "NeoServer::loop got msg:msg=%s,dwNumberOfBytesTransferrd=%d,pIO->len=%d,pIO->dataBuf.len=%d!,\r\n",
+                        msg,dwNumberOfBytesTransferrd,pIO->len,pIO->dataBuf.len);
+                    pClient->setDataBuffer("i am the server",16,IOWrite);
+                    pClient->Send();
+
+                    //重新触发报文异步接收
+			        pClient->setDataBuffer();
+                    if(!pClient->Recv())
+                    {
+                        if(!tThis->g_clientManager.empty())
+                            tThis->g_clientManager.erase(pClient);
+                        delete(pClient);
+                    }
+                    break;
                  case IOWrite:
                      break;
                  case IOLogOut:
@@ -474,44 +498,30 @@ void * doWriteTask(void *pParam)
          return needContinue;
      }
 #endif
+
+#ifndef WIN32   
     bool NeoServer::send(ReadWriteParam& param)
     {
 
         //也可以用task pool处    理
-#ifndef WIN32   
+
         WorkerThread *readThread = new WorkerThread(doWriteTask,param);
         readThread->start();
-#else
         return true;
-#endif
+
     }
+
     bool NeoServer::recv(unsigned int events, WIN_LINUX_SOCKET socket)
     {
-        //也可以用task pool处理
-#ifndef WIN32   
+        //也可以用task pool处理 
         ReadWriteParam param;
         param.events = events;
         param.epollfd = m_epollFd;
         WorkerThread *readThread = new WorkerThread(doReadTask,param);
         readThread->start();
-#else
-        DWORD recvBytes = 0, flags =0;
-        IO_OPERATION_DATA *pIoData=(IO_OPERATION_DATA*)GlobalAlloc(GPTR,sizeof(IO_OPERATION_DATA)); 
-        pIoData->IoType = IORead;
-        pIoData->dataBuf.buf = new char[1024];  
-        pIoData->dataBuf.len=1024;  
-        ZeroMemory(&pIoData->overlapped,sizeof(WSAOVERLAPPED));  
-        if(WSARecv(socket,&(pIoData->dataBuf),1,&recvBytes,&flags,&(pIoData->overlapped),NULL)==SOCKET_ERROR)  
-        {   
-            if(WSAGetLastError()!=ERROR_IO_PENDING)  
-            {  
-                return false;
-            }  
-        }
-        m_pNEOBaseLib->m_pDebug->DebugToFile("NeoServer::size=%d\r\n",recvBytes);
-#endif
+
         return true;
     }
-
+#endif
     
 }

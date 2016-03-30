@@ -22,6 +22,9 @@ namespace NEOLIB {
 class CNEOBaseLibrary;
 class CClient;
 
+
+#ifndef WIN32
+
 typedef struct
 {
     int fd;
@@ -30,8 +33,6 @@ typedef struct
     int epollfd; 
     void *buffer;
 }ReadWriteParam;
-
-#ifndef WIN32
 
 #else
 typedef struct _completionKey   
@@ -53,6 +54,7 @@ public:
     void UDP(string addr, unsigned short port);
     void RAW(string addr, unsigned short port);
     void LOCAL();
+
 #ifndef WIN32
     static int makeSocketNonBlocking (int sfd);
     static int addEvent(const int epollfd, const int fd, epoll_event &listened_evnet);
@@ -60,9 +62,13 @@ public:
 #else
     void waitingToclose();
 #endif
+
     static bool loop(void *pThis,int &nStatus);
+
+#ifndef WIN32
     bool send(ReadWriteParam& param);
     bool recv(unsigned int events, WIN_LINUX_SOCKET socket);
+#endif
 
     void close();
 
@@ -78,7 +84,6 @@ private:
     WORD wVersionRequested;
     WSADATA m_wsaData;
     HANDLE m_hIOPort;
-
 #endif
     WIN_LINUX_SOCKET m_Socket;
     WIN_LINUX_SOCKET m_connSocket;

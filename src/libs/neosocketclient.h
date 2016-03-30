@@ -24,13 +24,15 @@ public:
     bool init(const SERVICE_TYPE svctype);
     void setInetAddr(string addr, unsigned short port);
     void close();
-    bool send(const SERVICE_TYPE svctype, char *buf, int len);
-    bool recv(const SERVICE_TYPE svctype, char *buf, int& len);
+    bool doConnection();
+    bool doSend();
+    bool doRecv();
 
+    static bool connTask(void *pThis,int &nStatus);
     static bool recvTask(void *pThis,int &nStatus);
     static bool myTask(void *pThis,int &nStatus);
 
-private:
+public:
     bool clientSwitch;
     CNEOBaseLibrary *m_pNEOBaseLib;
 #ifdef WIN32

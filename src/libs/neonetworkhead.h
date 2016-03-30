@@ -216,4 +216,7 @@ typedef struct _io_operation_data
     unsigned long len;//实际传输的数据长度。
 }IO_OPERATION_DATA;
 #endif
-#endif
+
+#define NEO_RECEIVE_BUFFER_SIZE 1024
+
+#endif//NEONETWORK
