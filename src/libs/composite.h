@@ -1,4 +1,4 @@
-#ifndef _NEOCOMPOSITE_H_
+ï»¿#ifndef _NEOCOMPOSITE_H_
 #define _NEOCOMPOSITE_H_
 
 #include <iostream>
@@ -7,12 +7,12 @@ using namespace std;
 namespace NEOLIB{
 
 /*
-  Ê¹ÓÃ·½·¨£º
-  1.ÊµÏÖÒ»¸öComponentÀà£¬×÷Îª³éÏóÀà£¬Ò»°ãÒª°üº¬Add£¬removeºÍgechild·½·¨£»ÓÉÓÃ»§ÊµÏÖ
-  2.ÊµÏÖÒ»¸öLeafÀà£¬ÍêÈ«¼Ì³ĞComponent²»ÊµÏÖAdd£¬removeºÍgechild£»ÓÉÓÃ»§ÊµÏÖ
-  3.Ê¹ÓÃtemplate <typename COMPONENT>
-    class Composite:public COMPONENT £¬¹¹½¨Ê÷ĞÎ½á¹¹
-    Ò²¿ÉÒÔ¼Ì³Ğ¸ÃÀà£¬ÊµÏÖ¸ü¼Ó·á¸»µÄ½Ó¿Ú
+  ä½¿ç”¨æ–¹æ³•ï¼š
+  1.å®ç°ä¸€ä¸ªComponentç±»ï¼Œä½œä¸ºæŠ½è±¡ç±»ï¼Œä¸€èˆ¬è¦åŒ…å«Addï¼Œremoveå’Œgechildæ–¹æ³•ï¼›ç”±ç”¨æˆ·å®ç°
+  2.å®ç°ä¸€ä¸ªLeafç±»ï¼Œå®Œå…¨ç»§æ‰¿Componentä¸å®ç°Addï¼Œremoveå’Œgechildï¼›ç”±ç”¨æˆ·å®ç°
+  3.ä½¿ç”¨template <typename COMPONENT>
+    class Composite:public COMPONENT ï¼Œæ„å»ºæ ‘å½¢ç»“æ„
+    ä¹Ÿå¯ä»¥ç»§æ‰¿è¯¥ç±»ï¼Œå®ç°æ›´åŠ ä¸°å¯Œçš„æ¥å£
 */
 
 

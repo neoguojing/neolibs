@@ -1,13 +1,13 @@
-#ifndef _NEOCHAINOFRESP_H_ 
+ï»¿#ifndef _NEOCHAINOFRESP_H_ 
 #define _NEOCHAINOFRESP_H_
 #include <iostream>
 using namespace std;
 namespace NEOLIB{
 
 /*
-    ÔðÈÎÁ´Ä£Ê½£º
-    1¡¢ÓÃ»§±ØÐë¼Ì³ÐHandle£¬²¢½öÐèÊµÏÖHandleRequest
-    Ê¹ÓÃ·½·¨£º
+    è´£ä»»é“¾æ¨¡å¼ï¼š
+    1ã€ç”¨æˆ·å¿…é¡»ç»§æ‰¿Handleï¼Œå¹¶ä»…éœ€å®žçŽ°HandleRequest
+    ä½¿ç”¨æ–¹æ³•ï¼š
     Handle* h1 = new ConcreteHandle();
     Handle* h2 = new ConcreteHandle();
     h1->SetSuccessor(h2);
@@ -47,12 +47,12 @@ public:
     {
         if (this->GetSuccessor() != NULL) 
         { 
-            cout<<"ConcreteHandle ÎÒ°Ñ´¦ÀíÈ¨¸øºó¼Ì½Úµã....."<<endl;
+            cout<<"ConcreteHandle æˆ‘æŠŠå¤„ç†æƒç»™åŽç»§èŠ‚ç‚¹....."<<endl;
             this->GetSuccessor()->HandleRequest();
         } 
         else 
         { 
-            cout<<"ConcreteHandle Ã»ÓÐºó¼ÌÁË£¬ÎÒ±ØÐë×Ô¼º´¦Àí...."<<endl; 
+            cout<<"ConcreteHandle æ²¡æœ‰åŽç»§äº†ï¼Œæˆ‘å¿…é¡»è‡ªå·±å¤„ç†...."<<endl; 
         }
     }
 protected:

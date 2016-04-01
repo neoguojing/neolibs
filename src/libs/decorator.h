@@ -1,4 +1,4 @@
-#ifndef _NEODECORATOR_H_
+﻿#ifndef _NEODECORATOR_H_
 #define _NEODECORATOR_H_
 
 #include <iostream>
@@ -6,16 +6,16 @@ using namespace std;
 namespace NEOLIB{
 
 /*
-    ʹ�÷�����
-    Component(�����ʥ)�������һ�������࣬����һ��ʵ����������������û�ʵ��
-    ConcreteComponent����ʥ���𣩣������ʵ��Component�����û�ʵ��
-    Decorator����ʮ���䣩װ�����Ļ���
-    ConcreteDecorator���㣩Decorator��ʵ���࣬����ʥװ��Ϊ�㣺���û�ʵ�֣���Ҫ�̳�Decorator��ָ����Ӧ�Ļ���
-    ��class ConcreteDecorator:public Decorator<Component>��
-    ����ʹ�ã�
-    //������ʥ����
+    使用方法：
+    Component(齐天大圣)，最好是一个抽象类，描述一个实物的所有特征：由用户实现
+    ConcreteComponent（大圣本尊），具体的实现Component：由用户实现
+    Decorator（七十二变）装饰器的基类
+    ConcreteDecorator（鱼）Decorator的实现类，将大圣装饰为鱼：由用户实现，需要继承Decorator并指定相应的基类
+    （class ConcreteDecorator:public Decorator<Component>）
+    具体使用：
+    //创建大圣本尊
     Component* com = new ConcreteComponent();
-    //�����൱�ڰѴ�ʥ����װ�γ�Ϊ���
+    //以下相当于把大圣本尊装饰成为鱼儿
     Component *dec1 = new ConcreteDecorator(com);
     dec1->Print();
     delete dec1;

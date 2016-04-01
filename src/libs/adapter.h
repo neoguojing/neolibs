@@ -1,4 +1,4 @@
-#ifndef _NEOADAPTER_H_
+ï»¿#ifndef _NEOADAPTER_H_
 #define _NEOADAPTER_H_
 
 #include <iostream>
@@ -6,12 +6,12 @@ using namespace std;
 namespace NEOLIB{
 
 /*
-Ê¹ÓÃ·½·¨£º
-    1.Ò»¸ötargetÀà£¬°üº¬ÓÃ»§ÐèÒªÊ¹ÓÃµÄËùÓÐ·½·¨£»ÓÉÓÃ»§×Ô¼º±àÐ´
-    2.Ò»¸öadapteeÀà£¬ÊÇÐèÒªÊÊÅäµÄÀà£»ÓÉÓÃ»§Ö¸¶¨»òÕß±àÐ´
-    3.adapterÀà£¬¸ÄÐ´targetÀàµÄÄ³Ð©·½·¨£¬ÔÚÊµÏÖÖÐÊ¹ÓÃadapteeµÄ·½·¨È¥ÊµÏÖ£»
-      ±ØÐë¼Ì³Ð×ÔClassAdapter »òÕß ObjectAdapter
-      ×¢Òâ£º¼Ì³Ð×ÔObjectAdapter£¬¹¹Ôìº¯ÊýÐèÒªÏÔÊ¾µ÷ÓÃObjectAdapterµÄ¹¹Ôìº¯Êý
+ä½¿ç”¨æ–¹æ³•ï¼š
+    1.ä¸€ä¸ªtargetç±»ï¼ŒåŒ…å«ç”¨æˆ·éœ€è¦ä½¿ç”¨çš„æ‰€æœ‰æ–¹æ³•ï¼›ç”±ç”¨æˆ·è‡ªå·±ç¼–å†™
+    2.ä¸€ä¸ªadapteeç±»ï¼Œæ˜¯éœ€è¦é€‚é…çš„ç±»ï¼›ç”±ç”¨æˆ·æŒ‡å®šæˆ–è€…ç¼–å†™
+    3.adapterç±»ï¼Œæ”¹å†™targetç±»çš„æŸäº›æ–¹æ³•ï¼Œåœ¨å®žçŽ°ä¸­ä½¿ç”¨adapteeçš„æ–¹æ³•åŽ»å®žçŽ°ï¼›
+      å¿…é¡»ç»§æ‰¿è‡ªClassAdapter æˆ–è€… ObjectAdapter
+      æ³¨æ„ï¼šç»§æ‰¿è‡ªObjectAdapterï¼Œæž„é€ å‡½æ•°éœ€è¦æ˜¾ç¤ºè°ƒç”¨ObjectAdapterçš„æž„é€ å‡½æ•°
 	classadapter
     AdapterTargetTest* adt = new AdpterTest1();
     adt->request1();
@@ -56,7 +56,7 @@ private:
     
 };
 
-//////////////////////ÒÔÏÂÎªtest//////////////////////////////
+//////////////////////ä»¥ä¸‹ä¸ºtest//////////////////////////////
 class AdapterTargetTest 
 { 
 public: 

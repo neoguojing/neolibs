@@ -1,4 +1,4 @@
-#ifndef _NEOFACTORY_H_ 
+﻿#ifndef _NEOFACTORY_H_ 
 #define _NEOFACTORY_H_
 #include <stdio.h>
 

@@ -1,11 +1,11 @@
-#ifndef _NEOBUILDER_H_
+ï»¿#ifndef _NEOBUILDER_H_
 #define _NEOBUILDER_H_
 
 namespace NEOLIB{
 
 
 /*
-	½¨ÔìÕßÄ£Ê½Ê¹ÓÃ£º
+	å»ºé€ è€…æ¨¡å¼ä½¿ç”¨ï¼š
 int main()
 {
 	AbstractBuilder* builder = new Builder();
@@ -20,12 +20,12 @@ int main()
 */
 class Product{
 /*
-	²úÆ·µÄ»ùÀà
+	äº§å“çš„åŸºç±»
 */
 public:
 	~Product(){}
 
-	/*´òÓ¡²úÆ·µÄÄÚ²¿½á¹¹*/
+	/*æ‰“å°äº§å“çš„å†…éƒ¨ç»“æ„*/
 	virtual void show() = 0;
 
 private:
@@ -35,25 +35,25 @@ private:
 
 class AbstractBuilder{
 	/*
-		½¨ÔìÕß»ùÀà
-		×ÓÀàÊµÏÖ£º
-		1.ÊµÏÖÏàÓ¦µÄĞéº¯Êı£»
-		2.ÊµÏÖ½¨Ôìº¯Êı
+		å»ºé€ è€…åŸºç±»
+		å­ç±»å®ç°ï¼š
+		1.å®ç°ç›¸åº”çš„è™šå‡½æ•°ï¼›
+		2.å®ç°å»ºé€ å‡½æ•°
 	*/
 public:
 	virtual ~AbstractBuilder(){}
 
-	/*´´½¨¿Õ²úÆ·¶ÔÏó*/
+	/*åˆ›å»ºç©ºäº§å“å¯¹è±¡*/
 	virtual void createProduct() = 0;
 	/*
-	ÔÚ×ÓÀàÖĞÉè¼Æ¾ßÌåµÄ½¨Ôìº¯Êı
-	ÕâĞ©º¯Êıµ÷ÓÃm_productµÄ·½·¨´´½¨²úÆ·
+	åœ¨å­ç±»ä¸­è®¾è®¡å…·ä½“çš„å»ºé€ å‡½æ•°
+	è¿™äº›å‡½æ•°è°ƒç”¨m_productçš„æ–¹æ³•åˆ›å»ºäº§å“
 	virtual void buildPartA(int param) = 0;
 	virtual void buildPartB(int param) = 0;
 	virtual void buildPartC(int param) = 0;
 	*/
 
-	/*»ñÈ¡½¨ÔìÖ®ºóµÄ²úÆ·¶ÔÏó*/
+	/*è·å–å»ºé€ ä¹‹åçš„äº§å“å¯¹è±¡*/
 	virtual Product* getProduct() = 0;
 
 protected:
@@ -67,9 +67,9 @@ protected:
 class AbstractDirector
 {
 	/*
-		½¨ÔìÕß»ùÀà
-		1¡¢×ÓÀàĞèÒªÊµÏÖconstructº¯Êı£¬ÊµÏÖ£ºÒÀ´Îµ÷ÓÃm_BuilderµÄ·½·¨¹¹½¨²úÆ·
-		2¡¢×ÓÀàĞèÒªÏÔÊ¾µÄµ÷ÓÃAbstractDirectorµÄ¹¹Ôìº¯Êı£¬Ò²¾ÍÊÇ±ØĞë´«ÈëAbstractBuilderÖ¸Õë
+		å»ºé€ è€…åŸºç±»
+		1ã€å­ç±»éœ€è¦å®ç°constructå‡½æ•°ï¼Œå®ç°ï¼šä¾æ¬¡è°ƒç”¨m_Builderçš„æ–¹æ³•æ„å»ºäº§å“
+		2ã€å­ç±»éœ€è¦æ˜¾ç¤ºçš„è°ƒç”¨AbstractDirectorçš„æ„é€ å‡½æ•°ï¼Œä¹Ÿå°±æ˜¯å¿…é¡»ä¼ å…¥AbstractBuilderæŒ‡é’ˆ
 	*/
 public:
 	~AbstractDirector(){}
