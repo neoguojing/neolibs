@@ -1,4 +1,4 @@
-#ifndef NEOLOG
+ï»¿#ifndef NEOLOG
 
 #define NEOLOG
 #include "neoindex.h"
@@ -13,57 +13,57 @@ class CNEOMemQueue;
 ////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////
-//#define LOG_FILE_SIZE_MAX (1*1024*1024*1024)   //ÈÕÖ¾ÎÄ¼ş×î´ó1g
-//#define LOG_ITEM_LENGTH_MAX (2*1024)           //µ¥Ìõlog×î´ó2K
-//#define LOG_FILE_CHANGE_NAME_PRE_SECONDS (60*60)//ÈÕÖ¾ÎÄ¼şÒ»Ğ¡Ê±¸ü»»Ò»´ÎĞÕÃû
-//#define LOG_FILE_INFO_BUFFER_SIZE (256*1024)   //ÈÕÖ¾Ä¿Â¼×î´ó³¤¶È ³¬³öÉ¾³ı
-//#define LOG_FILE_DEFAULT_HOLD 72               //Ò»°ã±£ÁôÈıÌìµÄÊı¾İ
-//#define LOG_TIME_STRING_MAX 128                //Ê±¼ä´Á×Ö·û´®³¤¶È
-//#define FILENAME_STRING_LENGTH 256             //ÎÄ¼şÃû³¤¶È
+//#define LOG_FILE_SIZE_MAX (1*1024*1024*1024)   //æ—¥å¿—æ–‡ä»¶æœ€å¤§1g
+//#define LOG_ITEM_LENGTH_MAX (2*1024)           //å•æ¡logæœ€å¤§2K
+//#define LOG_FILE_CHANGE_NAME_PRE_SECONDS (60*60)//æ—¥å¿—æ–‡ä»¶ä¸€å°æ—¶æ›´æ¢ä¸€æ¬¡å§“å
+//#define LOG_FILE_INFO_BUFFER_SIZE (256*1024)   //æ—¥å¿—ç›®å½•æœ€å¤§é•¿åº¦ è¶…å‡ºåˆ é™¤
+//#define LOG_FILE_DEFAULT_HOLD 72               //ä¸€èˆ¬ä¿ç•™ä¸‰å¤©çš„æ•°æ®
+//#define LOG_TIME_STRING_MAX 128                //æ—¶é—´æˆ³å­—ç¬¦ä¸²é•¿åº¦
+//#define FILENAME_STRING_LENGTH 256             //æ–‡ä»¶åé•¿åº¦
 //#define APP_INFO_OIT_STRING_MAX 256           
 //////////////////////////////////////////////////////////////
-//ÈÕÖ¾Àà
+//æ—¥å¿—ç±»
 class  CNEOLog
 {
 public:
 	CNEOLog(CNEOLowDebug *pDebug,
-		CNEOMemPoolWithLock *pMemPool,        //ÄÚ´æÖ¸Õë³Ø
-		const char *szLogPath,                      //ÈÕÖ¾Â·¾¶
-		const char *szAppName,                      //Ó¦ÓÃÃû
-		int nHoldFileMax=LOG_FILE_DEFAULT_HOLD,//±£´æµÄ×î´óÎÄ¼şÊı
-		bool bSyslogFlag=true,                //ÈÕÖ¾¼¶±ğ¿ª¹Ø
+		CNEOMemPoolWithLock *pMemPool,        //å†…å­˜æŒ‡é’ˆæ± 
+		const char *szLogPath,                      //æ—¥å¿—è·¯å¾„
+		const char *szAppName,                      //åº”ç”¨å
+		int nHoldFileMax=LOG_FILE_DEFAULT_HOLD,//ä¿å­˜çš„æœ€å¤§æ–‡ä»¶æ•°
+		bool bSyslogFlag=true,                //æ—¥å¿—çº§åˆ«å¼€å…³
 		bool bDebugFlag=true,
 		bool bDebug2Flag=false,
 		bool bDebug3Flag=false,
-		bool bPrintfToScrFlag=true           //ÊÇ·ñÏòÆÁÄ»´òÓ¡
+		bool bPrintfToScrFlag=true           //æ˜¯å¦å‘å±å¹•æ‰“å°
 		);
 	~CNEOLog();
-private://ÄÚ²¿Ë½ÓĞ±äÁ¿
-	CMutexLock m_Lock;                      //Ïß³Ì°²È«Ëø
-	char m_szFilePath[FILENAME_STRING_LENGTH];//ÎÄ¼şÂ·¾¶
-	char m_szFileName[FILENAME_STRING_LENGTH*2];//ÎÄ¼şÃû
-	unsigned long m_nFileSize;                //µ±Ç°ÎÄ¼ş´óĞ¡
-	time_t m_tFileNameMake;                   //¶¨ÖÆÎÄ¼şÃûµÄÊ±¼ä´Á
-	int m_nHoldFileMax;                       //±£ÁôÎÄ¼şµÄÊıÁ¿£¬ÓÉ¹¹Ôìº¯Êı´«Èë
-	_APP_INFO_OUT_CALLBACK m_pInfoOutCallback;// Ó¦ÓÃ³ÌĞòÀ¹½ØÊä³ö»Øµ÷º¯Êı
-	void *m_pInfoOutCallbackParam;            //Í¸´«µÄ»Øµ÷º¯Êı²ÎÊı
-	bool m_bPrintfToScrFlag;                  //ÊÇ·ñ´òÓ¡µ½ÆÁÄ»
-	char m_szFileInfoName[FILENAME_STRING_LENGTH];//ÎÄ¼şÃû
+private://å†…éƒ¨ç§æœ‰å˜é‡
+	CMutexLock m_Lock;                      //çº¿ç¨‹å®‰å…¨é”
+	char m_szFilePath[FILENAME_STRING_LENGTH];//æ–‡ä»¶è·¯å¾„
+	char m_szFileName[FILENAME_STRING_LENGTH*2];//æ–‡ä»¶å
+	unsigned long m_nFileSize;                //å½“å‰æ–‡ä»¶å¤§å°
+	time_t m_tFileNameMake;                   //å®šåˆ¶æ–‡ä»¶åçš„æ—¶é—´æˆ³
+	int m_nHoldFileMax;                       //ä¿ç•™æ–‡ä»¶çš„æ•°é‡ï¼Œç”±æ„é€ å‡½æ•°ä¼ å…¥
+	_APP_INFO_OUT_CALLBACK m_pInfoOutCallback;// åº”ç”¨ç¨‹åºæ‹¦æˆªè¾“å‡ºå›è°ƒå‡½æ•°
+	void *m_pInfoOutCallbackParam;            //é€ä¼ çš„å›è°ƒå‡½æ•°å‚æ•°
+	bool m_bPrintfToScrFlag;                  //æ˜¯å¦æ‰“å°åˆ°å±å¹•
+	char m_szFileInfoName[FILENAME_STRING_LENGTH];//æ–‡ä»¶å
 	CNEOLowDebug *m_pDebug;
-	CNEOMemPoolWithLock *m_pMemPool;          //ÄÚ´æ³ØÖ¸Õë
-	CNEOMemQueue *m_pFileInfoQueue;           //ÎÄ¼şÃ÷¶ÓÁĞ
+	CNEOMemPoolWithLock *m_pMemPool;          //å†…å­˜æ± æŒ‡é’ˆ
+	CNEOMemQueue *m_pFileInfoQueue;           //æ–‡ä»¶æ˜é˜Ÿåˆ—
 private:
-	//ÄÚ²¿¹¤¾ßº¯Êı
-	int _Printf(const char *szFormat,...);        //ºËĞÄ´òÓ¡Êä³öÄ£¿é
-	void DeleteFirstFile(void);             //É¾³ı×îÀÏµÄÎÄ¼ş
-	void FixFileInfo(void);                 //ĞŞ¶©ÎÄ¼şÃûÄ¿Â¼¶ÓÁĞ
-	void MakeFileName(void);                //¸ù¾İÊ±¼äºÍÎÄ¼ş´óĞ¡£¬¶¨ÖÆÎÄ¼şÃû
-	void GetFileName(void);                 //»ñµÃµ±Ç°¿ÉÓÃµÄÎÄ¼şÃû
+	//å†…éƒ¨å·¥å…·å‡½æ•°
+	int _Printf(const char *szFormat,...);        //æ ¸å¿ƒæ‰“å°è¾“å‡ºæ¨¡å—
+	void DeleteFirstFile(void);             //åˆ é™¤æœ€è€çš„æ–‡ä»¶
+	void FixFileInfo(void);                 //ä¿®è®¢æ–‡ä»¶åç›®å½•é˜Ÿåˆ—
+	void MakeFileName(void);                //æ ¹æ®æ—¶é—´å’Œæ–‡ä»¶å¤§å°ï¼Œå®šåˆ¶æ–‡ä»¶å
+	void GetFileName(void);                 //è·å¾—å½“å‰å¯ç”¨çš„æ–‡ä»¶å
 public:
-	static  int MakeATimeString(char *szBuffer,int nBufferSize);//¶¨ÖÆÊ±¼ä´Á×Ö·û´®
-	void _XGDebugForBin(const char *pBuffer,int nLength);  //¶ş½øÖÆÊä³ö
-	int _XGSysLog(const char *szFormat,...);               //syslogÊä³ö
-	int _XGDebug(const char *szFormat,...);                //debug Êä³ö
+	static  int MakeATimeString(char *szBuffer,int nBufferSize);//å®šåˆ¶æ—¶é—´æˆ³å­—ç¬¦ä¸²
+	void _XGDebugForBin(const char *pBuffer,int nLength);  //äºŒè¿›åˆ¶è¾“å‡º
+	int _XGSysLog(const char *szFormat,...);               //syslogè¾“å‡º
+	int _XGDebug(const char *szFormat,...);                //debug è¾“å‡º
 	int _XGDebug2(const char *szFormat,...);   
 	int _XGDebug3(const char *szFormat,...);   
 public:

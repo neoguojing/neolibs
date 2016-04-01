@@ -1,12 +1,12 @@
-//Òªµ¼ÈëËøµÄÍ·ÎÄ¼ş£¬ÒÔÒıÓÃ¼ÓËøÀà,
-//±ØĞëµ¼Èë°üº­socketµÄÍ·ÎÄ¼ş
-//µ¼ÈëdebugÎÄ¼ûµÄº¯Êı
+ï»¿//è¦å¯¼å…¥é”çš„å¤´æ–‡ä»¶ï¼Œä»¥å¼•ç”¨åŠ é”ç±»,
+//å¿…é¡»å¯¼å…¥åŒ…æ¶µsocketçš„å¤´æ–‡ä»¶
+//å¯¼å…¥debugæ–‡è§çš„å‡½æ•°
 #include "neomemmanager.h"
 
 //#ifdef WIN32_NEO
 namespace NEOLIB {
-//ÄÚ´æ¿éÔªËØ¹ÜÀí,Ö÷ÒªÊÇÓÒÖ®Ê÷µÄ¹ÜÀí
-CNEOMemStackToken::CNEOMemStackToken(int nBlockSize/*Òª¹ÜÀíµÄ»ù±¾ÄÚ´æ¿é´óĞ¡*/,CNEOLowDebug *pDebug):
+//å†…å­˜å—å…ƒç´ ç®¡ç†,ä¸»è¦æ˜¯å³ä¹‹æ ‘çš„ç®¡ç†
+CNEOMemStackToken::CNEOMemStackToken(int nBlockSize/*è¦ç®¡ç†çš„åŸºæœ¬å†…å­˜å—å¤§å°*/,CNEOLowDebug *pDebug):
     m_pDebug(pDebug),m_Lock()
 {
     //m_pDebug=pDebug;
@@ -26,7 +26,7 @@ CNEOMemStackToken::~CNEOMemStackToken()
     {
         m_pDebug->DebugToFile("Tony Mem Stack Lost %d*%d\n",m_ulBlockSize,m_nBlockOutSide.Get());
     }
-    m_Lock.EnableWrite();//µİ¹éÏú»Ù
+    m_Lock.EnableWrite();//é€’å½’é”€æ¯
     {
         if(m_pFirstSon)
             DestroySon(m_pFirstSon);
@@ -38,35 +38,35 @@ CNEOMemStackToken::~CNEOMemStackToken()
     m_Lock.DisableWrite();
 }
 
-void * CNEOMemStackToken::Malloc(int nSize,/*Í³¼ÆÉè¼ÆÒÔ±ãdebugµ÷ÓÃ*/CMRSWint &nAllBlockCount,CMRSWint &nMemUsed)//¸ºÔğ·ÖÅäÄÚ´æ£¬¸ù¾İĞèÇóÒ»²½²½´´½¨ÄÚ´æÊı½á¹¹
+void * CNEOMemStackToken::Malloc(int nSize,/*ç»Ÿè®¡è®¾è®¡ä»¥ä¾¿debugè°ƒç”¨*/CMRSWint &nAllBlockCount,CMRSWint &nMemUsed)//è´Ÿè´£åˆ†é…å†…å­˜ï¼Œæ ¹æ®éœ€æ±‚ä¸€æ­¥æ­¥åˆ›å»ºå†…å­˜æ•°ç»“æ„
 {
-    void *pRet=NULL;//×¼±¸·µ»ØµÄÖ¸Õë
+    void *pRet=NULL;//å‡†å¤‡è¿”å›çš„æŒ‡é’ˆ
     SNeoMemroryBlockHead *pNew;
     if(NEO_MEM_BLOCK_SIZE(nSize)<m_ulBlockSize)
     {
         m_Lock.EnableWrite();
         {
-            //ÅĞ¶ÏÓĞÎó¿ÕÏĞµÄÄÚ´æ¿é
+            //åˆ¤æ–­æœ‰è¯¯ç©ºé—²çš„å†…å­˜å—
             if(!m_pFirstSon)
             {
                 pNew=(SNeoMemroryBlockHead*)malloc(m_ulBlockSize);
                 if(pNew)
                 {
-                    m_nBlockOutSide.Add();//Õâ¸öÄÚ´æ¿éÂíÉÏ±»·Ö³öÈ¥
-                    nMemUsed.Add(m_ulBlockSize);//Í³¼ÆÄÚ´æÊı
-                    //³õÊ¼»¯ÄÚ´æĞÅÏ¢
+                    m_nBlockOutSide.Add();//è¿™ä¸ªå†…å­˜å—é©¬ä¸Šè¢«åˆ†å‡ºå»
+                    nMemUsed.Add(m_ulBlockSize);//ç»Ÿè®¡å†…å­˜æ•°
+                    //åˆå§‹åŒ–å†…å­˜ä¿¡æ¯
                     pNew->m_ulBlockSize=m_ulBlockSize;
                     pNew->m_pNext=NULL;
                     pRet=NEO_MEM_BLOCK_DATA(pNew);
                     nAllBlockCount.Add();
                 }//if
-                //´´½¨Ê§°ÜÔòÔÚÏÂÃæ·µ»ØnRet=NULL
+                //åˆ›å»ºå¤±è´¥åˆ™åœ¨ä¸‹é¢è¿”å›nRet=NULL
             }//if
-            else//ÓĞ¿ÕÏĞµÄÄÚ´æ¿éÖ±½ÓÌáÈ¡
+            else//æœ‰ç©ºé—²çš„å†…å­˜å—ç›´æ¥æå–
             {
                 pNew=m_pFirstSon;
                 m_pFirstSon=m_pFirstSon->m_pNext;
-                pNew->m_pNext=NULL;//²»Ê¹ÓÃµÄÖ¸Õë¸³Öµ
+                pNew->m_pNext=NULL;//ä¸ä½¿ç”¨çš„æŒ‡é’ˆèµ‹å€¼
                 pRet=NEO_MEM_BLOCK_DATA(pNew);
                 m_nBlockOutSide.Add();
                 m_nBlockInSide.Dec();
@@ -74,7 +74,7 @@ void * CNEOMemStackToken::Malloc(int nSize,/*Í³¼ÆÉè¼ÆÒÔ±ãdebugµ÷ÓÃ*/CMRSWint &nA
         }
         m_Lock.DisableWrite();
     }
-    else//³ß´ç²»·ûºÏÒªÇóµÄ
+    else//å°ºå¯¸ä¸ç¬¦åˆè¦æ±‚çš„
     {
         m_Lock.EnableWrite();
         {
@@ -84,7 +84,7 @@ void * CNEOMemStackToken::Malloc(int nSize,/*Í³¼ÆÉè¼ÆÒÔ±ãdebugµ÷ÓÃ*/CMRSWint &nA
             }
         }
         m_Lock.DisableWrite();
-        //Ä£Ê½×ª»»
+        //æ¨¡å¼è½¬æ¢
         m_Lock.AddRead();
         {
             //
@@ -97,8 +97,8 @@ void * CNEOMemStackToken::Malloc(int nSize,/*Í³¼ÆÉè¼ÆÒÔ±ãdebugµ÷ÓÃ*/CMRSWint &nA
 }
 bool CNEOMemStackToken::Free(void *pPoint,bool bCloseFlag)
 {
-    bool bRet=false;//×¼±¸·µ»ØÖµµÄ±äÁ¿
-    SNeoMemroryBlockHead *pOld=NEO_MEM_BLOCK_HEAD(pPoint);//¼ÓÍ·µÄÄÚ´æµØÖ·
+    bool bRet=false;//å‡†å¤‡è¿”å›å€¼çš„å˜é‡
+    SNeoMemroryBlockHead *pOld=NEO_MEM_BLOCK_HEAD(pPoint);//åŠ å¤´çš„å†…å­˜åœ°å€
     if(m_ulBlockSize==pOld->m_ulBlockSize)
     {
         if(NEO_MEM_STACK_BLOCK_MAX<=m_ulBlockSize)
@@ -108,16 +108,16 @@ bool CNEOMemStackToken::Free(void *pPoint,bool bCloseFlag)
         }
         else if(bCloseFlag)
         {
-            //bCloseFlagÎªÕæ£¬²»ÔÙÍÆÈë¶ÑÕ»£¬Ö±½ÓÊÍ·Å
+            //bCloseFlagä¸ºçœŸï¼Œä¸å†æ¨å…¥å †æ ˆï¼Œç›´æ¥é‡Šæ”¾
             free(pOld);
             m_nBlockOutSide.Dec();
         }//else if
         else
         {
-            //Õı³£ÍÆÈëÓÒÖ¦Õ»£¬×¼±¸ÖØÓÃÄÚ´æÕ»
+            //æ­£å¸¸æ¨å…¥å³ææ ˆï¼Œå‡†å¤‡é‡ç”¨å†…å­˜æ ˆ
             m_Lock.EnableWrite();
             {
-            //ĞÂ¼ÓÈëµÄÄÚ´æ¿é·ÅÔÚµÚÒ»¸ö£¬Ô­ÓĞµÄÄÚ´æ¿é±»Á¬½Óµ½ÏÂÒ»¸ö
+            //æ–°åŠ å…¥çš„å†…å­˜å—æ”¾åœ¨ç¬¬ä¸€ä¸ªï¼ŒåŸæœ‰çš„å†…å­˜å—è¢«è¿æ¥åˆ°ä¸‹ä¸€ä¸ª
                 pOld->m_pNext=m_pFirstSon;
                 m_pFirstSon=pOld;
             }
@@ -129,10 +129,10 @@ bool CNEOMemStackToken::Free(void *pPoint,bool bCloseFlag)
     }//if
     else
     {
-        //×Ô¼º½âÊÍ
+        //è‡ªå·±è§£é‡Š
         m_Lock.AddRead();
         {
-            //´Ë´¦µİ¹é²Ù×÷
+            //æ­¤å¤„é€’å½’æ“ä½œ
             if(m_pNext)
                 bRet=m_pNext->Free(pPoint,bCloseFlag);
         }
@@ -141,12 +141,12 @@ bool CNEOMemStackToken::Free(void *pPoint,bool bCloseFlag)
     return bRet;
 }
 
-void CNEOMemStackToken::PrintStack(void)//´òÓ¡º¯Êı°ïÖúÊä³öÊÇÒ»¸ö¸¨Öúº¯Êı
+void CNEOMemStackToken::PrintStack(void)//æ‰“å°å‡½æ•°å¸®åŠ©è¾“å‡ºæ˜¯ä¸€ä¸ªè¾…åŠ©å‡½æ•°
 {
-    //µİ¹éº¯Êı£¬Ò»´Î´òÓ¡×óÖ¦ÉÏÉÏµÄËùÓĞÄÚ´æµ¥ÔªÄÚÈİ
+    //é€’å½’å‡½æ•°ï¼Œä¸€æ¬¡æ‰“å°å·¦æä¸Šä¸Šçš„æ‰€æœ‰å†…å­˜å•å…ƒå†…å®¹
     if(m_nBlockInSide.Get()+m_nBlockOutSide.Get())
     {
-        //ÓĞÖµ´òÓ¡£¬ÎŞÖµ²»Êä³ö
+        //æœ‰å€¼æ‰“å°ï¼Œæ— å€¼ä¸è¾“å‡º
         NEO_PRINTF("[%ld]stack:all=%d,out=%d,in=%d\n",m_ulBlockSize,
             m_nBlockInSide.Get()+m_nBlockOutSide.Get(),
             m_nBlockOutSide.Get(),m_nBlockInSide.Get());
@@ -155,15 +155,15 @@ void CNEOMemStackToken::PrintStack(void)//´òÓ¡º¯Êı°ïÖúÊä³öÊÇÒ»¸ö¸¨Öúº¯Êı
     {
         if(m_pNext)
         {
-            m_pNext->PrintStack();//µİ¹é
+            m_pNext->PrintStack();//é€’å½’
         }
     }
     m_Lock.DecRead();
 }
-//ÏµÍ³ÍÆ³öÊ±µİ¹éÏú»ÙÉêÇëµÄÄÚ´æ¿é,µİ¹éÏú»ÙÓÒÖ®Ê÷
+//ç³»ç»Ÿæ¨å‡ºæ—¶é€’å½’é”€æ¯ç”³è¯·çš„å†…å­˜å—,é€’å½’é”€æ¯å³ä¹‹æ ‘
 void CNEOMemStackToken::DestroySon(SNeoMemroryBlockHead *pSon)
 {
-    SNeoMemroryBlockHead *pObjNow=pSon;//ÖĞ¼ä±äÁ¿
+    SNeoMemroryBlockHead *pObjNow=pSon;//ä¸­é—´å˜é‡
     SNeoMemroryBlockHead *pOnjNext=NULL;
     while(1)
     {
@@ -176,25 +176,25 @@ void CNEOMemStackToken::DestroySon(SNeoMemroryBlockHead *pSon)
     }
 }
 
-//¾ÛºÏ£¬ÊµÏÖ×óÖ¦Ê÷µÄ¹ÜÀí
+//èšåˆï¼Œå®ç°å·¦ææ ‘çš„ç®¡ç†
 
 CNEOMemStack::CNEOMemStack(CNEOLowDebug *pDebug):
     m_pMaxPoint(0),m_nAllBlockCount(),m_nMemoryUse(),
 		m_CloseFlag(),m_pDebug(pDebug)
 {
-    m_CloseFlag.Set(false);//¹Ø±Õ±êÖ¾Çå¿Õ
+    m_CloseFlag.Set(false);//å…³é—­æ ‡å¿—æ¸…ç©º
     //m_pDebug=pDebug;
     m_pMaxPoint.Set(0);
     m_nAllBlockCount.Set(0);
     m_nMemoryUse.Set(0);
-    m_pHead=new CNEOMemStackToken(NEO_MEM_STACK_BLOCK_MIN,m_pDebug);// ¹¹½¨×óÖ¦ÉÏµÚÒ»¸ö½Úµã
-    //ÔËĞĞÆÚ¼ä×óÖ¦ÉÏÖ»´´½¨²»Ïú»Ù
+    m_pHead=new CNEOMemStackToken(NEO_MEM_STACK_BLOCK_MIN,m_pDebug);// æ„å»ºå·¦æä¸Šç¬¬ä¸€ä¸ªèŠ‚ç‚¹
+    //è¿è¡ŒæœŸé—´å·¦æä¸Šåªåˆ›å»ºä¸é”€æ¯
 }
 CNEOMemStack::~CNEOMemStack()
 {
-    //ÍË³öÊ±¡£»ã±¨Ê¹ÓÃµÄ×î´óÖ¸Õë
+    //é€€å‡ºæ—¶ã€‚æ±‡æŠ¥ä½¿ç”¨çš„æœ€å¤§æŒ‡é’ˆ
     m_pDebug->DebugToFile("Mem Stack:Max Point=0x%p\n",m_pMaxPoint.Get());
-    //Çå³ı×óÖ¦Ê÷£¬µİ¹é
+    //æ¸…é™¤å·¦ææ ‘ï¼Œé€’å½’
     if(m_pHead)
     {
         delete m_pHead;
@@ -202,16 +202,16 @@ CNEOMemStack::~CNEOMemStack()
     }
 }
 
-//ÖØ¶¨ÒåÖ¸ÕëÖ¸ÏòµÄÄÚ´æµ¥ÔªµÄ¿Õ¼ä´óĞ¡£¬¸ø³ö¾ÉÖ¸ÕëºÍĞÂ¿Õ¼äµÄ³ß´ç
-//Èç¹û³É¹¦£¬·µ»ØÓĞĞ§µØĞÂÖ¸Õë£¬Ö¸ÏòÖØ¶¨ÒåµÄ´óĞ¡Ö®ºóĞÂ¿Õ¼ä£¬Ê§°Ü·µ»Ønull
-//¿ÉÒÔ½«¾Í¿Õ¼äµÄÊı¾İ±¸·İµ½ĞÂ¿Õ¼ä£¬µ«Õâ²»Ò»¶¨È¡¾öÓÚĞÂ¿Õ¼äµÄ´óĞ¡
-void *CNEOMemStack::ReMalloc(void *pPoint,//¾ÉÖ¸Õë
-    int nNewSize,//ĞÂµÄÊı¾İ³ß´ç
-    bool bCopyOldDataFlag)//ÊÇ·ñ±¸·İ¾ÉÊı¾İ
+//é‡å®šä¹‰æŒ‡é’ˆæŒ‡å‘çš„å†…å­˜å•å…ƒçš„ç©ºé—´å¤§å°ï¼Œç»™å‡ºæ—§æŒ‡é’ˆå’Œæ–°ç©ºé—´çš„å°ºå¯¸
+//å¦‚æœæˆåŠŸï¼Œè¿”å›æœ‰æ•ˆåœ°æ–°æŒ‡é’ˆï¼ŒæŒ‡å‘é‡å®šä¹‰çš„å¤§å°ä¹‹åæ–°ç©ºé—´ï¼Œå¤±è´¥è¿”å›null
+//å¯ä»¥å°†å°±ç©ºé—´çš„æ•°æ®å¤‡ä»½åˆ°æ–°ç©ºé—´ï¼Œä½†è¿™ä¸ä¸€å®šå–å†³äºæ–°ç©ºé—´çš„å¤§å°
+void *CNEOMemStack::ReMalloc(void *pPoint,//æ—§æŒ‡é’ˆ
+    int nNewSize,//æ–°çš„æ•°æ®å°ºå¯¸
+    bool bCopyOldDataFlag)//æ˜¯å¦å¤‡ä»½æ—§æ•°æ®
 {
     void *pRet=NULL;
-    SNeoMemroryBlockHead *pOldToken=NULL;//¾ÉµÄp0
-    int nOldLen=0;                       //¾ÍµÃ³¤¶È
+    SNeoMemroryBlockHead *pOldToken=NULL;//æ—§çš„p0
+    int nOldLen=0;                       //å°±å¾—é•¿åº¦
     if(0>=nNewSize)
     {
         m_pDebug->DebugToFile("CNEOMemStackToken::ReMalloc():ERROR!nNewSize=%d\n",nNewSize);
@@ -219,15 +219,15 @@ void *CNEOMemStack::ReMalloc(void *pPoint,//¾ÉÖ¸Õë
     }
     pOldToken=NEO_MEM_BLOCK_HEAD(pPoint);
     nOldLen=pOldToken->m_ulBlockSize;
-    //±È½ÏĞÂµÄ³¤¶ÈÓëÄÚ´æ¿é×Ü³¤¶ÈµÄ´óĞ¡
+    //æ¯”è¾ƒæ–°çš„é•¿åº¦ä¸å†…å­˜å—æ€»é•¿åº¦çš„å¤§å°
     if(NEO_MEM_BLOCK_SIZE(nNewSize)<=(unsigned long)nOldLen)
     {
         pRet=pPoint;
         goto CNEOMemStack_ReMalloc_End;
     }//if
-    //Ã»ÓĞ·ûºÏÒªÇóµÄÖØĞÂÉêÇë
+    //æ²¡æœ‰ç¬¦åˆè¦æ±‚çš„é‡æ–°ç”³è¯·
     pRet=m_pHead->Malloc(nNewSize,m_nAllBlockCount,m_nMemoryUse);
-    //¿½±´Êı¾İ
+    //æ‹·è´æ•°æ®
     if((pRet)&&(pPoint))
         if(bCopyOldDataFlag)
             memcpy(pRet,pPoint,nOldLen);
@@ -236,7 +236,7 @@ CNEOMemStack_ReMalloc_Free_End:
 CNEOMemStack_ReMalloc_End:
     return pRet;
 }
-//MallocºÍfree£¬µ÷ÓÃÄÚ´æ¹ÜÀíµ¥ÔªµÄ·½·¨
+//Mallocå’Œfreeï¼Œè°ƒç”¨å†…å­˜ç®¡ç†å•å…ƒçš„æ–¹æ³•
 void *CNEOMemStack::Malloc(int nSize)
 {
     void *pRet=NULL;
@@ -247,9 +247,9 @@ void *CNEOMemStack::Malloc(int nSize)
     }
     if(m_pHead)
     {
-        //µİ¹é·ÖÅä
+        //é€’å½’åˆ†é…
         pRet=m_pHead->Malloc(nSize,m_nAllBlockCount,m_nMemoryUse);
-        //Í³¼Æ×î´óµÄÖ¸Õë
+        //ç»Ÿè®¡æœ€å¤§çš„æŒ‡é’ˆ
         if(m_pMaxPoint.Get()<pRet)
             m_pMaxPoint.Set(pRet);
     }
@@ -258,17 +258,17 @@ void *CNEOMemStack::Malloc(int nSize)
 bool CNEOMemStack::Free(void *pPoint)
 {
     bool bRet=false;
-    if(m_pHead)//µİ¹éµ÷ÓÃ×óÖ¦½ÚµãÉÏµÄFree
+    if(m_pHead)//é€’å½’è°ƒç”¨å·¦æèŠ‚ç‚¹ä¸Šçš„Free
     {
         bRet=m_pHead->Free(pPoint,m_CloseFlag.Get());
     }
     return bRet;
 }
-//ÄÚ²¿ĞÅÏ¢Êä³öº¯Êı
+//å†…éƒ¨ä¿¡æ¯è¾“å‡ºå‡½æ•°
 void CNEOMemStack::PrintStack(void)
 {
     if(m_pHead)
-        m_pHead->PrintStack();//µİ¹é´òÓ¡Õû¸öÊ÷µÄÇé¿ö
+        m_pHead->PrintStack();//é€’å½’æ‰“å°æ•´ä¸ªæ ‘çš„æƒ…å†µ
 }
 void CNEOMemStack::PrintInfo(void)
 {
@@ -277,14 +277,14 @@ void CNEOMemStack::PrintInfo(void)
         m_nMemoryUse.Get(),
         m_pMaxPoint.Get());
 }
-//ÉèÖÃ¹Ø±Õ±êÖ¾£¬ÎªÕæÊ±µ÷ÓÃÏµÍ³free
+//è®¾ç½®å…³é—­æ ‡å¿—ï¼Œä¸ºçœŸæ—¶è°ƒç”¨ç³»ç»Ÿfree
 void CNEOMemStack::SetCloseFlag(bool bFlag)
 {
     m_CloseFlag.Set(bFlag);
 }
 
 
-//ÄÚ´æÖ¸Õë×¢²áÄ£¿é
+//å†…å­˜æŒ‡é’ˆæ³¨å†Œæ¨¡å—
 
 CMemRegister::CMemRegister(CNEOLowDebug *pDebug):
     m_pDebug(pDebug)
@@ -293,8 +293,8 @@ CMemRegister::CMemRegister(CNEOLowDebug *pDebug):
     m_nUseMax=0;
     m_pMaxPoint=NULL;
     m_nPointCount=0;
-    //ÒÔnullÀ´±íÊ¾½á¹¹ÌåÊÇ·ñ±»Ê¹ÓÃ
-    //³õÊ¼»¯
+    //ä»¥nullæ¥è¡¨ç¤ºç»“æ„ä½“æ˜¯å¦è¢«ä½¿ç”¨
+    //åˆå§‹åŒ–
     int i=0;
     for(i=0;i<NEO_MEM_REGISTER_MAX;i++)
     {
@@ -308,7 +308,7 @@ CMemRegister::~CMemRegister()
     m_Lock.Lock();
     {
         m_pDebug->DebugToFile("CMemRegister Max Register Point=0x%p\n",m_pMaxPoint);
-        //¼ì²éËùÓĞÖ¸Õë£¬·Ç0Öµ±¨¾¯
+        //æ£€æŸ¥æ‰€æœ‰æŒ‡é’ˆï¼Œé0å€¼æŠ¥è­¦
         for(i=0;i<m_nUseMax;i++)
         {
             if(m_RegisterArray[i].m_pPoint)
@@ -322,15 +322,15 @@ CMemRegister::~CMemRegister()
     m_Lock.UnLock();
 }
 
-//ÄÚ²¿¹¤¾ß£¬¿½±´Êı¾İ
-void CMemRegister::RegisterCopy(SNEOMemRegister *pDest//Ä¿µÄ¿½±´Ö¸Õë
-    ,void *pPoint                       //´ı¿½±´µÄÖ¸Õë
-    ,const char *szInfo)                      //´ı¿½±´µÄÃèÊö
+//å†…éƒ¨å·¥å…·ï¼Œæ‹·è´æ•°æ®
+void CMemRegister::RegisterCopy(SNEOMemRegister *pDest//ç›®çš„æ‹·è´æŒ‡é’ˆ
+    ,void *pPoint                       //å¾…æ‹·è´çš„æŒ‡é’ˆ
+    ,const char *szInfo)                      //å¾…æ‹·è´çš„æè¿°
 {
     pDest->m_pPoint=pPoint;
     if(szInfo)
     {
-        //ÒıÈëµÄº¯Êı
+        //å¼•å…¥çš„å‡½æ•°
         SafeStrcpy(pDest->m_szInfo,szInfo,NEO_MEM_BLOCK_INFO_MAX_SIZE);
     }
     else
@@ -338,35 +338,35 @@ void CMemRegister::RegisterCopy(SNEOMemRegister *pDest//Ä¿µÄ¿½±´Ö¸Õë
         NEO_CLEAN_CHAR_BUFFER(szInfo);
     }
 }
-//Ìí¼ÓÒ»¸öÖ¸Õë¼°ÆäËµÃ÷
+//æ·»åŠ ä¸€ä¸ªæŒ‡é’ˆåŠå…¶è¯´æ˜
 void CMemRegister::Add(void *pPoint,const char *szInfo)
 {
     int i=0;
     m_Lock.Lock();
     {
-        //¸üĞÂ×î´óÖ¸Õë
+        //æ›´æ–°æœ€å¤§æŒ‡é’ˆ
         if(pPoint>m_pMaxPoint)
             m_pMaxPoint=pPoint;
-        //±éÀúÑ°ÕÒDElµ¼ÖÂµÄ¿ÕÏĞÇøÓò
+        //éå†å¯»æ‰¾DElå¯¼è‡´çš„ç©ºé—²åŒºåŸŸ
         for(i=0;i<m_nUseMax;i++)
         {
-            //½á¹¹ÌåÖØµÄÖ¸ÕëÎªNULLÔò±íÊ¾Î´Ê¹ÓÃ
+            //ç»“æ„ä½“é‡çš„æŒ‡é’ˆä¸ºNULLåˆ™è¡¨ç¤ºæœªä½¿ç”¨
             if(!m_RegisterArray[i].m_pPoint)
             {
-                //Í³¼ÆÊ¹ÓÃµÄÖ¸Õë×ÜÊı
+                //ç»Ÿè®¡ä½¿ç”¨çš„æŒ‡é’ˆæ€»æ•°
                 m_nPointCount++;
-                //´«ÈëĞÅÏ¢
+                //ä¼ å…¥ä¿¡æ¯
                 RegisterCopy(&(m_RegisterArray[i]),pPoint,szInfo);
                 goto CMemRegister_Add_End;
             }
         }//for
-        //ÎŞ¿ÕÏĞÇøÓòÔòÔÚÄ©Î²Ôö¼õ
-        if(NEO_MEM_REGISTER_MAX<=m_nUseMax)//²é¿´ÊÇ·ñÔ½½ç
+        //æ— ç©ºé—²åŒºåŸŸåˆ™åœ¨æœ«å°¾å¢å‡
+        if(NEO_MEM_REGISTER_MAX<=m_nUseMax)//æŸ¥çœ‹æ˜¯å¦è¶Šç•Œ
         {
             m_pDebug->DebugToFile("***ERROR***CMemRegister is full\n");
             goto CMemRegister_Add_End;
         }
-        //×¢²áµ½Ä©Î²
+        //æ³¨å†Œåˆ°æœ«å°¾
         RegisterCopy(&(m_RegisterArray[m_nUseMax]),pPoint,szInfo);
         m_nPointCount++;
         m_nUseMax++;
@@ -375,13 +375,13 @@ void CMemRegister::Add(void *pPoint,const char *szInfo)
 CMemRegister_Add_End:
     m_Lock.UnLock();
 }
-//É¾³ıÒ»¸öÖ¸Õë£¨ÄÚ´æ±»ÊÍ·Å£¬Ê§Ğ§£©
+//åˆ é™¤ä¸€ä¸ªæŒ‡é’ˆï¼ˆå†…å­˜è¢«é‡Šæ”¾ï¼Œå¤±æ•ˆï¼‰
 void CMemRegister::Del(void *pPoint)
 {
     int i=0;
     m_Lock.Lock();
     {
-        //Ñ°ÕÒÔÙÓÃÄÚ´æÇøÓò
+        //å¯»æ‰¾å†ç”¨å†…å­˜åŒºåŸŸ
         for(i=0;i<m_nUseMax;i++)
         {
             if(pPoint==m_RegisterArray[i].m_pPoint)
@@ -396,7 +396,7 @@ void CMemRegister::Del(void *pPoint)
 CMemRegister_Del_End:
     m_Lock.UnLock();
 }
-//remallocµÄÊ±ºò¸üĞÂÖ¸Õë
+//remallocçš„æ—¶å€™æ›´æ–°æŒ‡é’ˆ
 void CMemRegister::Modeify(void *pOld,void *pNew)
 {
     int i=0;
@@ -404,23 +404,23 @@ void CMemRegister::Modeify(void *pOld,void *pNew)
     {
         if(pOld>m_pMaxPoint)
             m_pMaxPoint=pOld;
-        //Ñ°ÕÒÔÙÓÃÄÚ´æÇøÓò
+        //å¯»æ‰¾å†ç”¨å†…å­˜åŒºåŸŸ
         for(i=0;i<m_nUseMax;i++)
         {
             if(pOld==m_RegisterArray[i].m_pPoint)
             {
-                //½öĞŞ¸ÄÖ¸Õë£¬²»ĞŞ¸ÄËµÃ÷
+                //ä»…ä¿®æ”¹æŒ‡é’ˆï¼Œä¸ä¿®æ”¹è¯´æ˜
                 m_RegisterArray[i].m_pPoint=pNew;
                 goto CMemRegister_Modeify_End;
             }
         }
     }
-    //ÈôÖ¸Õë²»´æÔÚ±¨´í
-    m_pDebug->DebugToFile("***ERROR***CMemRegister£º£ºmodeify(): I can't found point!\n");
+    //è‹¥æŒ‡é’ˆä¸å­˜åœ¨æŠ¥é”™
+    m_pDebug->DebugToFile("***ERROR***CMemRegisterï¼šï¼šmodeify(): I can't found point!\n");
 CMemRegister_Modeify_End:
     m_Lock.UnLock();
 }
-//´òÓ¡ĞÅÏ¢
+//æ‰“å°ä¿¡æ¯
 void CMemRegister::PrintInfo(void)
 {
     m_Lock.Lock();
@@ -433,7 +433,7 @@ void CMemRegister::PrintInfo(void)
     m_Lock.UnLock();
 }
 
-//socket×¢²áÄ£¿é
+//socketæ³¨å†Œæ¨¡å—
 inline bool SocketIsOK(WIN_LINUX_SOCKET nSocket)
 {
     //if(0>nSocket) return false;
@@ -467,7 +467,7 @@ CSocketRegister::~CSocketRegister()
         {
             if(SocketIsOK(m_RegisterArray[i].m_nSocket))
             {
-                //Èç¹û·¢ÏÖÓĞsocketÔÚÊ¹ÓÃ£¬Ôò±¨¾¯£¬²¢ÊÍ·Å
+                //å¦‚æœå‘ç°æœ‰socketåœ¨ä½¿ç”¨ï¼Œåˆ™æŠ¥è­¦ï¼Œå¹¶é‡Šæ”¾
                 m_pDebug->DebugToFile("***Socket Lost:[%d]-%s\n",
                     m_RegisterArray[i].m_nSocket,
                     m_RegisterArray[i].m_szInfo);
@@ -483,23 +483,23 @@ void CSocketRegister::Add(WIN_LINUX_SOCKET s,char *szInfo)
     int i=0;
     m_Lock.Lock();
     {
-        //Í³¼Æ×î´óµÄsocket
+        //ç»Ÿè®¡æœ€å¤§çš„socket
         if(!SocketIsOK(m_nMaxSocket))
             m_nMaxSocket=s;
         else if(s>m_nMaxSocket)
             m_nMaxSocket=s;
-        //ÏÈÊÔÍ¼ĞŞ¸Ä
+        //å…ˆè¯•å›¾ä¿®æ”¹
         for(i=0;i<m_nUseMax;i++)
         { 
             if(m_RegisterArray[i].m_nSocket==s)
             {
                 if(szInfo)
                     SafeStrcpy(m_RegisterArray[i].m_szInfo,szInfo,NEO_MEM_BLOCK_INFO_MAX_SIZE);
-                //ĞŞ¸Ä²»Ôö¼Ó
+                //ä¿®æ”¹ä¸å¢åŠ 
                 goto CSocketRegister_Add_End;
             }
         }//for
-        //ÔÙÊÔÍ¼²åÈë£¬Ñ°ÕÒÆäÖĞ¿ÕÏĞµÄsocket
+        //å†è¯•å›¾æ’å…¥ï¼Œå¯»æ‰¾å…¶ä¸­ç©ºé—²çš„socket
         for(i=0;i<m_nUseMax;i++)
         {
             if(!SocketIsOK(m_nMaxSocket))
@@ -511,7 +511,7 @@ void CSocketRegister::Add(WIN_LINUX_SOCKET s,char *szInfo)
                 goto CSocketRegister_Add_End;
             }
         }//for
-        //×îºó×·¼Óµ½Ä©Î²
+        //æœ€åè¿½åŠ åˆ°æœ«å°¾
         if(NEO_MEM_REGISTER_MAX>m_nUseMax)
         {
             m_RegisterArray[i].m_nSocket=s;
@@ -520,7 +520,7 @@ void CSocketRegister::Add(WIN_LINUX_SOCKET s,char *szInfo)
             m_nUseMax++;
             m_nSocketUseCount++;
         }
-        else//×¢²áÇøÂúÁË£¬±ØĞëÒªÀ©´ó»º´æ
+        else//æ³¨å†ŒåŒºæ»¡äº†ï¼Œå¿…é¡»è¦æ‰©å¤§ç¼“å­˜
         {
             m_pDebug->DebugToFile("CSocketRegister ::Add():Pool is full!\n");
         }
@@ -564,10 +564,10 @@ void CSocketRegister::PrintInfo(void)
 
 //////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////
-//ÄÚ´æ³ØÀà
+//å†…å­˜æ± ç±»
 
 CNEOMemPoolWithLock::CNEOMemPoolWithLock(CNEOLowDebug *pDebug,
-    bool bOpenResgisterFlag)://¿ªÆô×¢²á¹¦ÄÜµÄ±ê¼Ç
+    bool bOpenResgisterFlag)://å¼€å¯æ³¨å†ŒåŠŸèƒ½çš„æ ‡è®°
     m_pDebug(pDebug)
 {
     //m_pDebug=pDebug;
@@ -578,16 +578,16 @@ CNEOMemPoolWithLock::CNEOMemPoolWithLock(CNEOLowDebug *pDebug,
     ///////////////
     if(bOpenResgisterFlag)
     {
-        //¸ù¾İ±êÖ¾£¬¾ö¶¨ÊÇ·ñÊµÀı»¯¸÷¸ö×¢²á¶ÔÏó
+        //æ ¹æ®æ ‡å¿—ï¼Œå†³å®šæ˜¯å¦å®ä¾‹åŒ–å„ä¸ªæ³¨å†Œå¯¹è±¡
         m_pRegister=new CMemRegister(m_pDebug);
         m_pSocketRegister=new CSocketRegister(m_pDebug);
     }
-    //´òÓ¡ÄÚ´æ³ØÕıÈ·Æô¶¯±êÖ¾
+    //æ‰“å°å†…å­˜æ± æ­£ç¡®å¯åŠ¨æ ‡å¿—
     m_pDebug->DebugToFile("NEO Mem Pool Open,register flag=%d\n",bOpenResgisterFlag);
 }
 CNEOMemPoolWithLock::~CNEOMemPoolWithLock()
 {
-    //´İ»Ù¸÷¸ö×Ó¶ÔÏó
+    //æ‘§æ¯å„ä¸ªå­å¯¹è±¡
     if(m_pRegister)
     {
         delete m_pRegister;
@@ -603,10 +603,10 @@ CNEOMemPoolWithLock::~CNEOMemPoolWithLock()
         delete m_pMemPool;
         m_pMemPool=NULL;
     }
-    //´òÓ¡ÕıÈ·½áÊøµÄ±êÖ¾
+    //æ‰“å°æ­£ç¡®ç»“æŸçš„æ ‡å¿—
         m_pDebug->DebugToFile("NEO Mem Pool Close\n");
 }
-//Ö¸Õë¹ÜÀí
+//æŒ‡é’ˆç®¡ç†
 
 void CNEOMemPoolWithLock::Register(void *pPoint,const char *szInfo)
 {
@@ -622,7 +622,7 @@ void CNEOMemPoolWithLock::UnRegister(void *pPoint)
         m_pRegister->Del(pPoint);
     }
 }
-//socket   ¹ÜÀí
+//socket   ç®¡ç†
 
 void CNEOMemPoolWithLock::RegisterSocket(WIN_LINUX_SOCKET s,char *szInfo)
 {
@@ -631,7 +631,7 @@ void CNEOMemPoolWithLock::RegisterSocket(WIN_LINUX_SOCKET s,char *szInfo)
         m_pSocketRegister->Add(s,szInfo);
     }
 }
-//·´×¢²á¼Ó¹Ø±Õ
+//åæ³¨å†ŒåŠ å…³é—­
 void CNEOMemPoolWithLock::CloseSocket(WIN_LINUX_SOCKET &s)
 {
     if(SocketIsOK(s))
@@ -647,39 +647,39 @@ void CNEOMemPoolWithLock::CloseSocket(WIN_LINUX_SOCKET &s)
         }
     }
 }
-//¹«¹²¹ÜÀí
-//ÉèÖÃ±êÖ¾£¬ÈÃËùÓĞµÄfree¶¼Ö±½Ófree, ²»ÔÚ±£ÁôÔÚstackÖĞ
+//å…¬å…±ç®¡ç†
+//è®¾ç½®æ ‡å¿—ï¼Œè®©æ‰€æœ‰çš„freeéƒ½ç›´æ¥free, ä¸åœ¨ä¿ç•™åœ¨stackä¸­
 void CNEOMemPoolWithLock::SetCloseFlag(bool bFlag)
 {
     if(m_pMemPool)
         m_pMemPool->SetCloseFlag(bFlag);
 }
-//ÖØĞÂ·ÖÅäÖ¸ÕëµÄ¿Õ¼ä£¬Ä¬ÈÏ¿½±´Ô­Ê¼Êı¾İµ½ĞÂ¿Õ¼ä
+//é‡æ–°åˆ†é…æŒ‡é’ˆçš„ç©ºé—´ï¼Œé»˜è®¤æ‹·è´åŸå§‹æ•°æ®åˆ°æ–°ç©ºé—´
 void *CNEOMemPoolWithLock::ReMalloc(void *pPoint,int nNewSize,bool bCopyOldDataFlag)
 {
     void *pRet=NULL;
     if(m_pMemPool)
     {
-        //µ÷ÓÃÄÚ´æÕ»ÖØ¶¨ÒåÄÚ´æÇøÓò´óĞ¡
+        //è°ƒç”¨å†…å­˜æ ˆé‡å®šä¹‰å†…å­˜åŒºåŸŸå¤§å°
         pRet=m_pMemPool->ReMalloc(pPoint,nNewSize,bCopyOldDataFlag);
         if(m_pRegister)
         {
             if(pRet)
                 m_pRegister->Modeify(pPoint,pRet);
-            else//Ê§°Ü£¬ÓÉÓÚÀÏÖ¸ÕëÒÑ¾­´İ»Ù£¬ÊµÏÖ·´×¢²á
+            else//å¤±è´¥ï¼Œç”±äºè€æŒ‡é’ˆå·²ç»æ‘§æ¯ï¼Œå®ç°åæ³¨å†Œ
                 m_pRegister->Del(pPoint);
         }
     }
     return pRet;
 }
-//·ÖÅäÒ»¿éÄÚ´æ
+//åˆ†é…ä¸€å—å†…å­˜
 void *CNEOMemPoolWithLock::Malloc(int nSize,const char *szInfo)
 {
     void *pRet=NULL;
     if(m_pMemPool)
     {
         pRet=m_pMemPool->Malloc(nSize);
-        if(pRet)//Èç¹ûÖ¸ÕëÓĞĞ§£¬Ôò×¢²á
+        if(pRet)//å¦‚æœæŒ‡é’ˆæœ‰æ•ˆï¼Œåˆ™æ³¨å†Œ
             Register(pRet,szInfo);
     }
     return pRet;
@@ -690,13 +690,13 @@ void CNEOMemPoolWithLock::Free(void *pBlock)
         m_pMemPool->Free(pBlock);
     UnRegister(pBlock);
 }
-//ÏÔÊ¾Õû¿ÃÄÚ´æÊ÷µÄÄÚÈİ
+//æ˜¾ç¤ºæ•´æ£µå†…å­˜æ ‘çš„å†…å®¹
 void CNEOMemPoolWithLock::PrintTree(void)
 {
     if(m_pMemPool)
         m_pMemPool->PrintStack();
 }
-//¹Ø¼üĞÅÏ¢ÏÔÊ¾
+//å…³é”®ä¿¡æ¯æ˜¾ç¤º
 void CNEOMemPoolWithLock::PrintInfo(void)
 {
     /////////////////

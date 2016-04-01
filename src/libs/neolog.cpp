@@ -1,7 +1,7 @@
-//ĞèÒªÒÀÀµdebugÀà
-//ÄÚ´æÀà
-//ËøÀà
-//¶ÓÁĞ
+ï»¿//éœ€è¦ä¾èµ–debugç±»
+//å†…å­˜ç±»
+//é”ç±»
+//é˜Ÿåˆ—
 
 #include "neoindex.h"    
 
@@ -16,32 +16,32 @@ namespace NEOLIB {
 ///////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////
 CNEOLog::CNEOLog(CNEOLowDebug *pDebug,
-        CNEOMemPoolWithLock *pMemPool,        //ÄÚ´æÖ¸Õë³Ø
-        const char *szLogPath,                      //ÈÕÖ¾Â·¾¶
-        const char *szAppName,                      //Ó¦ÓÃÃû
-        int nHoldFileMax,                 //±£´æµÄ×î´óÎÄ¼şÊı
-        bool bSyslogFlag,                //ÈÕÖ¾¼¶±ğ¿ª¹Ø
+        CNEOMemPoolWithLock *pMemPool,        //å†…å­˜æŒ‡é’ˆæ± 
+        const char *szLogPath,                      //æ—¥å¿—è·¯å¾„
+        const char *szAppName,                      //åº”ç”¨å
+        int nHoldFileMax,                 //ä¿å­˜çš„æœ€å¤§æ–‡ä»¶æ•°
+        bool bSyslogFlag,                //æ—¥å¿—çº§åˆ«å¼€å…³
         bool bDebugFlag,
         bool bDebug2Flag,
         bool bDebug3Flag,
-        bool bPrintfToScrFlag          //ÊÇ·ñÏòÆÁÄ»´òÓ¡
+        bool bPrintfToScrFlag          //æ˜¯å¦å‘å±å¹•æ‰“å°
         ):m_Lock(),m_pDebug(pDebug),m_pMemPool(pMemPool)
 {
     //m_pDebug=pDebug;
     //m_pMemPool=pMemPool;
-    //À¹½ØĞÅÏ¢
+    //æ‹¦æˆªä¿¡æ¯
     m_pInfoOutCallback=m_pDebug->pInfoOutCallback;
     m_pInfoOutCallbackParam=m_pDebug->pInfoOutCallbackParam;
     memset(m_szFilePath,0,sizeof(m_szFilePath));
     memset(m_szFileName,0,sizeof(m_szFileName));
-    //ÀûÓÃdebugÊä³öÆô¶¯±êÖ¾
+    //åˆ©ç”¨debugè¾“å‡ºå¯åŠ¨æ ‡å¿—
     m_pDebug->DebugToFile("CNEOLog:start~\n");
-    //»ñµÃÎÄ¼şµÄ»ù×¼×Ö·û
-    FULL_NAME(szLogPath,szAppName,m_szFilePath,"");//ÔÚdebugÎÄ¼şÖĞ¶¨Òå
-    //»ñµÃÎÄ¼şÄ¿Â¼ÃûµÄ±£´æÎÄ¼şÃû
+    //è·å¾—æ–‡ä»¶çš„åŸºå‡†å­—ç¬¦
+    FULL_NAME(szLogPath,szAppName,m_szFilePath,"");//åœ¨debugæ–‡ä»¶ä¸­å®šä¹‰
+    //è·å¾—æ–‡ä»¶ç›®å½•åçš„ä¿å­˜æ–‡ä»¶å
     FULL_NAME(szLogPath,szAppName,m_szFileInfoName,"info");
-    //Çå¿Õµ±Ç°ÎÄ¼şÃû»º³å
-    NEO_CLEAN_CHAR_BUFFER(m_szFileName);//ÔÚÄ³¸öÎÄ¼şÖĞ¶¨Òå
+    //æ¸…ç©ºå½“å‰æ–‡ä»¶åç¼“å†²
+    NEO_CLEAN_CHAR_BUFFER(m_szFileName);//åœ¨æŸä¸ªæ–‡ä»¶ä¸­å®šä¹‰
     m_nFileSize=0;
     m_bSysLogFlag=bSyslogFlag;
     m_bDebugFlag=bDebugFlag;
@@ -50,19 +50,19 @@ CNEOLog::CNEOLog(CNEOLowDebug *pDebug,
     m_bPrintfToScrFlag=bPrintfToScrFlag;
     m_nHoldFileMax=nHoldFileMax;
     m_pFileInfoQueue=new CNEOMemQueue(m_pDebug,m_pMemPool,"CNEOLog::m_pFileInfoQueue");
-    if(m_pFileInfoQueue)//ÉêÇë³É¹¦£¬×¢²áµ½ÄÚ´æ³Ø
+    if(m_pFileInfoQueue)//ç”³è¯·æˆåŠŸï¼Œæ³¨å†Œåˆ°å†…å­˜æ± 
     {
        m_pMemPool->Register(m_pFileInfoQueue,"CNEOLog::m_pFileInfoQueue");
     }
-    m_pFileInfoQueue->ReadFromFile(m_szFileInfoName);//¶ÁÈëÉÏ´Î±£ÁôµÄÎÄ¼şÃûĞÅÏ¢
-    MakeFileName();                                  // ¶¨ÖÆÎÄ¼şÃû
+    m_pFileInfoQueue->ReadFromFile(m_szFileInfoName);//è¯»å…¥ä¸Šæ¬¡ä¿ç•™çš„æ–‡ä»¶åä¿¡æ¯
+    MakeFileName();                                  // å®šåˆ¶æ–‡ä»¶å
 }
 CNEOLog::~CNEOLog()
 {
     if(m_pFileInfoQueue)
     {
        m_pFileInfoQueue->WriteToFile(m_szFileInfoName);
-       m_pMemPool->UnRegister(m_pFileInfoQueue);    //·´×¢²áÖ¸Õë
+       m_pMemPool->UnRegister(m_pFileInfoQueue);    //åæ³¨å†ŒæŒ‡é’ˆ
        delete m_pFileInfoQueue;
        m_pFileInfoQueue=NULL;
     }
@@ -90,9 +90,9 @@ int CNEOLog::_Printf(const char *szFormat,...)
     if(nListCount>(nMaxLength-1))
         nListCount=nMaxLength-1;
     *(szBuf+nListCount)='\0';
-    //µÃµ½µ±Ç°µÄÎÄ¼şÃû
+    //å¾—åˆ°å½“å‰çš„æ–‡ä»¶å
     GetFileName();
-    //½«ĞÅÏ¢Êä³öµ½ÎÄ¼ş
+    //å°†ä¿¡æ¯è¾“å‡ºåˆ°æ–‡ä»¶
     nListCount=OutputFileOrScreen(m_szFileName,"a+","%s%s",szTime,szBuf);
     if(m_bPrintfToScrFlag)
     {
@@ -109,13 +109,13 @@ int CNEOLog::_Printf(const char *szFormat,...)
 }
 void CNEOLog::DeleteFirstFile(void)
 {
-    char szFirstFile[FILENAME_STRING_LENGTH]="\0";  //ÎÄ¼şÃû»º³å
-    int nFirstFileNameLen=0;                   //ÎÄ¼şÃû³¤¶È
-    //´ÓÎÄ¼şÃûÊı×éÖĞµ¯³öµÚÒ»¸öÊı×é
+    char szFirstFile[FILENAME_STRING_LENGTH]="\0";  //æ–‡ä»¶åç¼“å†²
+    int nFirstFileNameLen=0;                   //æ–‡ä»¶åé•¿åº¦
+    //ä»æ–‡ä»¶åæ•°ç»„ä¸­å¼¹å‡ºç¬¬ä¸€ä¸ªæ•°ç»„
     nFirstFileNameLen=m_pFileInfoQueue->GetAndDeleteFirst(szFirstFile,FILENAME_STRING_LENGTH);
     if(0>=nFirstFileNameLen)
         goto CNEOLog_DeleteFirstFile_End;
-    CNEOLowDebug::DeleteAFile(szFirstFile);   //ÕæÊµµÄÉ¾³ıÎÄ¼ş
+    CNEOLowDebug::DeleteAFile(szFirstFile);   //çœŸå®çš„åˆ é™¤æ–‡ä»¶
 CNEOLog_DeleteFirstFile_End:
     return;
 }
@@ -130,47 +130,47 @@ void CNEOLog::FixFileInfo(void)
 void CNEOLog::MakeFileName(void)
 {
     char szTemp[LOG_ITEM_LENGTH_MAX] = "\0";
-    MakeATimeString(szTemp,LOG_ITEM_LENGTH_MAX);  //»ñµÃÊ±¼ä´Á×Ö·û´®
-    FixFileInfo();                                //Î¬»¤ÎÄ¼ş×Ü¸öÊı£¨Ä¬ÈÏ72¸ö£©
-    int nLen=SafePrintf(m_szFileName,(FILENAME_STRING_LENGTH*2),"%s_%s.log",m_szFilePath,szTemp);//Éú³ÉÈÕÖ¾ÎÄ¼şÃû
+    MakeATimeString(szTemp,LOG_ITEM_LENGTH_MAX);  //è·å¾—æ—¶é—´æˆ³å­—ç¬¦ä¸²
+    FixFileInfo();                                //ç»´æŠ¤æ–‡ä»¶æ€»ä¸ªæ•°ï¼ˆé»˜è®¤72ä¸ªï¼‰
+    int nLen=SafePrintf(m_szFileName,(FILENAME_STRING_LENGTH*2),"%s_%s.log",m_szFilePath,szTemp);//ç”Ÿæˆæ—¥å¿—æ–‡ä»¶å
     nLen++;
-    //½«ĞÂµÄÎÄ¼şÃûÌí¼Óµ½¶ÓÁĞ
+    //å°†æ–°çš„æ–‡ä»¶åæ·»åŠ åˆ°é˜Ÿåˆ—
     int nAddLastRet=m_pFileInfoQueue->AddLast(m_szFileName,nLen);
     if(0>=nAddLastRet)
     {
-       //Îª·ÀÖ¹¶ÓÁĞÂúÁË£¬É¾³ı¶ÔÍ·µÄÈı¸öÃû×Ö
+       //ä¸ºé˜²æ­¢é˜Ÿåˆ—æ»¡äº†ï¼Œåˆ é™¤å¯¹å¤´çš„ä¸‰ä¸ªåå­—
         DeleteFirstFile();
         DeleteFirstFile();
         DeleteFirstFile();
-        //ÖØĞÂÌí¼Ó
+        //é‡æ–°æ·»åŠ 
         nAddLastRet=m_pFileInfoQueue->AddLast(m_szFileName,nLen);
     }
-    m_nFileSize=0;                               //ĞÂ½¨ÎÄ¼ş£¬³¤¶ÈÎª0
-    //ĞÂ½¨ÎÄ¼ş£¬ÔÚÎÄ¼şÍ·´òÓ¡Ò»Ğ©ĞÅÏ¢
+    m_nFileSize=0;                               //æ–°å»ºæ–‡ä»¶ï¼Œé•¿åº¦ä¸º0
+    //æ–°å»ºæ–‡ä»¶ï¼Œåœ¨æ–‡ä»¶å¤´æ‰“å°ä¸€äº›ä¿¡æ¯
     time(&m_tFileNameMake);
     {
        bool bPrintToScr=m_bPrintfToScrFlag;
        m_bPrintfToScrFlag=false;
        _Printf("NEO.base lib log file %s\n",m_szFileName);
        _Printf("____________________________________\n");
-       m_bPrintfToScrFlag=bPrintToScr;//Êä³öÍê±Ï£¬»Ö¸´±êÖ¾
+       m_bPrintfToScrFlag=bPrintToScr;//è¾“å‡ºå®Œæ¯•ï¼Œæ¢å¤æ ‡å¿—
     }
 
 }
 void CNEOLog::GetFileName(void)
 {
     time_t tNow;
-    unsigned long ulDeltaT=0;  //±ä»¯Á¿
-    if('\0'==m_szFileName[0])  //Èç¹ûµÚÒ»´ÎÆô¶¯£¬ÎÄ¼şÃûÎ»¿Õ
+    unsigned long ulDeltaT=0;  //å˜åŒ–é‡
+    if('\0'==m_szFileName[0])  //å¦‚æœç¬¬ä¸€æ¬¡å¯åŠ¨ï¼Œæ–‡ä»¶åä½ç©º
     {
        MakeFileName();
        goto CNEOLog_GetFileName_End;
     }
     time(&tNow);
-    ulDeltaT=(unsigned long)tNow-m_tFileNameMake;  //¼ÆËã±ä»¯Á¿
+    ulDeltaT=(unsigned long)tNow-m_tFileNameMake;  //è®¡ç®—å˜åŒ–é‡
     if(LOG_FILE_CHANGE_NAME_PRE_SECONDS<=ulDeltaT)
     {
-       MakeFileName();                            //Ê±¼ä³¬¹ıÒ»Ğ¡Ê±£¬·µ»Ø
+       MakeFileName();                            //æ—¶é—´è¶…è¿‡ä¸€å°æ—¶ï¼Œè¿”å›
        goto CNEOLog_GetFileName_End;
     }
     if(LOG_FILE_SIZE_MAX<=m_nFileSize)
@@ -190,10 +190,10 @@ int CNEOLog::MakeATimeString(char *szBuffer,int nBufferSize)
     if(LOG_TIME_STRING_MAX>nBufferSize)
         goto CNEOLog_MakeATimeString_End;
     time(&t);
-    pTM=localtime(&t);//Éú³ÉÊ±¼ä×Ô¶¯´øÒ»¸ö;;\0
+    pTM=localtime(&t);//ç”Ÿæˆæ—¶é—´è‡ªåŠ¨å¸¦ä¸€ä¸ª;;\0
     nLength=SafePrintf(szBuffer,LOG_ITEM_LENGTH_MAX,"%s",asctime(pTM));
     szBuffer[nLength-1]='\0';
-    //¹ıÂË¿Õ¸ñ
+    //è¿‡æ»¤ç©ºæ ¼
     for(i=0;i<nLength;i++)
     {
        if(' '==szBuffer[i])

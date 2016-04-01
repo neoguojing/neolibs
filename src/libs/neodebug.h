@@ -1,3 +1,4 @@
+ï»¿
 #ifndef NEODEBUG  
 
 #define NEODEBUG  
@@ -6,54 +7,54 @@
 
 namespace NEOLIB {
 ///////////////////////////////////////////////export fun
-typedef struct COUNT_SUB//²îÖµµÄÊı¾İ½á¹¹
+typedef struct COUNT_SUB//å·®å€¼çš„æ•°æ®ç»“æ„
 {
     unsigned long m_nBegin;
     unsigned long m_nEnd;
 }SCountSub;
-typedef struct _COUNT_//Í³¼ÆÆ½¾ùÖµÄ£¿é
+typedef struct _COUNT_//ç»Ÿè®¡å¹³å‡å€¼æ¨¡å—
 {
-    SCountSub m_Sub;//²îÖµ
-    unsigned long m_Sum;//Í³¼ÆÆ½¾ùÖµ
+    SCountSub m_Sub;//å·®å€¼
+    unsigned long m_Sum;//ç»Ÿè®¡å¹³å‡å€¼
 }SCount;
 ////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////
-//×Ö·ûÊä³ö
+//å­—ç¬¦è¾“å‡º
  int SafePrintf(char *szBuf,int nMaxlength,const char *szFormat,...);
-//»ñµÃÊ±¼ä´Á
+//è·å¾—æ—¶é—´æˆ³
  int GetTimeStamp(char *szBuf,int nMaxlength);
-//´òÓ¡µ½ÎÄ¼ş»òÆÁÄ»
+//æ‰“å°åˆ°æ–‡ä»¶æˆ–å±å¹•
  int OutputFileOrScreen(const char *szFileName,const char *szMode,const char *szFormate,...);
-//ÒÔ¶ş½øÖÆÊä³öÊı¾İ
+//ä»¥äºŒè¿›åˆ¶è¾“å‡ºæ•°æ®
  int Debug_bin_ASC(char *pPrintBuffer,const char *pBuffer,int nLength);
-//ÒÔ16½øÖÆÊä³öÊı¾İ
+//ä»¥16è¿›åˆ¶è¾“å‡ºæ•°æ®
  int Debug_bin_HEX(char *pPrintBuffer,const char *pBuffer,int nLength);
-//Êä³öÖ÷Èë¿Úº¯Êı
+//è¾“å‡ºä¸»å…¥å£å‡½æ•°
  void Debug_bin(const char *pBuffer,int nLength);
 ///////////////////////////////////////////////////////////////
-//»ñÈ¡²îÖµµÄº¯Êı
+//è·å–å·®å€¼çš„å‡½æ•°
  unsigned long SCountSubGetX(SCountSub &CountSub);
  void SCountSubSetBegin(SCountSub &CountSub,unsigned long n);
  unsigned long SCountSubSetEnd(SCountSub &CountSub,unsigned long n);
 ///////////////////////////////////////////////////////////////
-//Í³¼ÆÆ½¾ùÖµÄ£¿é
- void SCountReset(SCount &Count);//³õÊ¼»¯
- unsigned long SCountSum(SCount &Count);//¼ÆËãÍ³¼ÆÆ½¾ùÖµ
- unsigned long SCountGetSum(SCount &Count);//·µ»ØsumÖµ
- unsigned long SCountGetX(SCount &Count);//·µ»Øµ±Ç°µÄ²îÖµ
+//ç»Ÿè®¡å¹³å‡å€¼æ¨¡å—
+ void SCountReset(SCount &Count);//åˆå§‹åŒ–
+ unsigned long SCountSum(SCount &Count);//è®¡ç®—ç»Ÿè®¡å¹³å‡å€¼
+ unsigned long SCountGetSum(SCount &Count);//è¿”å›sumå€¼
+ unsigned long SCountGetX(SCount &Count);//è¿”å›å½“å‰çš„å·®å€¼
  void SCountSetBegin(SCount &Count,unsigned long n);
  unsigned long SCountSetEnd(SCount &Count,unsigned long n);
 ////////////////////////////////////////////////////////////////
-//¸¨Öú¹¦ÄÜº¯Êı
-//»ñµÃ·ÇÁãËæ»úÊı
+//è¾…åŠ©åŠŸèƒ½å‡½æ•°
+//è·å¾—éé›¶éšæœºæ•°
  inline int GetNot0(void);
  inline int Get0(void);
-//»ñµÃ¸ø¶¨·¶Î§ÄÚµÄËæ»úÊı
+//è·å¾—ç»™å®šèŒƒå›´å†…çš„éšæœºæ•°
  inline int GetRandomBeteen(int nBegin,int nEnd);
-//ÅĞ¶ÏÊ±¼äÊÇ·ñµ½ÁË
+//åˆ¤æ–­æ—¶é—´æ˜¯å¦åˆ°äº†
  //inline bool TimelsUp(long tLast,long lMax);
-//¼ÆËã²îÖµµÄÀà
+//è®¡ç®—å·®å€¼çš„ç±»
 class  CCountSub
 {
 public:
@@ -73,7 +74,7 @@ public:
 ///////////////////////////////////////////////////
 ///////////////////////////////////////////////////
 ///////////////////////////////////////////////////
-//Æ½¾ùÖµ¼ÆËã£¨Ã¿Ãë·¢Éú¶àÉÙ´Î¶¯×÷£©
+//å¹³å‡å€¼è®¡ç®—ï¼ˆæ¯ç§’å‘ç”Ÿå¤šå°‘æ¬¡åŠ¨ä½œï¼‰
 class  CDeltaTime
 {
 public:
@@ -85,10 +86,10 @@ public:
     void TouchBegin(void);
     void TouchEnd(void);
     unsigned long GetDeltaT(void);
-    double GetOperationsPerSecond(unsigned long ulOperationCount/*ÆÚ¼äµÄ²Ù×÷×ÜºÍ*/);
+    double GetOperationsPerSecond(unsigned long ulOperationCount/*æœŸé—´çš„æ“ä½œæ€»å’Œ*/);
 };
 //////////////////////////////////////
-//¼ÆËãÆ½¾ùÖµµÄÀà
+//è®¡ç®—å¹³å‡å€¼çš„ç±»
 class  CCount
 {
 public:
@@ -107,38 +108,38 @@ public:
 ////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
-//CLowDebugÀà£¬ÓÃÓÚ¾ßÌå¹¦ÄÜµÄÊä³ö
+//CLowDebugç±»ï¼Œç”¨äºå…·ä½“åŠŸèƒ½çš„è¾“å‡º
 class  CNEOLowDebug
 {
 public:
-    //É¾³ıÒ»¸öÎÄ¼ş
+    //åˆ é™¤ä¸€ä¸ªæ–‡ä»¶
     static void DeleteAFile(const char *szFileName);
-    //¹ıÂËÂ·¾¶»ñÈ¡ÎÄ¼şÃû
+    //è¿‡æ»¤è·¯å¾„è·å–æ–‡ä»¶å
     static char *GetTrueFileName(char *szBuffer);
 public:
-    //Êä³ö×Ö·û´®DebugToFileµ½ÎÄ¼ş»ò¿ØÖÆÌ¨£¬·µ»Ø×Ö·ûÊı£¬²»°üÀ¨\0
+    //è¾“å‡ºå­—ç¬¦ä¸²DebugToFileåˆ°æ–‡ä»¶æˆ–æ§åˆ¶å°ï¼Œè¿”å›å­—ç¬¦æ•°ï¼Œä¸åŒ…æ‹¬\0
     int DebugToFile(const char *szFormat,...);
-    //Êä³öÒ»¿éÄÚ´æ¶Îµ½ÎÄ¼ş¡£
+    //è¾“å‡ºä¸€å—å†…å­˜æ®µåˆ°æ–‡ä»¶ã€‚
     void DebugToFileBin(char *pBuffer,int nLength);
 public:
-    //¹¹Ôìº¯ÊıÓëÎö¹¹º¯Êı
-    CNEOLowDebug (const char *szPathName,                //Â·¾¶Ãû
-        const char *szAppName,                           //ÎÄ¼şÃû
-        _APP_INFO_OUT_CALLBACK pInfoOutCallback=NULL,//¶îÍâµÄÊä³ö»Øµ÷º¯Êı
-        void *pInfoOutCallbackParam=NULL,          //»Øµ÷º¯Êı²ÎÊı
-        bool bePrintToScreenFlag=false           //ÊÇ·ñ´òÓ¡µ½ÆÁÄ»
+    //æ„é€ å‡½æ•°ä¸ææ„å‡½æ•°
+    CNEOLowDebug (const char *szPathName,                //è·¯å¾„å
+        const char *szAppName,                           //æ–‡ä»¶å
+        _APP_INFO_OUT_CALLBACK pInfoOutCallback=NULL,//é¢å¤–çš„è¾“å‡ºå›è°ƒå‡½æ•°
+        void *pInfoOutCallbackParam=NULL,          //å›è°ƒå‡½æ•°å‚æ•°
+        bool bePrintToScreenFlag=false           //æ˜¯å¦æ‰“å°åˆ°å±å¹•
         );
     ~CNEOLowDebug();
 public:
-    //»Øµ÷º¯Êı¶¨Òå
-    //ÔÚĞèÒªµÄÊ±ºò£¬×¥È¡Êä³öĞÅÏ¢£¬´òÈë×Ô¼ºµÄÊä³ö¶ÓÁĞ
+    //å›è°ƒå‡½æ•°å®šä¹‰
+    //åœ¨éœ€è¦çš„æ—¶å€™ï¼ŒæŠ“å–è¾“å‡ºä¿¡æ¯ï¼Œæ‰“å…¥è‡ªå·±çš„è¾“å‡ºé˜Ÿåˆ—
     _APP_INFO_OUT_CALLBACK pInfoOutCallback;
-    //¸øµ÷ÓÃÕßÌá¹©µÄÖ¸Õë
+    //ç»™è°ƒç”¨è€…æä¾›çš„æŒ‡é’ˆ
     void *pInfoOutCallbackParam;
 private:
-    bool m_bePrintToScreenFlag;                  //ÄÚ²¿±£ÁôµÄÊä³ö±ê¼Ç
-    char m_szFileName[NEO_DEBUG_FILENAME_LENGTH];//Æ´½ÓºÃµÄÂ·¾¶Ãû+ÎÄ¼şÃû
-    CMutexLock m_Lock;                           //Ïß³Ì°²È«Ëø
+    bool m_bePrintToScreenFlag;                  //å†…éƒ¨ä¿ç•™çš„è¾“å‡ºæ ‡è®°
+    char m_szFileName[NEO_DEBUG_FILENAME_LENGTH];//æ‹¼æ¥å¥½çš„è·¯å¾„å+æ–‡ä»¶å
+    CMutexLock m_Lock;                           //çº¿ç¨‹å®‰å…¨é”
 };
 
 }

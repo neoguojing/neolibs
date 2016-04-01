@@ -1,9 +1,9 @@
-
+ï»¿
 #include "neolock.h"
 
 ////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////
-//»ù±¾¼ÓËøÀà
+//åŸºæœ¬åŠ é”ç±»
 namespace NEOLIB {
 
 CMutexLock::CMutexLock(void)
@@ -27,9 +27,9 @@ void CMutexLock::UnLock()
 
 /////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////½â¾ö¿çÏß³Ì±äÁ¿ÕõÓÃ
-//cÓïÑÔµÄ¼ÓËøº¯Êı,
-int MvarInit(MINT &(mValue)/*±£»¤ÕûĞÎ±äÁ¿µÄÖµ*/,int nValue)
+/////////////////////////////////////////////////////////è§£å†³è·¨çº¿ç¨‹å˜é‡æŒ£ç”¨
+//cè¯­è¨€çš„åŠ é”å‡½æ•°,
+int MvarInit(MINT &(mValue)/*ä¿æŠ¤æ•´å½¢å˜é‡çš„å€¼*/,int nValue)
 {
     MUTEXINIT(&mValue.m_MyLock);
     mValue.m_nValue=nValue;
@@ -37,13 +37,13 @@ int MvarInit(MINT &(mValue)/*±£»¤ÕûĞÎ±äÁ¿µÄÖµ*/,int nValue)
 }
 void MvarDestroy(MINT &(mValue))
 {
-    //ÎŞÒâÒåµÄ¼ÓËø£¬·ÀÖ¹ÔÚ´İ»ÙÊÇÓÉ¸ÉÈÅ
+    //æ— æ„ä¹‰çš„åŠ é”ï¼Œé˜²æ­¢åœ¨æ‘§æ¯æ˜¯ç”±å¹²æ‰°
     MUTEXLOCK(&mValue.m_MyLock);
     MUTEXUNLOCK(&mValue.m_MyLock);
     /////////////////////////////////
     MUTEXDESTROY(&mValue.m_MyLock);
 }
-//ÉèÖÃÒ»¸öÏß³Ì±äÁ¿Öµ
+//è®¾ç½®ä¸€ä¸ªçº¿ç¨‹å˜é‡å€¼
 int MvarSet(MINT &(mValue),int nValue)
 {
     MUTEXLOCK(&mValue.m_MyLock);
@@ -51,7 +51,7 @@ int MvarSet(MINT &(mValue),int nValue)
     MUTEXUNLOCK(&mValue.m_MyLock);
     return nValue;
 }
-//µÃµ½Ïß³Ì°²È«±äÁ¿µÄÖµ
+//å¾—åˆ°çº¿ç¨‹å®‰å…¨å˜é‡çš„å€¼
 int MvarGet(MINT &(mValue))
 {
     int nValue;
@@ -60,7 +60,7 @@ int MvarGet(MINT &(mValue))
     MUTEXUNLOCK(&mValue.m_MyLock);
     return nValue;
 }
-//Ïß³Ì°²È«±äÁ¿×ö¼Ó·¨ºÍ½â·¨
+//çº¿ç¨‹å®‰å…¨å˜é‡åšåŠ æ³•å’Œè§£æ³•
 int MvarAdd(MINT &(mValue),int nValue)
 {
     int nRet;
@@ -79,7 +79,7 @@ int MvarDec(MINT &(mValue),int nValue)
     MUTEXUNLOCK(&mValue.m_MyLock);
     return nRet;
 }
-//ÒÔÉÏº¯ÊıµÄc++ÀàÊµÏÖ
+//ä»¥ä¸Šå‡½æ•°çš„c++ç±»å®ç°
 
 CMint::CMint(int nValue)
 {
@@ -106,7 +106,7 @@ int CMint::Dec(int nValue)
     return MvarDec(m_nValue,nValue);
 }
 
-//¶ÔboolĞÍ±äÁ¿µÄ¼ÓËø
+//å¯¹boolå‹å˜é‡çš„åŠ é”
 
 CMbool::CMbool(int nValue)
 {
@@ -129,7 +129,7 @@ int CMbool::Set(int nValue)
 //////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////
 
-//µ¥Ğ´¶à¶ÁËø,Ö»ÊÇµ¥¶ÀµÄËø
+//å•å†™å¤šè¯»é”,åªæ˜¯å•ç‹¬çš„é”
 void MRSWLock_Create(SNeoMultiReadSingleWriteLock *pLock)
 {
     MUTEXINIT(&(pLock->m_Lock));
@@ -143,7 +143,7 @@ void MRSWLock_Destroy(SNeoMultiReadSingleWriteLock *pLock)
     /////////////////////////////////
     MUTEXDESTROY(&(pLock->m_Lock));
 }
-//Ëø×´Ì¬»ñÖª
+//é”çŠ¶æ€è·çŸ¥
 bool MRSWLock_GetWrite(SNeoMultiReadSingleWriteLock *pLock)
 {
     bool bRet=false;
@@ -164,14 +164,14 @@ int  MRSWLock_GetRead(SNeoMultiReadSingleWriteLock *pLock)
     MUTEXUNLOCK(&(pLock->m_Lock));
     return iRet;
 }
-//½øÈëĞ´²Ù×÷
+//è¿›å…¥å†™æ“ä½œ
 void MRSWLock_EnterWrite(SNeoMultiReadSingleWriteLock *pLock)
 {
     while(1)
     {
-       MUTEXLOCK(&(pLock->m_Lock));//¼ÓËø½øÈëËøÓò
+       MUTEXLOCK(&(pLock->m_Lock));//åŠ é”è¿›å…¥é”åŸŸ
        {
-           //ÅĞ¶ÏÊÇ·ñ¿ÉÒÔÇÀ¶áĞ´µÄÈ¨Àû
+           //åˆ¤æ–­æ˜¯å¦å¯ä»¥æŠ¢å¤ºå†™çš„æƒåˆ©
           if(!pLock->m_bWriteFlag)
           {
              pLock->m_bWriteFlag=true;
@@ -180,16 +180,16 @@ void MRSWLock_EnterWrite(SNeoMultiReadSingleWriteLock *pLock)
           }
        }
        MUTEXUNLOCK(&(pLock->m_Lock));
-       NEOMinSleep();//ÌØÊâµÄË¯Ãßº¯Êı
+       NEOMinSleep();//ç‰¹æ®Šçš„ç¡çœ å‡½æ•°
     }//while
 MRSWLock_EnterWrite_End:
-    //µÈ´ıÆäËûµÄ¶ÁÍê±Ï
+    //ç­‰å¾…å…¶ä»–çš„è¯»å®Œæ¯•
     while(MRSWLock_GetRead(pLock))
     {
        NEOMinSleep();
     }
 }
-//ÍË³öĞ´
+//é€€å‡ºå†™
 void MRSWLock_DisableWrite(SNeoMultiReadSingleWriteLock *pLock)
 {
     MUTEXLOCK(&(pLock->m_Lock));
@@ -198,14 +198,14 @@ void MRSWLock_DisableWrite(SNeoMultiReadSingleWriteLock *pLock)
     }
     MUTEXUNLOCK(&(pLock->m_Lock));
 }
-//½øÈë¶Á
+//è¿›å…¥è¯»
 int MRSWLock_AddRead(SNeoMultiReadSingleWriteLock *pLock)
 {
     while(1)
     {
-       MUTEXLOCK(&(pLock->m_Lock));//¼ÓËø½øÈëËøÓò
+       MUTEXLOCK(&(pLock->m_Lock));//åŠ é”è¿›å…¥é”åŸŸ
        {
-           //ÅĞ¶ÏÊÇ·ñ¿ÉÒÔÇÀ¶áĞ´µÄÈ¨Àû
+           //åˆ¤æ–­æ˜¯å¦å¯ä»¥æŠ¢å¤ºå†™çš„æƒåˆ©
           if(!pLock->m_bWriteFlag)
           {
              pLock->m_nReadCount++;
@@ -214,10 +214,10 @@ int MRSWLock_AddRead(SNeoMultiReadSingleWriteLock *pLock)
           }
        }
        MUTEXUNLOCK(&(pLock->m_Lock));
-       NEOMinSleep();//ÌØÊâµÄË¯Ãßº¯Êı
+       NEOMinSleep();//ç‰¹æ®Šçš„ç¡çœ å‡½æ•°
     }//while
 }
-//ÍË³ö¶Á
+//é€€å‡ºè¯»
 int MRSWLock_DecRead(SNeoMultiReadSingleWriteLock *pLock)
 {
     int nRet=0;
@@ -230,14 +230,14 @@ int MRSWLock_DecRead(SNeoMultiReadSingleWriteLock *pLock)
     MUTEXUNLOCK(&(pLock->m_Lock));
     return  nRet;
 }
-//¶Á×ªĞ´
+//è¯»è½¬å†™
 void MRSWLock_ReadToWrite(SNeoMultiReadSingleWriteLock *pLock)
 {
     while(1)
     {
-       MUTEXLOCK(&(pLock->m_Lock));//¼ÓËø½øÈëËøÓò
+       MUTEXLOCK(&(pLock->m_Lock));//åŠ é”è¿›å…¥é”åŸŸ
        {
-           //ÅĞ¶ÏÊÇ·ñ¿ÉÒÔÇÀ¶áĞ´µÄÈ¨Àû
+           //åˆ¤æ–­æ˜¯å¦å¯ä»¥æŠ¢å¤ºå†™çš„æƒåˆ©
           if(!pLock->m_bWriteFlag)
           {
              pLock->m_bWriteFlag=true;
@@ -248,16 +248,16 @@ void MRSWLock_ReadToWrite(SNeoMultiReadSingleWriteLock *pLock)
           }
        }
        MUTEXUNLOCK(&(pLock->m_Lock));
-       NEOMinSleep();//ÌØÊâµÄË¯Ãßº¯Êı
+       NEOMinSleep();//ç‰¹æ®Šçš„ç¡çœ å‡½æ•°
     }//while
 MRSWLock_ReadToWrite_End:
-    //µÈ´ıÆäËûµÄ¶ÁÍê±Ï
+    //ç­‰å¾…å…¶ä»–çš„è¯»å®Œæ¯•
     while(MRSWLock_GetRead(pLock))
     {
        NEOMinSleep();
     }
 }
-//ÒÔÉÏº¯Êı¶ÔÓ¦µÄc++·â×°
+//ä»¥ä¸Šå‡½æ•°å¯¹åº”çš„c++å°è£…
 CMultiReadSingleWriteLock::CMultiReadSingleWriteLock()
 {
     MRSWLock_Create(&m_Lock);
@@ -296,7 +296,7 @@ int CMultiReadSingleWriteLock::GetRead()
     return MRSWLock_GetRead(&m_Lock);
 }
 
-//ÓÃÒÔÉÏµÄËø±£»¤ÕûĞÎºÍboolĞÍ±äÁ¿µÄÀà
+//ç”¨ä»¥ä¸Šçš„é”ä¿æŠ¤æ•´å½¢å’Œboolå‹å˜é‡çš„ç±»
 
 CMRSWint::CMRSWint()
 {
@@ -306,7 +306,7 @@ CMRSWint::CMRSWint()
 }
 CMRSWint::~CMRSWint(){}
 
-int CMRSWint::Get(void)//µÃµ½±äÁ¿
+int CMRSWint::Get(void)//å¾—åˆ°å˜é‡
 {
     int nRet=0;
     m_Lock.AddRead();
@@ -354,7 +354,7 @@ CMRSWbool::CMRSWbool():
     m_nValue()
 {}
 CMRSWbool::~CMRSWbool(){}
-int CMRSWbool::Get(void)//µÃµ½±äÁ¿
+int CMRSWbool::Get(void)//å¾—åˆ°å˜é‡
 {
     return (bool)m_nValue.Get();
 }
@@ -366,7 +366,7 @@ int CMRSWbool::Set(bool bFlag)
 /////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////
-//²»¿ÉÖØÈëËø
+//ä¸å¯é‡å…¥é”
 
 CNonReentrant::CNonReentrant()
 {
@@ -383,7 +383,7 @@ bool CNonReentrant::Set(bool bRunFlag)
             if(!m_bAlreadyRunFlag)
             {
             m_bAlreadyRunFlag=true;
-            bRet=true;//±íÊ¾ÉèÖÃ³É¹¦
+            bRet=true;//è¡¨ç¤ºè®¾ç½®æˆåŠŸ
             }
         }
         m_Lock.UnLock();
@@ -403,7 +403,7 @@ bool CNonReentrant::Set(bool bRunFlag)
 ////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////
-//Ïß³Ì¿ØÖÆËø
+//çº¿ç¨‹æ§åˆ¶é”
 
 CThreadManager::CThreadManager():
     m_bThreadContinue(),m_nThreadCount(),m_nThreadID()
@@ -431,17 +431,17 @@ void CThreadManager::DecAThread(void)
 {
     m_nThreadCount.Dec();
 }
-//²éÑ¯Ïß³ÌÎ¬³Ö±äÁ¿µÄÖµ
+//æŸ¥è¯¢çº¿ç¨‹ç»´æŒå˜é‡çš„å€¼
 bool CThreadManager::ThreadContinue(void)
 {
     return m_bThreadContinue.Get();
 }
-//»ñµÃ¼ÆÊıÆ÷µÄÖµ
+//è·å¾—è®¡æ•°å™¨çš„å€¼
 int CThreadManager::GetThreadCount(void)
 {
     return m_nThreadCount.Get();
 }
-//·ÖÅäÒ»¸öÏß³ÌID¹©debugÓÃ
+//åˆ†é…ä¸€ä¸ªçº¿ç¨‹IDä¾›debugç”¨
 int CThreadManager::GetID(void)
 {
     return m_nThreadID.Add()-1;

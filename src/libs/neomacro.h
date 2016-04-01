@@ -1,13 +1,14 @@
+ï»¿/////////////////////////////////
 #ifndef NEOMACRO
 
 #define NEOMACRO
 
-//Àà¿âµÄºê¶¨Òå
+//ç±»åº“çš„å®å®šä¹‰
 
-//ÅĞ¶ÏÊ±¼äÊÇ·ñµ½ÁË
+//åˆ¤æ–­æ—¶é—´æ˜¯å¦åˆ°äº†
 #define TimeSetNow(t) time(&t)
 
-inline bool TimelsUp(time_t tLast,long lMax)///*×îºóÒ»´ÎÊ±¼ä*//*³¬Ê±Ê±¼äÉèÖÃ*/
+inline bool TimelsUp(time_t tLast,long lMax)///*æœ€åä¸€æ¬¡æ—¶é—´*//*è¶…æ—¶æ—¶é—´è®¾ç½®*/
 {
 	time_t tNow;
 	TimeSetNow(tNow);
@@ -26,13 +27,13 @@ inline void NEOExchange(Parm &p1, Parm &p2)
 	p1 = p2;
 	p2 = temp;
 }
-/*¸ù¾İ½á¹¹ÌåÔªËØ»ñÈ¡½á¹¹ÌåÊ×µØÖ·Ö¸Õë*/
-/*»ñÈ¡³ÉÔ±ÔÚ½á¹¹ÌåÖĞµÄÆ«ÒÆÁ¿*/
+/*æ ¹æ®ç»“æ„ä½“å…ƒç´ è·å–ç»“æ„ä½“é¦–åœ°å€æŒ‡é’ˆ*/
+/*è·å–æˆå‘˜åœ¨ç»“æ„ä½“ä¸­çš„åç§»é‡*/
 #define offset_of(type,member) ((size_t)&((type *)0)->member)
-/*ptrÎªmemberµÄÓĞĞ§µØÖ·
-  typeÎª½á¹¹ÌåµÄÀàĞÍÃû£¬ÊÇ
-  memberÎªtypeÖĞµÄÔªËØ*/
-//µ±Ç°Ö¸ÕëÎ»ÖÃ¼õÈ¥´ÓÍ·µ½Î²µÄÆ«ÒÆÁ¿¾ÍÊÇ°üº¬¸ÃÖ¸ÕëµÄ½á¹¹ÌåµÄÊ×Ö¸Õë
+/*pträ¸ºmemberçš„æœ‰æ•ˆåœ°å€
+  typeä¸ºç»“æ„ä½“çš„ç±»å‹åï¼Œæ˜¯
+  memberä¸ºtypeä¸­çš„å…ƒç´ */
+//å½“å‰æŒ‡é’ˆä½ç½®å‡å»ä»å¤´åˆ°å°¾çš„åç§»é‡å°±æ˜¯åŒ…å«è¯¥æŒ‡é’ˆçš„ç»“æ„ä½“çš„é¦–æŒ‡é’ˆ
 #define container_of(ptr,type,member)\
 	({ \
 		const typeof(((type *)0)->member) *_mptr = (ptr);\
@@ -43,20 +44,20 @@ inline void NEOExchange(Parm &p1, Parm &p2)
 #define DEBUG_BUFFER_LENGTH 1024
 #define NEO_DEBUG_FILENAME_LENGTH 256
 #ifdef WIN32
-	#define PATH_CHAR "\\"//ÓÃÓÚ½â¾ölinuxÓëwindowsÂ·¾¶¼ä¸ô·ûµÄ²îÒì
+	#define PATH_CHAR "\\"//ç”¨äºè§£å†³linuxä¸windowsè·¯å¾„é—´éš”ç¬¦çš„å·®å¼‚
 #else
 	#define PATH_CHAR "/"
 #endif
 
-#ifdef NEO_DEBUG//debug¿ª¹ØÓÃÓÚÅĞ¶¨ÊÇ·ñÊÇdebug
+#ifdef NEO_DEBUG//debugå¼€å…³ç”¨äºåˆ¤å®šæ˜¯å¦æ˜¯debug
 #define NEO_PRINTF printf
 #else
-#define NEO_PRINTF /\/printf //±íÃ÷²»ÊÇdebug
+#define NEO_PRINTF /\/printf //è¡¨æ˜ä¸æ˜¯debug
 #endif
 
-//¹¹½¨ÎÄ¼şÃûµÄºê
-#define FILENAME_STRING_LENGTH 256//ÎÄ¼şÃûµÄÍ³Ò»³¤¶È
-#define FULL_NAME(path,name,fullname,ext_name/*À©Õ¹Ãû*/)\
+//æ„å»ºæ–‡ä»¶åçš„å®
+#define FILENAME_STRING_LENGTH 256//æ–‡ä»¶åçš„ç»Ÿä¸€é•¿åº¦
+#define FULL_NAME(path,name,fullname,ext_name/*æ‰©å±•å*/)\
 {\
 	if(strlen(path))\
     {\
@@ -94,29 +95,29 @@ inline void NEOExchange(Parm &p1, Parm &p2)
     }\
 }
 //lock
-//Ëø±äÁ¿ÖØ¶¨Òå
+//é”å˜é‡é‡å®šä¹‰
 #ifdef WIN32
-//ÁÙ½çÇø£¨ËüÖ»¿ÉÒÔÔÚÍ¬Ò»½ø³ÌÄÚ²¿Ê¹ÓÃ£©
+//ä¸´ç•ŒåŒºï¼ˆå®ƒåªå¯ä»¥åœ¨åŒä¸€è¿›ç¨‹å†…éƒ¨ä½¿ç”¨ï¼‰
 #define MUTEX CRITICAL_SECTION
 #define MUTEXINIT(m) InitializeCriticalSection(m)
 #define MUTEXLOCK(m) EnterCriticalSection(m)
 #define MUTEXUNLOCK(m) LeaveCriticalSection(m)
 #define MUTEXDESTROY(m) DeleteCriticalSection(m)
-//ĞÅºÅµÆ
+//ä¿¡å·ç¯
 #define SEM HANDLE
 #define SEM_INIT(sem,value) sem=CreateSemaphore(NULL,value,65535,"neo");
 #define SEM_GET(sem,value) OpenSemaphore(SEMAPHORE_ALL_ACCESS,FALSE,"neo")
 #define SEM_WAIT(sem) WaitForSingleObject(sem,INFINITE)
 #define SEM_POST(sem) ReleaseSemaphore(sem,1,NULL)
 #define SEM_FREE(sem) CloseHandle(sem)
-//¹ÜµÀ£¨½öÓÃÓÚ¸¸×Ó½ø³ÌÍ¨ĞÅ£¬²»¿ÉÓÃÓÚÍøÂçÍ¨ĞÅ£¬µ¥Ïò¶ÁĞ´£©
+//ç®¡é“ï¼ˆä»…ç”¨äºçˆ¶å­è¿›ç¨‹é€šä¿¡ï¼Œä¸å¯ç”¨äºç½‘ç»œé€šä¿¡ï¼Œå•å‘è¯»å†™ï¼‰
 #define PIPE HANDLE
 #define PIPE_INIT(fds) CreatePipe(&fds[0],&fds[2],NULL,0)
-//²ÉÓÃÍ¬²½·½Ê½¶ÁĞ´
+//é‡‡ç”¨åŒæ­¥æ–¹å¼è¯»å†™
 #define PIPE_WRITE(fd,buf,count) WriteFile(fd,buf,count,NULL,NULL)
 #define PIPE_READ(fd,buf,count) ReadFile(fd,buf,count,NULL,NULL)
 #define PIPE_CLOSE(fd) CloseHandle(fd)
-//ÃüÃû¹ÜµÀ
+//å‘½åç®¡é“
 #define PIPE_NAMED_INIT(name) CreateNamedPipe(name, PIPE_ACCESS_DUPLEX,\
                                                 PIPE_TYPE_BYTE|PIPE_READMODE_BYTE,1,0,0,1000, NULL)
 #define PIPE_NAMED_OPEN(name) CreateFile(name, GENERIC_READ | GENERIC_WRITE,\
@@ -124,20 +125,20 @@ inline void NEOExchange(Parm &p1, Parm &p2)
 #define PIPE_NAMED_LISTEN(id) ConnectNamedPipe(id, NULL)
 #define PIPE_NAMED_WRITE(fd,buf,count) WriteFile(fd,buf,count,NULL,NULL)
 #define PIPE_NAMED_READ(fd,buf,count) ReadFile(fd,buf,count,NULL,NULL)
-//¹²ÏíÄÚ´æ
+//å…±äº«å†…å­˜
 #define SHM HANDLE 
 #define SHM_INIT(id,key,len) HANDLE id = CreateFileMapping(INVALID_HANDLE_VALUE,NULL,PAGE_READWRITE,0,len,key);  
 #define SHM_FREE(id) CloseHandle(id)
 #define SHM_MATCH(id,addr) void* addr=MapViewOfFile(id,FILE_MAP_ALL_ACCESS,0,0,0);
 #define SHM_DIVIDE(addr) UnmapViewOfFile(addr)
 #else
-//»¥³âËø
+//äº’æ–¥é”
 #define MUTEX pthread_mutex_t
 #define MUTEXINIT(m) pthread_mutex_init(m,NULL)
 #define MUTEXLOCK(m) pthread_mutex_lock(m)
 #define MUTEXUNLOCK(m) pthread_mutex_unlock(m)
 #define MUTEXDESTROY(m) pthread_mutex_destroy(m)
-//ĞÅºÅÁ¿
+//ä¿¡å·é‡
 #define SEM sem_t
 #define SEM_INIT(sem,value) sem_init(&sem,0,value);
 #define SEM_GET(sem,value) sem_getvalue(&sem,value)
@@ -145,19 +146,19 @@ inline void NEOExchange(Parm &p1, Parm &p2)
 #define SEM_WAITNONBLOCK(sem) sem_trywait(&sem)
 #define SEM_POST(sem) sem_post(&sem)
 #define SEM_FREE(sem) sem_destroy(&sem)
-//¹ÜµÀ£¨½öÓÃÓÚ¹ØÁª½ø³ÌÍ¨ĞÅ£©
+//ç®¡é“ï¼ˆä»…ç”¨äºå…³è”è¿›ç¨‹é€šä¿¡ï¼‰
 #define PIPE int
 #define PIPE_INIT(fds) pipe(fds)
 #define PIPE_WRITE(fd,buf,count) write(fd, buf,count)
 #define PIPE_READ(fd,buf,count) read(fd, buf,count)
 #define PIPE_NONBLOCK(fd) fcntl(fd,F_SETFL,O_NONBLOCK)
 #define PIPE_CLOSE(fd) close(fd)
-//ÃüÃû¹ÜµÀ
+//å‘½åç®¡é“
 #define PIPE_NAMED_INIT(name) mkfifo(name,0777)
 #define PIPE_NAMED_OPEN(name) open(name,O_RDONLY|O_NONBLOCK)
 #define PIPE_NAMED_WRITE(fd,buf,count) write(fd, buf,count)
 #define PIPE_NAMED_READ(fd,buf,count) write(fd, buf,count)
-//¹²ÏíÄÚ´æ
+//å…±äº«å†…å­˜
 #define SHM int
 #define SHM_INIT(id,key,len) int id = shmget((key_t)key,len, 0777|IPC_CREAT);  
 #define SHM_FREE(id) shmctl(id, IPC_RMID, 0)
@@ -180,36 +181,36 @@ inline void NEOMinSleep(void)
 ///////////////////////////////////////////////////////////////
 //mem manager
 //////////////////////////////////////////////////////////////////////////
-//×Ô¶¨Òå¼ÆËãÄ£¿é
+//è‡ªå®šä¹‰è®¡ç®—æ¨¡å—
 #define NEO_MEM_BLOCK_SIZE(nDataLen)        (nDataLen+SNeoMemroryBlockHeadSize)
 #define NEO_MEM_BLOCK_DATA_SIZE(nBlockSize) (nBlockSize-SNeoMemroryBlockHeadSize)
-//¸ù¾İÊÍ·ÅµÄÖ¸Õë£¬ÄæÇóÕæÊµµÄÄÚ´æÄÚµØÖ·
+//æ ¹æ®é‡Šæ”¾çš„æŒ‡é’ˆï¼Œé€†æ±‚çœŸå®çš„å†…å­˜å†…åœ°å€
 #define NEO_MEM_BLOCK_HEAD(pData)       ((SNeoMemroryBlockHead*)(((char*)pData)-SNeoMemroryBlockHeadSize))
-//ÇóÊı¾İ¿éµÄµØÖ·
+//æ±‚æ•°æ®å—çš„åœ°å€
 #define NEO_MEM_BLOCK_DATA(pHead)       (((char *)pHead)+SNeoMemroryBlockHeadSize)
-//×îĞ¡×î´óÄÚ´æ¿é
+//æœ€å°æœ€å¤§å†…å­˜å—
 #define NEO_MEM_STACK_BLOCK_MIN 16
 #define NEO_MEM_STACK_BLOCK_MAX         (1024*1024)
 ////////////////////////////////////////////////////////////////////
-//ÄÚ´æ×¢²áÄ£¿é
+//å†…å­˜æ³¨å†Œæ¨¡å—
 #ifndef NEO_MEM_BLOCK_INFO_MAX_SIZE
 #define NEO_MEM_BLOCK_INFO_MAX_SIZE     124
 #endif
-//¹ÜÀíµÄÖ¸Õë¸öÊı
+//ç®¡ç†çš„æŒ‡é’ˆä¸ªæ•°
 #ifndef NEO_MEM_REGISTER_MAX
 #define NEO_MEM_REGISTER_MAX            10000
 #endif
-//×Ö·û´®Çå¿ÕµÄºê
+//å­—ç¬¦ä¸²æ¸…ç©ºçš„å®
 #define NEO_CLEAN_CHAR_BUFFER(p)        ((*(char *)p)='\0')
 ///////////////////////////////////////////////////////////////////////
 //thread
-//¸÷ÖÖ³£Á¿Éè¼Æ
-#define OPEN_THREAD_DELAY               250         //Á¬Ğø¿ªÆôÏß³ÌµÄ×îĞ¡Ê±¼ä¼ä¸ô
-#define WHILE_THREAD_COUNT              10         //×î¶à¿ªÆô10¸ö¿ÕÏĞÏß³Ì
-#define DEFAULT_THREAD_SLEEP            500      //Í¨³£½¨ÒéµÄÏß³ÌË¯ÃßÊ±¼ä
-#define THREAD_POOL_EXIT_CODE           10000   //Ïß³Ì³ØÍË³ö´úÂë
-//Ïß³ÌÉÏÏŞÊı
-#ifdef _ARM_                          //Ç¶ÈëÊ½armÏµÍ³
+//å„ç§å¸¸é‡è®¾è®¡
+#define OPEN_THREAD_DELAY               250         //è¿ç»­å¼€å¯çº¿ç¨‹çš„æœ€å°æ—¶é—´é—´éš”
+#define WHILE_THREAD_COUNT              10         //æœ€å¤šå¼€å¯10ä¸ªç©ºé—²çº¿ç¨‹
+#define DEFAULT_THREAD_SLEEP            500      //é€šå¸¸å»ºè®®çš„çº¿ç¨‹ç¡çœ æ—¶é—´
+#define THREAD_POOL_EXIT_CODE           10000   //çº¿ç¨‹æ± é€€å‡ºä»£ç 
+//çº¿ç¨‹ä¸Šé™æ•°
+#ifdef _ARM_                          //åµŒå…¥å¼armç³»ç»Ÿ
 #define THIS_POOLTHREAD_MAX              30
 #else
 #ifdef WIN32
@@ -219,30 +220,30 @@ inline void NEOMinSleep(void)
 #endif
 #endif
 ///////////////////////////////////////////////////////////////
-//Ïß³Ì×´Ì¬
-#define TPOOL_THREAD_STATE_NOT_RUN       0    //Ïß³ÌÎ´ÔËĞĞ
-#define TPOOL_THREAD_STATE_IDLE          1    //Ïß³Ì¿ÕÏĞ
-#define TPOOL_THREAD_STATE_BUSY          2    //Ïß³ÌÔËĞĞ
+//çº¿ç¨‹çŠ¶æ€
+#define TPOOL_THREAD_STATE_NOT_RUN       0    //çº¿ç¨‹æœªè¿è¡Œ
+#define TPOOL_THREAD_STATE_IDLE          1    //çº¿ç¨‹ç©ºé—²
+#define TPOOL_THREAD_STATE_BUSY          2    //çº¿ç¨‹è¿è¡Œ
 ///////////////////////////////////////////////////////////////
-//×¢²á·µ»Ø½á¹û¶¨Òå
-#define _THREADPOOL_CAN_NOT_USE          2    //Ïß³Ì³ØÎ´³õÊ¼»¯£¬ÎŞ·¨¹¤×÷
-#define _THREADPOOL_OVERFLOW             -1      //Ïß³Ì³ØÒç³ö±êÖ¾£¬ÎŞ·¨×¢²á
-#define _THREADPOOL_PLEASE_WAIT          0    //Ïß³Ì³ØÃ»ÓĞ±¸ÓÃÏß³Ì£¬ÇëµÈ´ı
-#define _THREADPOOL_OK                   1    //Ïß³Ì³Ø×¢²á³É¹¦
+//æ³¨å†Œè¿”å›ç»“æœå®šä¹‰
+#define _THREADPOOL_CAN_NOT_USE          2    //çº¿ç¨‹æ± æœªåˆå§‹åŒ–ï¼Œæ— æ³•å·¥ä½œ
+#define _THREADPOOL_OVERFLOW             -1      //çº¿ç¨‹æ± æº¢å‡ºæ ‡å¿—ï¼Œæ— æ³•æ³¨å†Œ
+#define _THREADPOOL_PLEASE_WAIT          0    //çº¿ç¨‹æ± æ²¡æœ‰å¤‡ç”¨çº¿ç¨‹ï¼Œè¯·ç­‰å¾…
+#define _THREADPOOL_OK                   1    //çº¿ç¨‹æ± æ³¨å†ŒæˆåŠŸ
 //////////////////////////////////////////////////////////////////////////
-#define TASK_POOL_TOKEN_MAX              (16*1024)      //×î¶à²¢·¢ÈÎÎñÊı
-#define DEFAULT_THREAD_MAX               (30)             //Ä¬ÈÏ×î´óÏß³ÌÊı
-#define NEO_TASK_RUN_MAX_TASK            16              //×î¶à²½¶¯×÷
+#define TASK_POOL_TOKEN_MAX              (16*1024)      //æœ€å¤šå¹¶å‘ä»»åŠ¡æ•°
+#define DEFAULT_THREAD_MAX               (30)             //é»˜è®¤æœ€å¤§çº¿ç¨‹æ•°
+#define NEO_TASK_RUN_MAX_TASK            16              //æœ€å¤šæ­¥åŠ¨ä½œ
 ///////////////////////////////////////////////////////////////////////////////
 //queue
 #define NEO_BUFFER_STRING_MAX            1024
 #define NEO_SAFE_BUFFER_MAX_SIZE         (132*1024)
-//ÇóÔªËØµÄ³¤¶È
+//æ±‚å…ƒç´ çš„é•¿åº¦
 #define NEO_POP_BUFFER_TOKEN_LENGTH(n)   (n+SNEOPopBufferTokenHeadSize)
-//ÔªËØµÄÊı¾İ¿ªÊ¼Î»ÖÃ
+//å…ƒç´ çš„æ•°æ®å¼€å§‹ä½ç½®
 #define NEO_POP_BUFFER_FIRST_TOKEN_BEGIN(p) \
 	(((char*)p)+SNEOPopBufferHeadSize)
-//ÇóÊı¾İ¿ªÊ¼Î»ÖÃµÄºê
+//æ±‚æ•°æ®å¼€å§‹ä½ç½®çš„å®
 #define NEO_POP_BUFFER_TOKEN_DATA_BEGIN(p)\
 	(((char*)p)+SNEOPopBufferTokenHeadSize)
 /////////////////////////////////////////////////////////////
@@ -250,13 +251,13 @@ inline void NEOMinSleep(void)
 #define NEO_CHAIN_TOKEN_MAX              1024
 /////////////////////////////////////////////////////////////////////////////////
 //log
-#define LOG_FILE_SIZE_MAX                (1*1024*1024*1024)   //ÈÕÖ¾ÎÄ¼ş×î´ó1g
-#define LOG_ITEM_LENGTH_MAX              (2*1024)           //µ¥Ìõlog×î´ó2K
-#define LOG_FILE_CHANGE_NAME_PRE_SECONDS (60*60)//ÈÕÖ¾ÎÄ¼şÒ»Ğ¡Ê±¸ü»»Ò»´ÎĞÕÃû
-#define LOG_FILE_INFO_BUFFER_SIZE        (256*1024)   //ÈÕÖ¾Ä¿Â¼×î´ó³¤¶È ³¬³öÉ¾³ı
-#define LOG_FILE_DEFAULT_HOLD            72               //Ò»°ã±£ÁôÈıÌìµÄÊı¾İ
-#define LOG_TIME_STRING_MAX              128                //Ê±¼ä´Á×Ö·û´®³¤¶È
-#define FILENAME_STRING_LENGTH           256             //ÎÄ¼şÃû³¤¶È
+#define LOG_FILE_SIZE_MAX                (1*1024*1024*1024)   //æ—¥å¿—æ–‡ä»¶æœ€å¤§1g
+#define LOG_ITEM_LENGTH_MAX              (2*1024)           //å•æ¡logæœ€å¤§2K
+#define LOG_FILE_CHANGE_NAME_PRE_SECONDS (60*60)//æ—¥å¿—æ–‡ä»¶ä¸€å°æ—¶æ›´æ¢ä¸€æ¬¡å§“å
+#define LOG_FILE_INFO_BUFFER_SIZE        (256*1024)   //æ—¥å¿—ç›®å½•æœ€å¤§é•¿åº¦ è¶…å‡ºåˆ é™¤
+#define LOG_FILE_DEFAULT_HOLD            72               //ä¸€èˆ¬ä¿ç•™ä¸‰å¤©çš„æ•°æ®
+#define LOG_TIME_STRING_MAX              128                //æ—¶é—´æˆ³å­—ç¬¦ä¸²é•¿åº¦
+#define FILENAME_STRING_LENGTH           256             //æ–‡ä»¶åé•¿åº¦
 #define APP_INFO_OIT_STRING_MAX          256           
 ////////////////////////////////////////////////////////////////////////////////////
 //base lib
@@ -265,7 +266,7 @@ inline void NEOMinSleep(void)
 #define NEO_APP_TEMP_PATH_NAME_SIZE      256////////////////////???
 
 
-//»Øµ÷º¯ÊıÔ­ĞÍ
+//å›è°ƒå‡½æ•°åŸå‹
 
 typedef void (*_APP_INFO_OUT_CALLBACK)(char *szInfo,void *pCallParam);
 #endif

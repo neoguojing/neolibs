@@ -1,19 +1,19 @@
-#ifndef NEOINCLUDEHEAD
+ï»¿#ifndef NEOINCLUDEHEAD
 
 #define NEOINCLUDEHEAD
 
 //////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////
-//×Ô¶¨ÒåÍ·ÎÄ¼ş
-//¶¨ÒåWIN32_NEOºê
+//è‡ªå®šä¹‰å¤´æ–‡ä»¶
+//å®šä¹‰WIN32_NEOå®
 //#define WIN32
-//³£ÓÃÍ·ÎÄ¼ş,
-//°üº¬Ïß³Ìºê¶¨Òå
+//å¸¸ç”¨å¤´æ–‡ä»¶,
+//åŒ…å«çº¿ç¨‹å®å®šä¹‰
 //WIN_LINUX_vsnprintf
 #define NEO_DEBUG
 #define NEOLIB_C_PLUS_PLUS __cplusplus
 #include "neonetworkhead.h"
-//ºêÎÄ¼şÃû
+//å®æ–‡ä»¶å
 #include "neomacro.h"
 #define IN
 #define OUT 

@@ -1,4 +1,4 @@
-//////////////////////////////////////////
+ï»¿//////////////////////////////////////////
 #include "neodebug.h"
       
 //#include <stdarg.h> 
@@ -6,13 +6,13 @@
 //#include <stdio.h>
 //#include <time.h>
 //#include <stdlib.h>
-/*Í·ÎÄ¼ş: ¡¡¡¡#include <stdarg.h> ¡¡¡¡º¯ÊıÉùÃ÷: ¡¡¡¡int _vsnprintf(char *buffer, size_t max_count, const char *format, va_list vArgList); ¡¡¡¡²ÎÊıËµÃ÷: ¡¡¡¡1. char *buffer [out],°ÑÉú³ÉµÄ¸ñÊ½»¯µÄ×Ö·û´®´æ·ÅÔÚÕâÀï. ¡¡¡¡2. size_t max_count [in], buffer¿É½ÓÊÜµÄ×î´ó×Ö½ÚÊı,·ÀÖ¹²úÉúÊı×éÔ½½ç. ¡¡¡¡3. const char *format [in], ¸ñÊ½»¯×Ö·û´® ¡¡¡¡4. va_list vArgList [in], va_list±äÁ¿. va:variable-argument:¿É±ä²ÎÊı ¡¡¡¡ÓÃ·¨ÀàËÆÓÚvsprintf,Ö»²»¹ı¼ÓÁËmax_countµÄÏŞÖÆ. ¡¡¡¡·µ»ØÖµËµÃ÷: ¡¡¡¡Èç¹û³É¹¦µ÷ÓÃ´Ëº¯Êı£¬·µ»ØĞ´µ½bufferÖĞµÄ×Ö·ûµÄ¸öÊı£¨²»°üÀ¨½áÎ²µÄ'\0'£©¡£snprintfºÍvsnprintfº¯Êı²»ÄÜ¹»Ğ´¶àÓÚsize´óĞ¡£¨°üÀ¨½áÎ²µÄ'0'£©µÄ×Ö½ÚÊı¡£Èç¹ûÊä³öÒòÎªÒÔÉÏÔ­Òò±»½Ø¶Ï£¬·µ»Ø³É¹¦Ğ´ÈëbufferµÄ×Ö·ûÊı£¨²»°üÀ¨½áÎ²µÄ'\0'£©£¬Èç¹ûÓĞ×ã¹»µÄÄÚ´æ¿Õ¼äµÄ»°¡£ËùÒÔ£¬Èç¹û·µ»ØÖµµÈÓÚsize»òÕß´óÓÚsize£¬±íÊ¾Êä³öµ½bufferµÄ×Ö·û±»½Ø¶Ï£¬Èç¹ûÊä³ö¹ı³ÌÖĞÓöµ½´íÎó£¬Ôò·µ»ØÒ»¸ö¸ºÊı¡£
-¡¡VA_LISTµÄÓÃ·¨£¨ VA_LIST ÊÇÔÚCÓïÑÔÖĞ½â¾ö±ä²ÎÎÊÌâµÄÒ»×éºê£©£º£¨1£©Ê×ÏÈÔÚº¯ÊıÀï¶¨ÒåÒ»¾ßVA_LISTĞÍµÄ±äÁ¿£¬Õâ¸ö±äÁ¿ÊÇÖ¸Ïò²ÎÊıµÄÖ¸Õë ¡¡¡¡£¨2£©È»ºóÓÃVA_STARTºê³õÊ¼»¯±äÁ¿¸Õ¶¨ÒåµÄVA_LIST±äÁ¿£¬Õâ¸öºêµÄµÚ¶ş¸ö ¡¡¡¡²ÎÊıÊÇµÚÒ»¸ö¿É±ä²ÎÊıµÄÇ°Ò»¸ö²ÎÊı£¬ÊÇÒ»¸ö¹Ì¶¨µÄ²ÎÊı¡££¨ÈçÔÚÔËĞĞVA_START ¡¡¡¡(ap,v)ÒÔºó£¬apÖ¸ÏòµÚÒ»¸ö¿É±ä²ÎÊıÔÚ¶ÑÕ»µÄµØÖ·¡££© ¡¡¡¡£¨3£©È»ºóÓÃVA_ARG·µ»Ø¿É±äµÄ²ÎÊı£¬VA_ARGµÄµÚ¶ş¸ö²ÎÊıÊÇÄãÒª·µ»ØµÄ²ÎÊıµÄÀàĞÍ¡£ ¡¡¡¡£¨4£©×îºóÓÃVA_ENDºê½áÊø¿É±ä²ÎÊıµÄ»ñÈ¡¡£È»ºóÄã¾Í¿ÉÒÔÔÚº¯ÊıÀïÊ¹ÓÃµÚ¶ş¸ö²ÎÊıÁË¡£ ¡¡¡¡Èç¹ûº¯ÊıÓĞ¶à¸ö¿É±ä²ÎÊıµÄ£¬ÒÀ´Îµ÷ÓÃVA_ARG»ñÈ¡¸÷¸ö²ÎÊı¡£*/
+/*å¤´æ–‡ä»¶: ã€€ã€€#include <stdarg.h> ã€€ã€€å‡½æ•°å£°æ˜: ã€€ã€€int _vsnprintf(char *buffer, size_t max_count, const char *format, va_list vArgList); ã€€ã€€å‚æ•°è¯´æ˜: ã€€ã€€1. char *buffer [out],æŠŠç”Ÿæˆçš„æ ¼å¼åŒ–çš„å­—ç¬¦ä¸²å­˜æ”¾åœ¨è¿™é‡Œ. ã€€ã€€2. size_t max_count [in], bufferå¯æ¥å—çš„æœ€å¤§å­—èŠ‚æ•°,é˜²æ­¢äº§ç”Ÿæ•°ç»„è¶Šç•Œ. ã€€ã€€3. const char *format [in], æ ¼å¼åŒ–å­—ç¬¦ä¸² ã€€ã€€4. va_list vArgList [in], va_listå˜é‡. va:variable-argument:å¯å˜å‚æ•° ã€€ã€€ç”¨æ³•ç±»ä¼¼äºvsprintf,åªä¸è¿‡åŠ äº†max_countçš„é™åˆ¶. ã€€ã€€è¿”å›å€¼è¯´æ˜: ã€€ã€€å¦‚æœæˆåŠŸè°ƒç”¨æ­¤å‡½æ•°ï¼Œè¿”å›å†™åˆ°bufferä¸­çš„å­—ç¬¦çš„ä¸ªæ•°ï¼ˆä¸åŒ…æ‹¬ç»“å°¾çš„'\0'ï¼‰ã€‚snprintfå’Œvsnprintfå‡½æ•°ä¸èƒ½å¤Ÿå†™å¤šäºsizeå¤§å°ï¼ˆåŒ…æ‹¬ç»“å°¾çš„'0'ï¼‰çš„å­—èŠ‚æ•°ã€‚å¦‚æœè¾“å‡ºå› ä¸ºä»¥ä¸ŠåŸå› è¢«æˆªæ–­ï¼Œè¿”å›æˆåŠŸå†™å…¥bufferçš„å­—ç¬¦æ•°ï¼ˆä¸åŒ…æ‹¬ç»“å°¾çš„'\0'ï¼‰ï¼Œå¦‚æœæœ‰è¶³å¤Ÿçš„å†…å­˜ç©ºé—´çš„è¯ã€‚æ‰€ä»¥ï¼Œå¦‚æœè¿”å›å€¼ç­‰äºsizeæˆ–è€…å¤§äºsizeï¼Œè¡¨ç¤ºè¾“å‡ºåˆ°bufferçš„å­—ç¬¦è¢«æˆªæ–­ï¼Œå¦‚æœè¾“å‡ºè¿‡ç¨‹ä¸­é‡åˆ°é”™è¯¯ï¼Œåˆ™è¿”å›ä¸€ä¸ªè´Ÿæ•°ã€‚
+ã€€VA_LISTçš„ç”¨æ³•ï¼ˆ VA_LIST æ˜¯åœ¨Cè¯­è¨€ä¸­è§£å†³å˜å‚é—®é¢˜çš„ä¸€ç»„å®ï¼‰ï¼šï¼ˆ1ï¼‰é¦–å…ˆåœ¨å‡½æ•°é‡Œå®šä¹‰ä¸€å…·VA_LISTå‹çš„å˜é‡ï¼Œè¿™ä¸ªå˜é‡æ˜¯æŒ‡å‘å‚æ•°çš„æŒ‡é’ˆ ã€€ã€€ï¼ˆ2ï¼‰ç„¶åç”¨VA_STARTå®åˆå§‹åŒ–å˜é‡åˆšå®šä¹‰çš„VA_LISTå˜é‡ï¼Œè¿™ä¸ªå®çš„ç¬¬äºŒä¸ª ã€€ã€€å‚æ•°æ˜¯ç¬¬ä¸€ä¸ªå¯å˜å‚æ•°çš„å‰ä¸€ä¸ªå‚æ•°ï¼Œæ˜¯ä¸€ä¸ªå›ºå®šçš„å‚æ•°ã€‚ï¼ˆå¦‚åœ¨è¿è¡ŒVA_START ã€€ã€€(ap,v)ä»¥åï¼ŒapæŒ‡å‘ç¬¬ä¸€ä¸ªå¯å˜å‚æ•°åœ¨å †æ ˆçš„åœ°å€ã€‚ï¼‰ ã€€ã€€ï¼ˆ3ï¼‰ç„¶åç”¨VA_ARGè¿”å›å¯å˜çš„å‚æ•°ï¼ŒVA_ARGçš„ç¬¬äºŒä¸ªå‚æ•°æ˜¯ä½ è¦è¿”å›çš„å‚æ•°çš„ç±»å‹ã€‚ ã€€ã€€ï¼ˆ4ï¼‰æœ€åç”¨VA_ENDå®ç»“æŸå¯å˜å‚æ•°çš„è·å–ã€‚ç„¶åä½ å°±å¯ä»¥åœ¨å‡½æ•°é‡Œä½¿ç”¨ç¬¬äºŒä¸ªå‚æ•°äº†ã€‚ ã€€ã€€å¦‚æœå‡½æ•°æœ‰å¤šä¸ªå¯å˜å‚æ•°çš„ï¼Œä¾æ¬¡è°ƒç”¨VA_ARGè·å–å„ä¸ªå‚æ•°ã€‚*/
 //#define WIN_LINUX_vsnprintf _vsnprintf
 //#define DEBUG_BUFFER_LENGTH 1024
 //#define NEO_DEBUG_FILENAME_LENGTH 256
 ////////////////////////////////////////////////////////////
-//#define PATH_CHAR "\\"//ÓÃÓÚ½â¾ölinuxÓëwindowsÂ·¾¶¼ä¸ô·ûµÄ²îÒì
+//#define PATH_CHAR "\\"//ç”¨äºè§£å†³linuxä¸windowsè·¯å¾„é—´éš”ç¬¦çš„å·®å¼‚
 ///////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////
@@ -25,7 +25,7 @@ int SafePrintf(char *szBuf,int nMaxlength,const char *szFormat,...)
         goto SafePrint_END;
 
     va_start(pArgList,szFormat);
-    //ÏÂÃæº¯Êıµ±¿½±´×Ö·û´®³¬¹ı×î´óÖµÊ±·µ»ØÖµÎª-1
+    //ä¸‹é¢å‡½æ•°å½“æ‹·è´å­—ç¬¦ä¸²è¶…è¿‡æœ€å¤§å€¼æ—¶è¿”å›å€¼ä¸º-1
     nListCount+=WIN_LINUX_vsnprintf(szBuf+nListCount,
         nMaxlength-nListCount,szFormat,pArgList);
     va_end(pArgList);
@@ -49,14 +49,14 @@ int GetTimeStamp(char *szBuf,int nMaxlength)
     int nLength=0;
     time(&t);
     pTM=localtime(&t);
-    nLength=SafePrintf(szBuf,nMaxlength,"%s",asctime(pTM));//asctimeÊä³ö»Ø³µÒª¹ıÂËµô
+    nLength=SafePrintf(szBuf,nMaxlength,"%s",asctime(pTM));//asctimeè¾“å‡ºå›è½¦è¦è¿‡æ»¤æ‰
     szBuf[nLength-1]='\0';
     return nLength;
 }
-//Í¬Ê±´òÓ¡×Ö·ûµ½ÆÁÄ»»òÎÄ¼ş
+//åŒæ—¶æ‰“å°å­—ç¬¦åˆ°å±å¹•æˆ–æ–‡ä»¶
 int OutputFileOrScreen(const char *szFileName,const char *szMode,const char *szFormate,...)
 {
-    char szBuf[DEBUG_BUFFER_LENGTH] = "\0";//debugÊ±Òª¶¨ÒåDEBUG_BUFFER_LENGTH
+    char szBuf[DEBUG_BUFFER_LENGTH] = "\0";//debugæ—¶è¦å®šä¹‰DEBUG_BUFFER_LENGTH
     char szTime[256] = "\0";
     int nListCount=0;
 
@@ -86,7 +86,7 @@ int OutputFileOrScreen(const char *szFileName,const char *szMode,const char *szF
     return nListCount;
 }
 
-//µØÖ·Âë¡ªµØÖ·ÂëµÄ16½øÖÆ±íÊ¾¡ªASC×Ö·û±íÊ¾
+//åœ°å€ç â€”åœ°å€ç çš„16è¿›åˆ¶è¡¨ç¤ºâ€”ASCå­—ç¬¦è¡¨ç¤º
 int Debug_bin_ASC(char *pPrintBuffer,const char *pBuffer,int nLength)
 {
     int i=0;
@@ -95,7 +95,7 @@ int Debug_bin_ASC(char *pPrintBuffer,const char *pBuffer,int nLength)
     {
        if(32<=*(pBuffer+i))
            nCount+=SafePrintf(pPrintBuffer+nCount,256,"%c",*(pBuffer+i));
-       else//²»¿ÉÏÔÊ¾×Ö·ûÒÔ.´úÌæ
+       else//ä¸å¯æ˜¾ç¤ºå­—ç¬¦ä»¥.ä»£æ›¿
            nCount+=SafePrintf(pPrintBuffer+nCount,256,".");
     }
     return nCount;
@@ -109,20 +109,20 @@ int Debug_bin_HEX(char *pPrintBuffer,const char *pBuffer,int nLength)
     {
         nCount+=SafePrintf(pPrintBuffer+nCount,256,"%02X",(unsigned char)*(pBuffer+i));
         j++;
-        if(4==j)//ËÄ¸ö×Ö½ÚÊÇÒ»¸ö32Î»Ö¸Õë,
+        if(4==j)//å››ä¸ªå­—èŠ‚æ˜¯ä¸€ä¸ª32ä½æŒ‡é’ˆ,
         {
           j=0;
-          nCount+=SafePrintf(pPrintBuffer+nCount,256," ");//Êä³öÖ¸Õë¼äµÄ¿Õ¸ñ
+          nCount+=SafePrintf(pPrintBuffer+nCount,256," ");//è¾“å‡ºæŒ‡é’ˆé—´çš„ç©ºæ ¼
         }
         
     }//for
     if(16>nLength)
     {
-        for(;i<16;i++)//Èô³¤¶ÈĞ¡ÓÚ16£¬16-i¸ö×Ö½ÚÓÃ¿Õ¸ñ²¹ÉÏ
+        for(;i<16;i++)//è‹¥é•¿åº¦å°äº16ï¼Œ16-iä¸ªå­—èŠ‚ç”¨ç©ºæ ¼è¡¥ä¸Š
         {
-            nCount+=SafePrintf(pPrintBuffer+nCount,256,"  ");//1¸ö×Ö½ÚÓÃÁ½¸ö¿Õ¸ñ´úÌæ
+            nCount+=SafePrintf(pPrintBuffer+nCount,256,"  ");//1ä¸ªå­—èŠ‚ç”¨ä¸¤ä¸ªç©ºæ ¼ä»£æ›¿
           j++;
-          if(4==j)//ËÄ¸ö×Ö½ÚÊÇÒ»¸ö32Î»Ö¸Õë,ÓÃÓÚÊä³ö¿Õ¸ñ
+          if(4==j)//å››ä¸ªå­—èŠ‚æ˜¯ä¸€ä¸ª32ä½æŒ‡é’ˆ,ç”¨äºè¾“å‡ºç©ºæ ¼
           {
              j=0;
              nCount+=SafePrintf(pPrintBuffer+nCount,256," ");
@@ -134,25 +134,25 @@ int Debug_bin_HEX(char *pPrintBuffer,const char *pBuffer,int nLength)
 
 void Debug_bin(const char *pBuffer,int nLength)
 {
-    int nAddr=0;//µ±Ç°Ö¸ÕëµÄÆ«ÒÆÁ¿
+    int nAddr=0;//å½“å‰æŒ‡é’ˆçš„åç§»é‡
     int nLineCount=0;
     int nBufferCount=nLength;
     int n=0;
-    char szLine[256];//ĞĞ»º³å
+    char szLine[256];//è¡Œç¼“å†²
     if(0<nLength)
     {
        while(1)
        {
           n=0;
-          n+=SafePrintf(szLine+n,256-n,"%p-",pBuffer+nAddr);//½«µ±Ç°ÄÚ´æµØÖ·Êä³ö
+          n+=SafePrintf(szLine+n,256-n,"%p-",pBuffer+nAddr);//å°†å½“å‰å†…å­˜åœ°å€è¾“å‡º
           nLineCount=16;
           if(nBufferCount<nLineCount)
               nLineCount=nBufferCount;
-          n+=Debug_bin_HEX(szLine+n,pBuffer+nAddr,nLineCount);//16½øÖÆ Ã¿ĞĞ16¸ö×Ö½Ú µÈÓÚ32¸ö×Ö·û
-          n+=Debug_bin_ASC(szLine+n,pBuffer+nAddr,nLineCount);//ascÂë  Ã¿ĞĞ16¸ö×Ö½Ú µÈÓÚ16¸ö×Ö·û
-          printf("%s\n",szLine);//Ã¿ĞĞÊä³ö16¸ö×Ö½Ú
+          n+=Debug_bin_HEX(szLine+n,pBuffer+nAddr,nLineCount);//16è¿›åˆ¶ æ¯è¡Œ16ä¸ªå­—èŠ‚ ç­‰äº32ä¸ªå­—ç¬¦
+          n+=Debug_bin_ASC(szLine+n,pBuffer+nAddr,nLineCount);//ascç   æ¯è¡Œ16ä¸ªå­—èŠ‚ ç­‰äº16ä¸ªå­—ç¬¦
+          printf("%s\n",szLine);//æ¯è¡Œè¾“å‡º16ä¸ªå­—èŠ‚
           nAddr+=16;
-          nBufferCount-=16;//°ïÖúÑ­»·
+          nBufferCount-=16;//å¸®åŠ©å¾ªç¯
           if(0>=nBufferCount) 
               break;
        }//while
@@ -164,7 +164,7 @@ void Debug_bin(const char *pBuffer,int nLength)
 //////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////
-//»ñÈ¡²îÖµµÄº¯Êı
+//è·å–å·®å€¼çš„å‡½æ•°
 unsigned long SCountSubGetX(SCountSub &CountSub)
 {
     return CountSub.m_nEnd-CountSub.m_nBegin;
@@ -178,7 +178,7 @@ unsigned long SCountSubSetEnd(SCountSub &CountSub,unsigned long n)
     CountSub.m_nEnd=n;
     return SCountSubGetX(CountSub);
 }
-//¼ÆËã²îÖµµÄÀà
+//è®¡ç®—å·®å€¼çš„ç±»
 CCountSub::CCountSub()
     {
        m_CountSub.m_nBegin=0;
@@ -212,7 +212,7 @@ void CCountSub::E2B(void)
 {
     m_CountSub.m_nBegin=m_CountSub.m_nEnd;
 }
-void CCountSub::Push(unsigned long ulNew)//ÓÃÓÚÑ­»·
+void CCountSub::Push(unsigned long ulNew)//ç”¨äºå¾ªç¯
 {
     E2B();
     m_CountSub.m_nEnd=ulNew;
@@ -221,7 +221,7 @@ void CCountSub::Push(unsigned long ulNew)//ÓÃÓÚÑ­»·
 ///////////////////////////////////////////////////
 ///////////////////////////////////////////////////
 ///////////////////////////////////////////////////
-//Æ½¾ùÖµ¼ÆËã£¨Ã¿Ãë·¢Éú¶àÉÙ´Î¶¯×÷£©
+//å¹³å‡å€¼è®¡ç®—ï¼ˆæ¯ç§’å‘ç”Ÿå¤šå°‘æ¬¡åŠ¨ä½œï¼‰
 CDeltaTime::CDeltaTime()
 {
     TouchBegin();
@@ -241,11 +241,11 @@ void CDeltaTime::TouchEnd(void)
 {
     m_CountSub.SetEnd((unsigned long)time(NULL));
 }
-unsigned long CDeltaTime::GetDeltaT(void)//»ñµÃ²îÖµ
+unsigned long CDeltaTime::GetDeltaT(void)//è·å¾—å·®å€¼
 {
     return m_CountSub.GetX();
 }
-double CDeltaTime::GetOperationsPerSecond(unsigned long ulOperationCount/*ÆÚ¼äµÄ²Ù×÷×ÜºÍ*/)
+double CDeltaTime::GetOperationsPerSecond(unsigned long ulOperationCount/*æœŸé—´çš„æ“ä½œæ€»å’Œ*/)
 {
     double dRet=0.0;
     double dCount=(double)ulOperationCount;
@@ -259,17 +259,17 @@ double CDeltaTime::GetOperationsPerSecond(unsigned long ulOperationCount/*ÆÚ¼äµÄ
 /////////////////////////////////////
 /////////////////////////////////////
 ////////////////////////////////////
-//Í³¼ÆÆ½¾ùÖµ
-//SCountSetBegin¿ªÊ¼Í³¼Æ
-//SCountSubSetEnd¶à´Îµ÷ÓÃÀ´Ë¢ĞÂ½áÊøÊ±¼ä
-//SCountSum»ñµÃÍ³¼ÆÆ½¾ùÖµ
+//ç»Ÿè®¡å¹³å‡å€¼
+//SCountSetBeginå¼€å§‹ç»Ÿè®¡
+//SCountSubSetEndå¤šæ¬¡è°ƒç”¨æ¥åˆ·æ–°ç»“æŸæ—¶é—´
+//SCountSumè·å¾—ç»Ÿè®¡å¹³å‡å€¼
 void SCountReset(SCount &Count)
 {
     Count.m_Sum=0;
     Count.m_Sub.m_nBegin=0;
     Count.m_Sub.m_nEnd=0;
 }
-unsigned long SCountSum(SCount &Count)//Æ½¾ùÖµµÄÆ½¾ùÖµ
+unsigned long SCountSum(SCount &Count)//å¹³å‡å€¼çš„å¹³å‡å€¼
 {
     unsigned long X=SCountSubGetX(Count.m_Sub);
     if(0==Count.m_Sum)
@@ -295,7 +295,7 @@ unsigned long SCountSetEnd(SCount &Count,unsigned long n)
     return SCountSubSetEnd(Count.m_Sub,n);
 }
 //////////////////////////////////////
-//¼ÆËãÆ½¾ùÖµµÄÀà
+//è®¡ç®—å¹³å‡å€¼çš„ç±»
 
 CCount::CCount()
 {
@@ -336,7 +336,7 @@ unsigned long CCount::SCountSetEnd(unsigned long n)
 //////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////
-//¸¨Öúº¯Êı
+//è¾…åŠ©å‡½æ•°
 inline int GetNot0(void)
 {
     srand((unsigned)time(NULL));
@@ -352,7 +352,7 @@ inline int Get0(void)
     return nRet^nRet;
 }
 
-//»ñµÃ¸ø¶¨·¶Î§ÄÚµÄËæ»úÊı
+//è·å¾—ç»™å®šèŒƒå›´å†…çš„éšæœºæ•°
 inline int GetRandomBeteen(int nBegin,int nEnd)
 {
     int n=GetNot0();
@@ -374,9 +374,9 @@ inline int GetRandomBeteen(int nBegin,int nEnd)
     n+=nBegin;
     return n;
 }
-////ÅĞ¶ÏÊ±¼äÊÇ·ñµ½ÁË
+////åˆ¤æ–­æ—¶é—´æ˜¯å¦åˆ°äº†
 //#define TimeSetNow(t) time(&t)
-//inline bool TimelsUp(time_t tLast/*×îºóÒ»´ÎÊ±¼ä*/,long lMax/*³¬Ê±Ê±¼äÉèÖÃ*/)
+//inline bool TimelsUp(time_t tLast/*æœ€åä¸€æ¬¡æ—¶é—´*/,long lMax/*è¶…æ—¶æ—¶é—´è®¾ç½®*/)
 //{
 //  time_t tNow;
 //  TimeSetNow(tNow);
@@ -389,14 +389,14 @@ inline int GetRandomBeteen(int nBegin,int nEnd)
 ////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
-//CLowDebugÀà£¬ÓÃÓÚ¾ßÌå¹¦ÄÜµÄÊä³ö
+//CLowDebugç±»ï¼Œç”¨äºå…·ä½“åŠŸèƒ½çš„è¾“å‡º
 
-    //É¾³ıÒ»¸öÎÄ¼ş
+    //åˆ é™¤ä¸€ä¸ªæ–‡ä»¶
 void CNEOLowDebug::DeleteAFile(const char *szFileName)
 {
     remove(szFileName);
 }
-//¹ıÂËÂ·¾¶»ñÈ¡ÎÄ¼şÃû
+//è¿‡æ»¤è·¯å¾„è·å–æ–‡ä»¶å
 char *CNEOLowDebug::GetTrueFileName(char *szBuffer)
 {
     char *pRet=szBuffer;
@@ -404,7 +404,7 @@ char *CNEOLowDebug::GetTrueFileName(char *szBuffer)
     int i=0;
     for(i=nLen-1;i>=0;i--)
     {
-        //´ÓÓÒÊıµÚÒ»¸ö·Ö¸ô·ûÌø³ö×÷ÎªÎÄ¼şÃû
+        //ä»å³æ•°ç¬¬ä¸€ä¸ªåˆ†éš”ç¬¦è·³å‡ºä½œä¸ºæ–‡ä»¶å
         if('\\'==*(szBuffer+i))
         {
             pRet=(szBuffer+i+1);
@@ -417,22 +417,22 @@ char *CNEOLowDebug::GetTrueFileName(char *szBuffer)
         }
 
     }
-    return pRet;//·µ»ØÖ¸Õë£¨²»Í×£©
+    return pRet;//è¿”å›æŒ‡é’ˆï¼ˆä¸å¦¥ï¼‰
 }
 
-//Êä³ö×Ö·û´®DebugToFileµ½ÎÄ¼ş»ò¿ØÖÆÌ¨£¬·µ»Ø×Ö·ûÊı£¬²»°üÀ¨\0
+//è¾“å‡ºå­—ç¬¦ä¸²DebugToFileåˆ°æ–‡ä»¶æˆ–æ§åˆ¶å°ï¼Œè¿”å›å­—ç¬¦æ•°ï¼Œä¸åŒ…æ‹¬\0
 int CNEOLowDebug::DebugToFile(const char *szFormat,...)
 {
-    char szBuff[DEBUG_BUFFER_LENGTH] = "\0";                                //Êä³ö»º³å
-    char szTemp[DEBUG_BUFFER_LENGTH] = "\0";                               //Ê±¼ä´ÁÖÃ»»µÄÖĞ¼äbuffer
-    char szTime[DEBUG_BUFFER_LENGTH] = "\0";                              //Ê±¼ä´Ábuff
+    char szBuff[DEBUG_BUFFER_LENGTH] = "\0";                                //è¾“å‡ºç¼“å†²
+    char szTemp[DEBUG_BUFFER_LENGTH] = "\0";                               //æ—¶é—´æˆ³ç½®æ¢çš„ä¸­é—´buffer
+    char szTime[DEBUG_BUFFER_LENGTH] = "\0";                              //æ—¶é—´æˆ³buff
     FILE *fp=NULL;
     int nListCount=0;
     va_list pArgList;
     //time_t t;
     //struct tm *pTM=NULL;
     //int nLength=0;
-    //¹¹½¨Ê±¼ä´Á
+    //æ„å»ºæ—¶é—´æˆ³
     GetTimeStamp(szTemp,DEBUG_BUFFER_LENGTH);
     SafePrintf(szTime,DEBUG_BUFFER_LENGTH,"[%s]",szTemp);
     ////////////////////////////////////////////////////
@@ -444,18 +444,18 @@ int CNEOLowDebug::DebugToFile(const char *szFormat,...)
         if(nListCount>(DEBUG_BUFFER_LENGTH-1))
             nListCount=DEBUG_BUFFER_LENGTH-1;
         *(szBuff+nListCount)='\0';
-        //Êä³öµ½ÎÄ¼ş
+        //è¾“å‡ºåˆ°æ–‡ä»¶
         fp=fopen(m_szFileName,"a+");
         if(fp)
         {
             nListCount=fprintf(fp,"%s%s",szTime,szBuff);
             if(m_bePrintToScreenFlag)
             {
-                //Êä³öµ½ÆÁÄ»
+                //è¾“å‡ºåˆ°å±å¹•
 				NEO_PRINTF("%s%s",szTime,szBuff);
 				if(pInfoOutCallback)
 				{
-					//»Øµ÷º¯Êı¹©ÉÏ²ãµ÷ÓÃ
+					//å›è°ƒå‡½æ•°ä¾›ä¸Šå±‚è°ƒç”¨
 					char szInfoOut[DEBUG_BUFFER_LENGTH];
 					SafePrintf(szInfoOut,DEBUG_BUFFER_LENGTH,"%s%s",szTime,szBuff);
 					pInfoOutCallback(szInfoOut,pInfoOutCallbackParam);
@@ -474,7 +474,7 @@ int CNEOLowDebug::DebugToFile(const char *szFormat,...)
     return nListCount;
 
 }
-//Êä³öÒ»¿éÄÚ´æ¶Îµ½ÎÄ¼ş¡£
+//è¾“å‡ºä¸€å—å†…å­˜æ®µåˆ°æ–‡ä»¶ã€‚
 void CNEOLowDebug::DebugToFileBin(char *pBuffer,int nLength)
 {
     m_Lock.Lock();
@@ -486,12 +486,12 @@ void CNEOLowDebug::DebugToFileBin(char *pBuffer,int nLength)
     m_Lock.UnLock();
 }
 
-//¹¹Ôìº¯ÊıÓëÎö¹¹º¯Êı
-CNEOLowDebug::CNEOLowDebug (const char *szPathName,                //Â·¾¶Ãû
-    const char *szAppName,                           //ÎÄ¼şÃû
-    _APP_INFO_OUT_CALLBACK pInfoOutCallback,//¶îÍâµÄÊä³ö»Øµ÷º¯Êı
-    void *pInfoOutCallbackParam,          //»Øµ÷º¯Êı²ÎÊı
-    bool bePrintToScreenFlag          //ÊÇ·ñ´òÓ¡µ½ÆÁÄ»
+//æ„é€ å‡½æ•°ä¸ææ„å‡½æ•°
+CNEOLowDebug::CNEOLowDebug (const char *szPathName,                //è·¯å¾„å
+    const char *szAppName,                           //æ–‡ä»¶å
+    _APP_INFO_OUT_CALLBACK pInfoOutCallback,//é¢å¤–çš„è¾“å‡ºå›è°ƒå‡½æ•°
+    void *pInfoOutCallbackParam,          //å›è°ƒå‡½æ•°å‚æ•°
+    bool bePrintToScreenFlag          //æ˜¯å¦æ‰“å°åˆ°å±å¹•
     ):pInfoOutCallback(pInfoOutCallback),pInfoOutCallbackParam(pInfoOutCallbackParam),
     m_bePrintToScreenFlag(bePrintToScreenFlag),m_Lock()
 {
