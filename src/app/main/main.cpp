@@ -1,4 +1,4 @@
-#include <iostream>
+ï»¿#include <iostream>
 /*
 #include "../../libs/neodebug.h"
 #include "../../libs/neomemmanager.h"
@@ -372,7 +372,7 @@ int main(int argc,char **argv,char *env[])
     printf(">>>>>>>>>>>>>>>>>>>>>>decorator>>>>>>>>>>>>>>>>>>>>>>>>>>\n");
     Component* com = new ConcreteComponent();
 
-    //ÒÔÏÂÏàµ±ÓÚ°ÑComponent£¨ÆßÌì´óÊ¥£©×°ÊÎ³ÉÎªÓã¶ù
+    //ä»¥ä¸‹ç›¸å½“äºæŠŠComponentï¼ˆä¸ƒå¤©å¤§åœ£ï¼‰è£…é¥°æˆä¸ºé±¼å„¿
     Component *dec1 = new ConcreteDecorator(com);
     dec1->Print();
     delete dec1;
@@ -397,7 +397,7 @@ int main(int argc,char **argv,char *env[])
     Watched *watched = new Watched();
     Watcher *watcher = new Watcher(watched);
     Watcher1 *watcher1 = new Watcher1(watched);
-    //watched¸Ä±äÊı¾İ£¬»áÍ¨¹ıWatcher´òÓ¡³öÀ´
+    //watchedæ”¹å˜æ•°æ®ï¼Œä¼šé€šè¿‡Watcheræ‰“å°å‡ºæ¥
     watched->SetData("hello world!");
     watched->SetData("grow up!");
     watched->SetData("grow up!");
@@ -485,7 +485,7 @@ int main(int argc,char **argv,char *env[])
     //NeoClient * client =new  NeoClient("127.0.0.1",8888);
 
 #ifndef WIN32
-	//linux Ö÷Ïß³ÌÍË³öÖ®ºó£¬×ÓÏß³ÌÒ²»áÍË³ö
+	//linux ä¸»çº¿ç¨‹é€€å‡ºä¹‹åï¼Œå­çº¿ç¨‹ä¹Ÿä¼šé€€å‡º
 	while(1)
 	{}
 #endif
