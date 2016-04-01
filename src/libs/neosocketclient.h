@@ -27,6 +27,7 @@ public:
     bool doConnection();
     bool doSend();
     bool doRecv();
+    bool sendToAppQueue(const char *szData,int nDataLen);
 
     static bool connTask(void *pThis,int &nStatus);
     static bool recvTask(void *pThis,int &nStatus);
@@ -36,6 +37,7 @@ public:
     bool clientSwitch;
     CNEOBaseLibrary *m_pNEOBaseLib;
 #ifdef WIN32
+    bool m_bSocketInitFlag;
     WORD wVersionRequested;
     WSADATA m_wsaData;
     IO_OPERATION_DATA m_IoRecv;  

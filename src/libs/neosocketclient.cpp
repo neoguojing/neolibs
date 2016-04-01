@@ -6,6 +6,7 @@
 #include "neomemmanager.h"
 #include "neolog.h"
 #include "neothread.h"
+#include "neoqueue.h"
 
 namespace NEOLIB{
 
@@ -43,13 +44,19 @@ NeoClient::~NeoClient()
 bool NeoClient::init(const SERVICE_TYPE svctype)
 {
 #ifdef WIN32
-    int err;
-    wVersionRequested=MAKEWORD(2,2);
-    err=WSAStartup(wVersionRequested,&m_wsaData);
-    if(err!=0)
-    {
-        m_pNEOBaseLib->m_pDebug->DebugToFile("Socket Init fail!\r\n");
-        return false;
+   {
+       m_bSocketInitFlag=false;
+       int err;
+       wVersionRequested=MAKEWORD(2,2);
+       err=WSAStartup(wVersionRequested,&m_wsaData);
+       if(err!=0)
+       {
+          m_pNEOBaseLib->m_pDebug->DebugToFile("Socket Init fail!\n");
+       }
+       else
+       {
+          m_bSocketInitFlag=true;
+       }
     }
 #endif
 
@@ -76,7 +83,19 @@ void NeoClient::setInetAddr(string addr, unsigned short port)
 void NeoClient::close()
 {
     clientSwitch = false;
-    ::WIN_LINUX_CloseSocket(m_Socket);
+    m_pNEOBaseLib->m_pMemPool->CloseSocket(m_Socket);
+#ifdef WIN32
+    {
+       if(m_bSocketInitFlag)
+       {
+          if(LOBYTE(&m_wsaData,wVersionRequested)!=2 || HIBYTE(&m_wsaData,wVersionRequested)!=2)
+          {
+             WSACleanup();
+          }
+          m_bSocketInitFlag=false;
+       }
+    }
+#endif
 }
 
 bool NeoClient::doConnection()
@@ -95,7 +114,16 @@ bool NeoClient::doRecv()
     m_pNEOBaseLib->m_pTaskPool->RegisterATask(recvTask,this);
     return true;
 }
-    
+
+bool NeoClient::sendToAppQueue(const char *szData,int nDataLen)
+{
+    if( m_pNEOBaseLib->m_pMemQueue->ICanWork())
+        m_pNEOBaseLib->m_pMemQueue->AddLast(szData, nDataLen);
+    else
+        return false;
+    return true;
+}
+
 bool NeoClient::connTask(void *pThis,int &nStatus)
 {
     bool needContinue = false;
@@ -121,13 +149,15 @@ bool NeoClient::recvTask(void *pThis,int &nStatus)
     tThis->m_pNEOBaseLib->m_pDebug->DebugToFile("receive task started!\r\n");
     while(tThis->clientSwitch)
     {
-        char buffer[1024] = {0};
+        char buffer[NEO_CLIENT_RECEIVE_BUFFER_SIZE] = {0};
 #ifdef WIN32
-        while((recvRet = recv( tThis->m_Socket, buffer, 1024, 0)) > 0)
+        while((recvRet = recv(tThis->m_Socket, buffer, 1024, 0)) > 0)
         {
             tThis->m_pNEOBaseLib->m_pDebug->DebugToFile(
                             "NeoClient::loop got msg:msg=%s,recvsize=%d,buffersize=1024!,\r\n",
                             buffer,recvRet);
+            tThis->sendToAppQueue(buffer,recvRet);
+            tThis->m_pNEOBaseLib->m_pMemQueue->PrintInside();
         }//while
 
         //server socket closed
@@ -169,6 +199,7 @@ bool NeoClient::myTask(void *pThis,int &nStatus)
 #else
 
 #endif
+
     return needContinue;
 }
 

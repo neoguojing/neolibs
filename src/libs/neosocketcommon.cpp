@@ -93,7 +93,7 @@ CClient::CClient(const WIN_LINUX_SOCKET socket,const struct sockaddr_in clientad
 
 CClient::~CClient(void)
 {
-
+    eraseDataBuffer();
 }
 
 #ifdef WIN32
@@ -103,17 +103,27 @@ void CClient::setDataBuffer(char *buf, const unsigned long buffsize,IOTYPE iotyp
 	{
 		ZeroMemory(&m_IoRecv,sizeof(IO_OPERATION_DATA));
 		m_IoRecv.IoType=IORead;
-		m_IoRecv.len = NEO_RECEIVE_BUFFER_SIZE;
-		m_IoRecv.dataBuf.buf = new char[NEO_RECEIVE_BUFFER_SIZE];
-		m_IoRecv.dataBuf.len = NEO_RECEIVE_BUFFER_SIZE;
+		m_IoRecv.len = NEO_SERVER_RECEIVE_BUFFER_SIZE;
+		m_IoRecv.dataBuf.buf = new char[NEO_SERVER_RECEIVE_BUFFER_SIZE];
+		m_IoRecv.dataBuf.len = NEO_SERVER_RECEIVE_BUFFER_SIZE;
 	}
 	else if (iotype == IOWrite)
 	{
+        int sendBufferSize = buffsize;
 		ZeroMemory(&m_IoSend,sizeof(IO_OPERATION_DATA));
 		m_IoSend.IoType=IOWrite;
-        m_IoSend.len = buffsize;
+        if (sendBufferSize > NEO_CLIENT_RECEIVE_BUFFER_SIZE)
+        {
+            m_IoSend.len = buffsize;
+            m_IoSend.dataBuf.len = NEO_CLIENT_RECEIVE_BUFFER_SIZE;
+        }
+        else
+        {
+            m_IoSend.len = buffsize;
+            m_IoSend.dataBuf.len = buffsize;
+        }
 		m_IoSend.dataBuf.buf = buf;
-		m_IoSend.dataBuf.len = buffsize;
+		
 	}
 }
 
@@ -141,8 +151,6 @@ bool CClient::Recv(const SERVICE_TYPE svctype)
 {
     int addrsize = sizeof(m_addr);
     WSABUF wsabuf;
-	//ZeroMemory(&m_IoRecv,sizeof(IO_OPERATION_DATA));
-	//m_IoRecv.IoType=IORead;
 	wsabuf.buf = (char*)m_IoRecv.dataBuf.buf;
 	wsabuf.len= m_IoRecv.dataBuf.len;
 	DWORD flag=0;
@@ -170,24 +178,22 @@ bool CClient::Recv(const SERVICE_TYPE svctype)
 
 bool CClient::Send(const SERVICE_TYPE svctype)
 {
-	//ZeroMemory(&m_IoSend,sizeof(IO_OPERATION_DATA));
-
+    bool needContinue = false;
+    DWORD flag=0;
 	WSABUF wsabuf;
-	//m_IoSend.IoType=IOWrite;
-    m_IoSend.len = m_IoSend.dataBuf.len;
+
 	wsabuf.buf = m_IoSend.dataBuf.buf;
 	wsabuf.len = m_IoSend.dataBuf.len;
-	DWORD flag=0;
 
     if(svctype == SERVICE_TYPE::TCP)
     {
-	    int ret=WSASend(m_s,&wsabuf,1,NULL,flag,&m_IoSend.overlapped,NULL);
+	    int ret=WSASend(m_s,&wsabuf,1,&wsabuf.len,flag,&m_IoSend.overlapped,NULL);
 	    if(ret==SOCKET_ERROR)
 	    {
 		    int err=WSAGetLastError();
 		    if(err!=WSA_IO_PENDING)
 		    {
-			    return false;
+			    needContinue = false;
 		    }
 	    }
     }
@@ -196,10 +202,18 @@ bool CClient::Send(const SERVICE_TYPE svctype)
         int rtn = sendto(m_s, wsabuf.buf, wsabuf.len, flag, (struct sockaddr *)&m_addr, sizeof(m_addr));  
         if (rtn < 0)  
         {  
-            return false;
+            needContinue = false;
         }  
     }
-	return true;
+
+    if (m_IoSend.len >=  NEO_CLIENT_RECEIVE_BUFFER_SIZE)
+    {
+        setDataBuffer(m_IoSend.dataBuf.buf+NEO_CLIENT_RECEIVE_BUFFER_SIZE,
+            m_IoSend.len-NEO_CLIENT_RECEIVE_BUFFER_SIZE,IOWrite);
+        needContinue = true;
+    }
+
+	return needContinue;
 }
 #else
 

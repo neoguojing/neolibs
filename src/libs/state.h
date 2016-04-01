@@ -1,4 +1,4 @@
-#ifndef _NEOSTATE_H_
+ï»¿#ifndef _NEOSTATE_H_
 #define _NEOSTATE_H_
 
 #include <iostream>
@@ -6,9 +6,9 @@ using namespace std;
 namespace NEOLIB{
 
 /*
-    stateÄ£Ê½:
-    1.ÓÃ»§ĞèÒª¼Ì³ĞStateContext£¬²¢À©Õ¹×Ô¼ºµÄ½Ó¿Ú£»×Ô¶¨Òå½Ó¿Ú£¬ĞèÒªÊ¹ÓÃm_State·½·¨È¥ÊµÏÖ
-    2.ÓÃ»§ĞèÒª×Ô¶¨Òåstate½Ó¿ÚÀà£¬³éÏó³ö×´Ì¬µÄ¹²Í¬ÌØÕ÷£¨ÊôĞÔºÍĞĞÎª£©
+    stateæ¨¡å¼:
+    1.ç”¨æˆ·éœ€è¦ç»§æ‰¿StateContextï¼Œå¹¶æ‰©å±•è‡ªå·±çš„æ¥å£ï¼›è‡ªå®šä¹‰æ¥å£ï¼Œéœ€è¦ä½¿ç”¨m_Stateæ–¹æ³•å»å®ç°
+    2.ç”¨æˆ·éœ€è¦è‡ªå®šä¹‰stateæ¥å£ç±»ï¼ŒæŠ½è±¡å‡ºçŠ¶æ€çš„å…±åŒç‰¹å¾ï¼ˆå±æ€§å’Œè¡Œä¸ºï¼‰
     
 */
 template <typename STATE>

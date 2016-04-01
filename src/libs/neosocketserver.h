@@ -49,7 +49,7 @@ public:
     NeoServer(const string addr, const unsigned short port, const SERVICE_TYPE svctype=(SERVICE_TYPE)0);
     ~NeoServer();
     
-    void init();
+    bool init();
     void TCP(string addr, unsigned short port);
     void UDP(string addr, unsigned short port);
     void RAW(string addr, unsigned short port);
@@ -72,15 +72,20 @@ public:
 
     void close();
 
+    bool doSend(CClient* pClient);
+
 private:
     void setInetAddr(string addr, unsigned short port);
     
     static bool accept(void *pThis,int &nStatus);
+    bool sendToAppQueue(const char *szData,int nDataLen);
+    static bool sendTask(void *pThis,int &nStatus);
 
     bool serverSwitch;
     set<CClient*> g_clientManager;
     CNEOBaseLibrary *m_pNEOBaseLib;
 #ifdef WIN32
+    bool m_bSocketInitFlag;
     WORD wVersionRequested;
     WSADATA m_wsaData;
     HANDLE m_hIOPort;

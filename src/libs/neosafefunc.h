@@ -1,4 +1,4 @@
-#ifndef NEOSAFEFUNC
+﻿#ifndef NEOSAFEFUNC
 
 #define NEOSAFEFUNC
 

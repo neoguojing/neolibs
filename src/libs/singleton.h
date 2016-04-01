@@ -1,4 +1,4 @@
-#ifndef _NEOSINGLETON_H_ 
+﻿#ifndef _NEOSINGLETON_H_ 
 #define _NEOSINGLETON_H_
 
 #include <iostream>
@@ -12,13 +12,13 @@ namespace
 	CMutexLock s_Lock;
 }
 /*
-	ʹ�÷�����
-	1.Ҫ���û���Ĺ��캯��Ϊprotected���ҹ��캯���Ĳ���ֻ��Ϊһ��ָ�룬�ڲ����¶�ָ����н���
-	2.��Ҫ���ʵĳ�Ա���Ϊprotected��public
+	使用方法：
+	1.要求用户类的构造函数为protected，且构造函数的参数只能为一个指针，内部重新对指针进行解析
+	2.需要访问的成员最好为protected或public
 		SingletonWithLock<CNEOBaseLibrary>::getInstance()
-	3.ʵ���������ӿڣ�һ�����в����Ľӿ����ڴ��в����ĵ������󣬲�����ָ�����ʽ����
+	3.实现了两个接口，一个带有参数的接口用于带有参数的单例需求，参数以指针的形式传递
 
-	ʹ�þ�����
+	使用举例：
 		SingletonWithLock<CNEOBaseLibrary>::getInstance();
 
 

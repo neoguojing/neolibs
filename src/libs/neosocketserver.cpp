@@ -6,6 +6,7 @@
 #include "neolog.h"
 #include "neothread.h"
 #include "neosocketcommon.h"
+#include "neoqueue.h"
 
 namespace NEOLIB{
 
@@ -17,7 +18,7 @@ class WorkerThread:public Thread
 {
 public:
     WorkerThread(NEO_THREAD_CALLBACK callback, ReadWriteParam param):
-	  mpParam(param),Thread(callback)
+      mpParam(param),Thread(callback)
     {
     }
 
@@ -92,13 +93,19 @@ void * doWriteTask(void *pParam)
     {
         m_pNEOBaseLib = CNEOBaseLibrary::getInstance("neoserver",".","serverlog",NULL);
 
-		m_pNEOBaseLib->m_pDebug->DebugToFile("NeoServer\r\n");
+        m_pNEOBaseLib->m_pDebug->DebugToFile("NeoServer\r\n");
 
         m_pNEOBaseLib->m_pMemPool->Register(m_pNEOBaseLib,"NeoServer::m_pNEOBaseLib");
 
-        init();
+        if (!init())
+            return;
 #ifdef WIN32
-        m_pNEOBaseLib->m_pTaskPool->RegisterATask(loop,this);
+        SYSTEM_INFO tSysteminfo;
+        GetSystemInfo(&tSysteminfo); 
+        for(int i = 0;i< tSysteminfo.dwNumberOfProcessors * 2 ; ++ i) 
+        {
+            m_pNEOBaseLib->m_pTaskPool->RegisterATask(loop,this);
+        }
 #endif
 
         if(svctyoe == SERVICE_TYPE::TCP)
@@ -123,7 +130,7 @@ void * doWriteTask(void *pParam)
         }
 
 #ifndef WIN32
-		m_pNEOBaseLib->m_pTaskPool->RegisterATask(loop,this);
+        m_pNEOBaseLib->m_pTaskPool->RegisterATask(loop,this);
 #else
         m_pNEOBaseLib->m_pTaskPool->RegisterATask(accept,this);
 #endif
@@ -141,23 +148,31 @@ void * doWriteTask(void *pParam)
         close();
     }
 
-    void NeoServer::init()
+    bool NeoServer::init()
     {
 #ifdef WIN32
        int err;
+       m_bSocketInitFlag = false;
        wVersionRequested=MAKEWORD(2,2);
        err=WSAStartup(wVersionRequested,&m_wsaData);
        if(err!=0)
        {
             m_pNEOBaseLib->m_pDebug->DebugToFile("Socket Init fail!\r\n");
+            return false;
+       }
+       else
+       {
+          m_bSocketInitFlag=true;
        }
 
        m_hIOPort=CreateIoCompletionPort(INVALID_HANDLE_VALUE,NULL,0,0);  
        if (INVALID_HANDLE_VALUE == m_hIOPort)
        {
             m_pNEOBaseLib->m_pDebug->DebugToFile("m_hIOPort Init fail!\r\n");
+            return false;
        }
 #endif
+       return true;
     }
 
     void NeoServer::TCP(string addr, unsigned short port)
@@ -247,17 +262,12 @@ void * doWriteTask(void *pParam)
         
         while(tThis->serverSwitch) 
         {
-            //PCOMPLETIONKEY pcompletionKey; 
             tThis->m_connSocket=WSAAccept(tThis->m_Socket,(SOCKADDR*)&tThis->m_ClientAddr,&size,0,NULL);
-            //tThis->m_connSocket = ::accept(tThis->m_Socket,(struct sockaddr *)&tThis->m_ClientAddr,&size);
             if(tThis->m_connSocket == WIN_LINUX_InvalidSocket)
                 continue;
 
-            /*pcompletionKey = (PCOMPLETIONKEY)GlobalAlloc(GPTR,sizeof(COMPLETIONKEY));
-            pcompletionKey->s=tThis->m_connSocket;  
-            memcpy(&pcompletionKey->clientAddr,&tThis->m_ClientAddr,size);*/
             CClient*pClient=new CClient(tThis->m_connSocket,tThis->m_ClientAddr);
-			pClient->setDataBuffer();
+            pClient->setDataBuffer();
 
             HANDLE h=CreateIoCompletionPort((HANDLE)tThis->m_connSocket,tThis->m_hIOPort,(ULONG_PTR)pClient,0);
             if (NULL == h)
@@ -292,12 +302,26 @@ void * doWriteTask(void *pParam)
 
      void NeoServer::close()
      {
-#ifdef WIN32
-        CancelIo(m_hIOPort);  
-#endif
         serverSwitch = false;
         m_pNEOBaseLib->m_pMemPool->CloseSocket(m_Socket);
+#ifdef WIN32
+        CancelIo(m_hIOPort);  
+        if(m_bSocketInitFlag)
+        {
+            if(LOBYTE(&m_wsaData,wVersionRequested)!=2 || HIBYTE(&m_wsaData,wVersionRequested)!=2)
+            {
+                WSACleanup();
+            }
+            m_bSocketInitFlag=false;
+        }
+#endif
      }
+
+bool NeoServer::doSend(CClient* pClient)
+{
+    m_pNEOBaseLib->m_pTaskPool->RegisterATask(sendTask,pClient);
+    return true;
+}
 
 #ifndef WIN32
      int NeoServer::makeSocketNonBlocking (int sfd)   
@@ -378,12 +402,12 @@ void * doWriteTask(void *pParam)
 
          while(tThis->serverSwitch)
          {
-			tThis->m_pNEOBaseLib->m_pDebug->DebugToFile("epoll_wait loop!\r\n");
+            tThis->m_pNEOBaseLib->m_pDebug->DebugToFile("epoll_wait loop!\r\n");
             numofwaitingfds = epoll_wait(tThis->m_epollFd, tThis->m_Events, EPOLL_SIZE_HINT, -1);
             if (-1 == numofwaitingfds)
             {
                  tThis->m_pNEOBaseLib->m_pDebug->DebugToFile("epoll_ctl fail!\r\n");
-				 continue;
+                 continue;
             }
 
             int i = 0;
@@ -407,7 +431,7 @@ void * doWriteTask(void *pParam)
             }
 
          }
-		 return needContinue;
+         return needContinue;
      }
 #else
 
@@ -424,7 +448,6 @@ void * doWriteTask(void *pParam)
 
          tThis->m_pNEOBaseLib->m_pDebug->DebugToFile("NeoServer::loop thread started!\r\n");
 
-         //PCOMPLETIONKEY pcompletionKey = NULL;
          CClient *pClient = NULL; 
          DWORD dwNumberOfBytesTransferrd = 0;
          LPOVERLAPPED pOverlapped = NULL;
@@ -452,28 +475,33 @@ void * doWriteTask(void *pParam)
                         delete(pClient);
                         break;
                     }
-                    char msg[14];
-                    memcpy(msg,pIO->dataBuf.buf,dwNumberOfBytesTransferrd);
-                        tThis->m_pNEOBaseLib->m_pDebug->DebugToFile(
-                        "NeoServer::loop got msg:msg=%s,dwNumberOfBytesTransferrd=%d,pIO->len=%d,pIO->dataBuf.len=%d!,\r\n",
-                        msg,dwNumberOfBytesTransferrd,pIO->len,pIO->dataBuf.len);
-                    pClient->setDataBuffer("i am the server",16,IOWrite);
-                    pClient->Send();
+                    
+                    //数据送入队列
+                    tThis->m_pNEOBaseLib->m_pDebug->DebugToFile(
+                    "NeoServer::loop got msg:msg=%s,dwNumberOfBytesTransferrd=%d,pIO->len=%d,pIO->dataBuf.len=%d!,\r\n",
+                    pIO->dataBuf.buf,dwNumberOfBytesTransferrd,pIO->len,pIO->dataBuf.len);
+                    tThis->sendToAppQueue(pIO->dataBuf.buf,dwNumberOfBytesTransferrd);
+                    tThis->m_pNEOBaseLib->m_pMemQueue->PrintInside();
+
+                    //发送回应数据
+                    //pClient->setDataBuffer("i am the server",16,IOWrite);
+                    //pClient->Send();
+                    tThis->doSend(pClient);
 
                     //重新触发报文异步接收
-			        pClient->setDataBuffer();
+                    pClient->setDataBuffer();
                     if(!pClient->Recv())
                     {
                         if(!tThis->g_clientManager.empty())
                             tThis->g_clientManager.erase(pClient);
                         delete(pClient);
                     }
+
                     break;
                  case IOWrite:
+                     tThis->m_pNEOBaseLib->m_pDebug->DebugToFile("NeoServer::send finish!\r\n");
                      break;
                  case IOLogOut:
-                     tThis->g_clientManager.erase(pClient);
-                     delete(pClient);
                      break;
                  default:
                      break;
@@ -492,6 +520,11 @@ void * doWriteTask(void *pParam)
                   //超时。
 
                  }
+
+                 if(!tThis->g_clientManager.empty())
+                            tThis->g_clientManager.erase(pClient);
+                 if (pClient!=NULL)
+                    delete(pClient);
              }
          }//for
 
@@ -523,5 +556,30 @@ void * doWriteTask(void *pParam)
         return true;
     }
 #endif
-    
+   
+bool NeoServer::sendToAppQueue(const char *szData,int nDataLen)
+{
+    if( m_pNEOBaseLib->m_pMemQueue->ICanWork())
+        m_pNEOBaseLib->m_pMemQueue->AddLast(szData, nDataLen);
+    else
+        return false;
+    return true;
 }
+
+bool NeoServer::sendTask(void *pThis,int &nStatus)
+{
+    bool needContinue = false;
+    int sendRet = 0;
+    CClient *tThis = (CClient*)pThis;
+
+#ifdef WIN32
+   tThis->setDataBuffer("i am the server",16,IOWrite);
+   needContinue = tThis->Send();
+#else
+
+#endif
+    return needContinue;
+}
+
+
+}//NEOLIB

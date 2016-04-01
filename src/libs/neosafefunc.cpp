@@ -1,4 +1,4 @@
-
+﻿
 
 #include "neoindex.h"
 #include "neosafefunc.h"

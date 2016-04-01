@@ -1,6 +1,6 @@
 ﻿#ifndef NEOSOCKETCOMMOM
 
-#define NEOSOCKETSERVER
+#define NEOSOCKETCOMMOM
 #include "neoindex.h" 
 
 #ifndef WIN32

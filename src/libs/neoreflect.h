@@ -1,4 +1,4 @@
-#ifndef _NEOREFLECT_H_ 
+ï»¿#ifndef _NEOREFLECT_H_ 
 #define _NEOREFLECT_H_
 
 #include "singleton.h"
@@ -10,12 +10,12 @@ using namespace std;
 namespace NEOLIB{
 
 /*
-    Ê¹ÓÃËµÃ÷£º
-        ½öĞè¼Ì³ĞNEODynBaseClass:
-                ÆäÖĞ£º
-                    1¡¢ĞèÊµÏÖCreateInstance£»
-                    2¡¢Ê¹ÓÃºêDECLARE_CLASSºÍIMPLEMENT_CLASS¶¨ÒåºÍ×¢²á¸Äº¯Êıµ½Àà¹¤³§£»
-                    3¡¢ÊôĞÔ¶¨ÒåºÍµ÷ÓÃ¿É²Î¿¼²âÊÔÓÃÀı
+    ä½¿ç”¨è¯´æ˜ï¼š
+        ä»…éœ€ç»§æ‰¿NEODynBaseClass:
+                å…¶ä¸­ï¼š
+                    1ã€éœ€å®ç°CreateInstanceï¼›
+                    2ã€ä½¿ç”¨å®DECLARE_CLASSå’ŒIMPLEMENT_CLASSå®šä¹‰å’Œæ³¨å†Œæ”¹å‡½æ•°åˆ°ç±»å·¥å‚ï¼›
+                    3ã€å±æ€§å®šä¹‰å’Œè°ƒç”¨å¯å‚è€ƒæµ‹è¯•ç”¨ä¾‹
 */
 class NEODynBaseClass;
 typedef void* (*createClass)(void);
@@ -79,7 +79,7 @@ public:
     }  
 } ;  
 
-//ÒÔÏÂÉùÃ÷µÄÁ½¸ö±äÁ¿ÊÇË½ÓĞµÄ£¬Ö»ÄÜ±»×Ô¼º·ÃÎÊ
+//ä»¥ä¸‹å£°æ˜çš„ä¸¤ä¸ªå˜é‡æ˜¯ç§æœ‰çš„ï¼Œåªèƒ½è¢«è‡ªå·±è®¿é—®
 #define DECLARE_CLASS(className)\
     string className##Name ;    \
     static NEODynamicClass* m_##className##NEO ;  
@@ -98,16 +98,16 @@ public:
     NEODynBaseClass() {}  
     virtual ~NEODynBaseClass() {}  
     static void* CreateInstance() {return new NEODynBaseClass();}  
-    /*×¢²áÊôĞÔº¯Êıµ½m_PropertyMap*/
+    /*æ³¨å†Œå±æ€§å‡½æ•°åˆ°m_PropertyMap*/
     virtual void RegistProperty() {}  
     virtual void Print() {}  
-    /*Í¨¹ıkeyÖµµ÷ÓÃÏàÓ¦º¯Êı*/
+    /*é€šè¿‡keyå€¼è°ƒç”¨ç›¸åº”å‡½æ•°*/
     map<string, setValue> m_PropertyMap ;  
 } ;  
   
 IMPLEMENT_CLASS(NEODynBaseClass)  
 
-/* Éú³ÉÏàÓ¦ÊôĞÔµÄget/setº¯Êı*/
+/* ç”Ÿæˆç›¸åº”å±æ€§çš„get/setå‡½æ•°*/
 #define SYNTHESIZE(classType, varType, varName)                    \
 public:                                                            \
     inline static void set##varName(NEODynBaseClass*cp, void*value)\

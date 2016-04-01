@@ -1,4 +1,5 @@
-﻿#ifndef NEOPROCESSSYNC
+﻿////////////////////////
+#ifndef NEOPROCESSSYNC
 
 #define NEOPROCESSSYNC
 #include "neoindex.h"

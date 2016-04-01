@@ -1,4 +1,4 @@
-#ifndef NEONETWORK 
+﻿#ifndef NEONETWORK 
 
 #define NEONETWORK
 
@@ -194,9 +194,10 @@ typedef enum _io_type
 typedef struct _io_operation_data
 
 {
-    char* dataBuf;
     IOTYPE IoType;//IO操作类型：如READ或WRITE。
     unsigned long len;//实际传输的数据长度。
+    unsigned long buffersize;//实际传输的数据长度。
+    char* dataBuf;
 }IO_OPERATION_DATA;
 
 #else
@@ -211,12 +212,32 @@ typedef struct _io_operation_data
 
 {
     OVERLAPPED overlapped;
-    WSABUF dataBuf;
     IOTYPE IoType;//IO操作类型：如READ或WRITE。
     unsigned long len;//实际传输的数据长度。
+    WSABUF dataBuf;
 }IO_OPERATION_DATA;
+
 #endif
 
-#define NEO_RECEIVE_BUFFER_SIZE 1024
+#define NEO_SERVER_RECEIVE_BUFFER_SIZE 1024
 
-#endif//NEONETWORK
+#define NEO_CLIENT_RECEIVE_BUFFER_SIZE 10240
+
+/***************************************************************************/
+#define XMSG_ID                          0  /*!< message identity */
+#define XMSG_TYPE                        2  /*!< message type */
+#define XMSG_FLOW_ID                     3  /*!< flow control */
+#define XMSG_RESERVED                    4  /*!< reserved by kernel */
+
+#define XMSG_USER_DATA1                  8  /*!< user data */
+#define XMSG_USER_DATA2                 12  /*!< user data */
+
+#define XMSG_BUF_PTR                     8  /*!< buffer pointer */
+#define XMSG_BUFFER_USER_DATA           12  /*!< user data */
+
+#define XMSG_TIMER_ID                    8  /*!< timer id */
+#define XMSG_TIMER_USER_DATA            12  /*!< timer user data */
+
+#define XM_APPL_MEM                      1  /*!< application memory */
+
+#endif

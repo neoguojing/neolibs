@@ -1,4 +1,4 @@
-#ifndef _NEOPROXY_H_
+ï»¿#ifndef _NEOPROXY_H_
 #define _NEOPROXY_H_
 
 #include <iostream>
@@ -6,15 +6,15 @@ using namespace std;
 namespace NEOLIB{
 
 /*
-    ´úÀíÄ£Ê½Ê¹ÓÃ£º
-    Subject£º³éÏóÄ£°åÀà£»ÓÃ»§¶¨ÒåµÄ´úÂë
-    ConcreteSubject£ºSubjectµÄÊµÏÖ£»ÓÃ»§¶¨ÒåµÄ´úÂë
-    AbstactProxy£º¹¤¾ßÀà£¬ĞèÒªÓÃ»§¼Ì³Ğ¸Ã½Ó¿Ú£¬²¢ÊµÏÖÏàÓ¦½Ó¿Ú£¬×îºÃÏÔÊ½µ÷ÓÃ¸ÃÀàµÄ¹¹Ôìº¯Êı
+    ä»£ç†æ¨¡å¼ä½¿ç”¨ï¼š
+    Subjectï¼šæŠ½è±¡æ¨¡æ¿ç±»ï¼›ç”¨æˆ·å®šä¹‰çš„ä»£ç 
+    ConcreteSubjectï¼šSubjectçš„å®ç°ï¼›ç”¨æˆ·å®šä¹‰çš„ä»£ç 
+    AbstactProxyï¼šå·¥å…·ç±»ï¼Œéœ€è¦ç”¨æˆ·ç»§æ‰¿è¯¥æ¥å£ï¼Œå¹¶å®ç°ç›¸åº”æ¥å£ï¼Œæœ€å¥½æ˜¾å¼è°ƒç”¨è¯¥ç±»çš„æ„é€ å‡½æ•°
     class ProxyTest:public AbstactProxy<Subject>
-    Ê¹ÓÃ·½·¨£º
-    //ĞÂ½¨Ö÷ÌâÀà
+    ä½¿ç”¨æ–¹æ³•ï¼š
+    //æ–°å»ºä¸»é¢˜ç±»
     Subject *sub = new ConcreteSubject();
-    //Ê¹ÓÃ´úÀí
+    //ä½¿ç”¨ä»£ç†
     ProxyTest *proxy = new ProxyTest(sub);
     proxy->PreRequest();
     proxy->Request();

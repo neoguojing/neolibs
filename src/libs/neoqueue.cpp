@@ -1,4 +1,4 @@
-//ÒªÈ¥µ¼ÈëÄÚ´æ³ØµÄÀà
+ï»¿//è¦å»å¯¼å…¥å†…å­˜æ± çš„ç±»
 
 
 //#ifdef WIN32_NEO
@@ -10,8 +10,8 @@
 
 
 namespace NEOLIB {
-//Ö÷ÒªÎªÁËÊµÏÖ±¨ÎÄÆ´½ÓºÍĞÅÁî¹¹½¨£¨ÒÀÀµÄÚ´æ³Ø£©
-//¶¯Ì¬buffer
+//ä¸»è¦ä¸ºäº†å®ç°æŠ¥æ–‡æ‹¼æ¥å’Œä¿¡ä»¤æ„å»ºï¼ˆä¾èµ–å†…å­˜æ± ï¼‰
+//åŠ¨æ€buffer
 
 CNEODynamicBuffer::CNEODynamicBuffer(CNEOMemPoolWithLock *pMemPool)
     :m_pMemPool(pMemPool),m_pData(NULL),m_nDataLen(0)
@@ -23,8 +23,8 @@ CNEODynamicBuffer::~CNEODynamicBuffer()
 }
 
 ///////////////////////////////
-//³ß´çÉèÖÃº¯Êı
-bool CNEODynamicBuffer::SetSize(int nSize) //ÉèÖÃĞÂµÄ´óĞ¡
+//å°ºå¯¸è®¾ç½®å‡½æ•°
+bool CNEODynamicBuffer::SetSize(int nSize) //è®¾ç½®æ–°çš„å¤§å°
 {
     if(!m_pMemPool)
         return false;
@@ -33,16 +33,16 @@ bool CNEODynamicBuffer::SetSize(int nSize) //ÉèÖÃĞÂµÄ´óĞ¡
     {
         if(m_pData)
         {
-            m_pMemPool->Free(m_pData);//ÄÚ´æ³ØÊÍ·Å
-            m_pData=NULL;             //ÊÍ·ÅºóÁ¢¼´¸³³õÖµ
+            m_pMemPool->Free(m_pData);//å†…å­˜æ± é‡Šæ”¾
+            m_pData=NULL;             //é‡Šæ”¾åç«‹å³èµ‹åˆå€¼
         }
-        return true;                 //ÕâÒ²ÊÇ²Ù×÷³É¹¦
+        return true;                 //è¿™ä¹Ÿæ˜¯æ“ä½œæˆåŠŸ
     }
-    //ĞÂÉèÖÃµÄ»º³åÆÚ³¤¶È£¬Ò»¶¨²»Îª0
-    if(!m_pData)                    //ÈôÔ­Ö¸ÕëÎª¿Õ£¬±íÊ¾Ã»ÓĞÊı¾İ£¬ĞèÒªMalloc
+    //æ–°è®¾ç½®çš„ç¼“å†²æœŸé•¿åº¦ï¼Œä¸€å®šä¸ä¸º0
+    if(!m_pData)                    //è‹¥åŸæŒ‡é’ˆä¸ºç©ºï¼Œè¡¨ç¤ºæ²¡æœ‰æ•°æ®ï¼Œéœ€è¦Malloc
     {
-        m_pData=(char *)m_pMemPool->Malloc(m_nDataLen,"CNEODynamicBuffer::m_pData");//ÉêÇëµÄÄÚ´æ¿é³¤¶È
-        if(!m_pData)//ÅĞ¶ÏÉêÇëÊÇ·ñ³É¹¦
+        m_pData=(char *)m_pMemPool->Malloc(m_nDataLen,"CNEODynamicBuffer::m_pData");//ç”³è¯·çš„å†…å­˜å—é•¿åº¦
+        if(!m_pData)//åˆ¤æ–­ç”³è¯·æ˜¯å¦æˆåŠŸ
         {
             m_nDataLen=0;
             return false;
@@ -50,7 +50,7 @@ bool CNEODynamicBuffer::SetSize(int nSize) //ÉèÖÃĞÂµÄ´óĞ¡
         else 
             return true;
     }//if
-    else //ÒÑ¾­ÓĞÒ»¸öÄÚ´æÇøµÄÇé¿ö
+    else //å·²ç»æœ‰ä¸€ä¸ªå†…å­˜åŒºçš„æƒ…å†µ
     {
         m_pData=(char *)m_pMemPool->ReMalloc(m_pData,m_nDataLen);
         if(!m_pData)
@@ -62,30 +62,30 @@ bool CNEODynamicBuffer::SetSize(int nSize) //ÉèÖÃĞÂµÄ´óĞ¡
             return true;
     }//else
 }
-/*¸Ãº¯Êı»áÏòmempoolÉêÇë¶îÍâµÄ¿Õ¼ä£¬µ«ÊÇ»áÁ¢¼´ÊÍ·Å
-  Ö÷ÒªÔ­ÒòÊÇ±ÜÃâmemcpy Ç°Ïò¿½±´´øÀ´µÄ´íÎó*/
-bool CNEODynamicBuffer::InsertSpaceToHead(int nAddBytes)//ÔÚÇ°Ãæ²åÈë¿Õ°×
+/*è¯¥å‡½æ•°ä¼šå‘mempoolç”³è¯·é¢å¤–çš„ç©ºé—´ï¼Œä½†æ˜¯ä¼šç«‹å³é‡Šæ”¾
+  ä¸»è¦åŸå› æ˜¯é¿å…memcpy å‰å‘æ‹·è´å¸¦æ¥çš„é”™è¯¯*/
+bool CNEODynamicBuffer::InsertSpaceToHead(int nAddBytes)//åœ¨å‰é¢æ’å…¥ç©ºç™½
 {
     bool bRet=false;
-    int nNewSize=0;                   //ĞÂµÄ ¿Õ¼ä±äÁ¿´óĞ¡
-    char *pBuffer=NULL;               //¶ş½øÖÆ»º³åÇøÖ¸Õë
+    int nNewSize=0;                   //æ–°çš„ ç©ºé—´å˜é‡å¤§å°
+    char *pBuffer=NULL;               //äºŒè¿›åˆ¶ç¼“å†²åŒºæŒ‡é’ˆ
     if(!m_pMemPool)
         goto CNEODynamicBuffer_InsertSpaceToHead_End;
-    nNewSize=m_nDataLen+nAddBytes;    //ÇóµÃĞÂµÄ³¤¶È
-    //Çë×¢ÒâÕâÀï£¬ÉêÇëÒ»¸öÁÙÊ±»º³åÇø£¬Æä³¤¶ÈµÈÓÚÔ­³¤¶È+Ôö¼ÓµÄ³¤¶È
+    nNewSize=m_nDataLen+nAddBytes;    //æ±‚å¾—æ–°çš„é•¿åº¦
+    //è¯·æ³¨æ„è¿™é‡Œï¼Œç”³è¯·ä¸€ä¸ªä¸´æ—¶ç¼“å†²åŒºï¼Œå…¶é•¿åº¦ç­‰äºåŸé•¿åº¦+å¢åŠ çš„é•¿åº¦
     pBuffer=(char *)m_pMemPool->Malloc(nNewSize,"CNEODynamicBuffer::InsertSpaceToHead();pBuffer");
-    if(!pBuffer)                      //ÉêÇëÊ§°Ü
+    if(!pBuffer)                      //ç”³è¯·å¤±è´¥
         goto CNEODynamicBuffer_InsertSpaceToHead_End;
-    //Èç»º³åÇøÎª¿Õ£¬Ôò²»¿½±´
+    //å¦‚ç¼“å†²åŒºä¸ºç©ºï¼Œåˆ™ä¸æ‹·è´
     if((m_pData)&&(m_nDataLen))
     {
-        //½«Ô­ÓĞ»º³åÇøÄÚÈİ¿½±´µ½ÁÙÊ±»º³åÇøºó°ë²¿·Ö£¬ÓëĞÂÔö¼ÓµÄ×Ö½Ú¹¹³ÉÒ»¸öÕûÌå
+        //å°†åŸæœ‰ç¼“å†²åŒºå†…å®¹æ‹·è´åˆ°ä¸´æ—¶ç¼“å†²åŒºååŠéƒ¨åˆ†ï¼Œä¸æ–°å¢åŠ çš„å­—èŠ‚æ„æˆä¸€ä¸ªæ•´ä½“
         memcpy(pBuffer+nAddBytes,m_pData,m_nDataLen);
     }
     bRet=BinCopyFrom(pBuffer,nNewSize);
     
 CNEODynamicBuffer_InsertSpaceToHead_End:
-    //ÊÍ·ÅÁÙÊ±»º³åÇø
+    //é‡Šæ”¾ä¸´æ—¶ç¼“å†²åŒº
     if(pBuffer)
     {
         m_pMemPool->Free(pBuffer);
@@ -93,22 +93,22 @@ CNEODynamicBuffer_InsertSpaceToHead_End:
     }
     return bRet;
 }
-bool CNEODynamicBuffer::AddSpaceToTail(int nAddBytes)//ÔÚºóÃæ²åÈë¿Õ°×
+bool CNEODynamicBuffer::AddSpaceToTail(int nAddBytes)//åœ¨åé¢æ’å…¥ç©ºç™½
 {
     return SetSize(m_nDataLen+nAddBytes);
 }
-void CNEODynamicBuffer::CutHead(int nBytes)// ´ÓÇ°Ãæ¼ôµôÒ»¶ÎÊı¾İ
+void CNEODynamicBuffer::CutHead(int nBytes)// ä»å‰é¢å‰ªæ‰ä¸€æ®µæ•°æ®
 {
     if(m_nDataLen<=nBytes)
         SetSize(0);
     else
     {
-        //´ÓºóÏòÇ°ÒÆ¶¯¿½±´
+        //ä»åå‘å‰ç§»åŠ¨æ‹·è´
         memcpy(m_pData,m_pData+nBytes,m_nDataLen-nBytes);
         m_nDataLen-=nBytes;
     }
 }
-void CNEODynamicBuffer::CutTail(int nBytes)//´ÓºóÃæ¼ôµôÒ»¶ÎÊı¾İ
+void CNEODynamicBuffer::CutTail(int nBytes)//ä»åé¢å‰ªæ‰ä¸€æ®µæ•°æ®
 {
     if(m_nDataLen<=nBytes)
         SetSize(0);
@@ -116,30 +116,30 @@ void CNEODynamicBuffer::CutTail(int nBytes)//´ÓºóÃæ¼ôµôÒ»¶ÎÊı¾İ
         m_nDataLen-=nBytes;
 }
 ////////////////////////////////////////
-//ÊıÖµ×ª»»º¯Êı
-bool CNEODynamicBuffer::SetInt(int n)//½²Ò»¸öÕûÊıÒÔ¶ş½øÖÆ·½Ê½¿½±´µ½»º³åÇø´øÍøÂç×Ö½ÚĞò
+//æ•°å€¼è½¬æ¢å‡½æ•°
+bool CNEODynamicBuffer::SetInt(int n)//è®²ä¸€ä¸ªæ•´æ•°ä»¥äºŒè¿›åˆ¶æ–¹å¼æ‹·è´åˆ°ç¼“å†²åŒºå¸¦ç½‘ç»œå­—èŠ‚åº
 {
     int nSave=htonl(n);
-    //¿½±´µ½±¾µØ»º³åÇø
+    //æ‹·è´åˆ°æœ¬åœ°ç¼“å†²åŒº
     return BinCopyFrom((char *)&nSave,sizeof(int));
 }
 
 
-int CNEODynamicBuffer::GetInt(void)//ÒÔÕûÊı·½Ê½»ñµÃ»º³åÇøµÄÊıÖµ
+int CNEODynamicBuffer::GetInt(void)//ä»¥æ•´æ•°æ–¹å¼è·å¾—ç¼“å†²åŒºçš„æ•°å€¼
 {
     if(!m_pData)
         return 0;
     if((sizeof(int)>(size_t)m_nDataLen))
         return 0;
-    return ntohl(*(int *)m_pData);//ÓÃÕâÖÖ·½Ê½È¡µÃÇ°ËÄ×Ö½Ú
+    return ntohl(*(int *)m_pData);//ç”¨è¿™ç§æ–¹å¼å–å¾—å‰å››å­—èŠ‚
 }
-bool CNEODynamicBuffer::SetShort(short n)//½²Ò»¸ö¶ÌÕûÊıÒÔ¶ş½øÖÆ·½Ê½¿½±´µ½»º³åÇø´øÍøÂç×Ö½ÚĞò
+bool CNEODynamicBuffer::SetShort(short n)//è®²ä¸€ä¸ªçŸ­æ•´æ•°ä»¥äºŒè¿›åˆ¶æ–¹å¼æ‹·è´åˆ°ç¼“å†²åŒºå¸¦ç½‘ç»œå­—èŠ‚åº
 {
     short sSave=htons(n);
     return BinCopyFrom((char *)&sSave,sizeof(short));
 }
 
-short CNEODynamicBuffer::GetShort(void)//¶Ë¿ÚºÅ
+short CNEODynamicBuffer::GetShort(void)//ç«¯å£å·
 {
     if(!m_pData)
         return 0;
@@ -147,11 +147,11 @@ short CNEODynamicBuffer::GetShort(void)//¶Ë¿ÚºÅ
         return 0;
     return ntohs(*(short *)m_pData);
 }
-bool CNEODynamicBuffer::SetChar(char n)//½«Ò»¸ö×Ö½ÚÒÔ¶ş½øÖÆ·½Ê½¿½±´µ½»º³åÇø
+bool CNEODynamicBuffer::SetChar(char n)//å°†ä¸€ä¸ªå­—èŠ‚ä»¥äºŒè¿›åˆ¶æ–¹å¼æ‹·è´åˆ°ç¼“å†²åŒº
 {
     return BinCopyFrom(&n,sizeof(char));
 }
-char CNEODynamicBuffer::GetChar(void)//ÒÔ×Ö½Ú·½Ê½»ñµÃ»º³åÇøµÄÊıÖµ
+char CNEODynamicBuffer::GetChar(void)//ä»¥å­—èŠ‚æ–¹å¼è·å¾—ç¼“å†²åŒºçš„æ•°å€¼
 {
     if(!m_pData)
         return 0;
@@ -160,8 +160,8 @@ char CNEODynamicBuffer::GetChar(void)//ÒÔ×Ö½Ú·½Ê½»ñµÃ»º³åÇøµÄÊıÖµ
     return *(char *)m_pData;
 }
 //////////////////////////////////////////
-//¶ş½øÖÆÊı¾İ×·¼Óº¯Êı
-//×·¼ÓÊı¾İµ½×îºó£¬·µ»ØĞÂµÄ³¤¶È
+//äºŒè¿›åˆ¶æ•°æ®è¿½åŠ å‡½æ•°
+//è¿½åŠ æ•°æ®åˆ°æœ€åï¼Œè¿”å›æ–°çš„é•¿åº¦
 int CNEODynamicBuffer::AddData(char *szData,int nDataLen)
 {
     if((!m_pData)||(0>=m_nDataLen))
@@ -175,7 +175,7 @@ int CNEODynamicBuffer::AddData(char *szData,int nDataLen)
     memcpy(m_pData+nOldSize,szData,nDataLen);
     return m_nDataLen;
 }
-//²åÈëÊı¾İµÄ×îÇ°Ãæ£¬·µ»ØĞÂµÄÊı¾İ³¤¶È
+//æ’å…¥æ•°æ®çš„æœ€å‰é¢ï¼Œè¿”å›æ–°çš„æ•°æ®é•¿åº¦
 int CNEODynamicBuffer::InsertDataToHead(char *szData,int nDataLen)
 {
     if((!m_pData)||(0>=m_nDataLen))
@@ -188,8 +188,8 @@ int CNEODynamicBuffer::InsertDataToHead(char *szData,int nDataLen)
     return m_nDataLen;
 }
 /////////////////////////////////////////
-//¶ş½øÖÆÊı¾İ¿½±´º¯Êı
-//¿½±´µ½Ò»¿éÄ¿±ê»º³åÇøÓò£¬ÊÜ´«ÈëµÄ»º³åÇø³¤¶ÈÏŞÖÆ
+//äºŒè¿›åˆ¶æ•°æ®æ‹·è´å‡½æ•°
+//æ‹·è´åˆ°ä¸€å—ç›®æ ‡ç¼“å†²åŒºåŸŸï¼Œå—ä¼ å…¥çš„ç¼“å†²åŒºé•¿åº¦é™åˆ¶
 int CNEODynamicBuffer::BinCopyTo(char *szBuffer,int nBufferSize)
 {
     if(!m_pData)
@@ -201,7 +201,7 @@ int CNEODynamicBuffer::BinCopyTo(char *szBuffer,int nBufferSize)
     memcpy(szBuffer,m_pData,m_nDataLen);
     return m_nDataLen;
 }
-//´ÓÒ»¿éÀ´Ô´»º³åÇø¿½±´Êı¾İµ½±¾¶ÔÏóÖĞ
+//ä»ä¸€å—æ¥æºç¼“å†²åŒºæ‹·è´æ•°æ®åˆ°æœ¬å¯¹è±¡ä¸­
 int CNEODynamicBuffer::BinCopyFrom(char *szData,int nDataLen)
 {
     if((!szData)||(0>=nDataLen))
@@ -215,17 +215,17 @@ int CNEODynamicBuffer::BinCopyFrom(char *szData,int nDataLen)
     return m_nDataLen;
 }
 
-//´ÓÁíÍâÒ»¸öBuffer¶ÔÏó¿½±´Êı¾İµ½±¾¶ÔÏó
+//ä»å¦å¤–ä¸€ä¸ªBufferå¯¹è±¡æ‹·è´æ•°æ®åˆ°æœ¬å¯¹è±¡
 int CNEODynamicBuffer::BinCopyFrom(CNEODynamicBuffer *pBuffer)
 {
     return BinCopyFrom(pBuffer->m_pData,pBuffer->m_nDataLen);
 }
 /////////////////////////////////////////////
-//ÎÄ±¾Êı¾İ¿½±´¹¹½¨º¯Êı
+//æ–‡æœ¬æ•°æ®æ‹·è´æ„å»ºå‡½æ•°
 int CNEODynamicBuffer::StrCopyFrom(char *szString)
 {
     int n=strlen(szString);
-    n++;//Á÷³ö¡°\0¡±
+    n++;//æµå‡ºâ€œ\0â€
     return BinCopyFrom(szString,n);
 }
 int CNEODynamicBuffer::Printf(const char *szFormat,...)
@@ -242,7 +242,7 @@ int CNEODynamicBuffer::Printf(const char *szFormat,...)
     return StrCopyFrom(szBuf);
 }
 /////////////////////////////////////////////
-//Êı¾İ±È½Ïº¯Êı
+//æ•°æ®æ¯”è¾ƒå‡½æ•°
 int CNEODynamicBuffer::memcmp(char *szData,int nDataLen)
 {
     if(!m_pData)
@@ -277,7 +277,7 @@ int CNEODynamicBuffer::GetBufferLength(void)
     return m_nDataLen;
 }
 
-//¾²Ì¬Buffer
+//é™æ€Buffer
 
 CNEOStaticBuffer::CNEOStaticBuffer(CNEOMemPoolWithLock *pMemPool)
     :m_pMemPool(pMemPool),m_nDataLen(0)
@@ -287,22 +287,22 @@ CNEOStaticBuffer::CNEOStaticBuffer(CNEOMemPoolWithLock *pMemPool)
 }
 CNEOStaticBuffer::~CNEOStaticBuffer(){}                      
 ///////////////////////////////
-//³ß´çÉèÖÃº¯Êı
-bool CNEOStaticBuffer::SetSize(int nSize) //ÉèÖÃĞÂµÄ´óĞ¡
+//å°ºå¯¸è®¾ç½®å‡½æ•°
+bool CNEOStaticBuffer::SetSize(int nSize) //è®¾ç½®æ–°çš„å¤§å°
 {
     if(NEO_SAFE_BUFFER_MAX_SIZE<nSize)
     {
-        m_pMemPool->m_pDebug->DebugToFile("CNEOStaticBuffer::SetSize():ERROR!nSize=%d\n",nSize);////////neoqueue.cppÖĞ°üº¬neomem.h,neomem.h ÖĞ²¢²»°üº¬neodebug.h
+        m_pMemPool->m_pDebug->DebugToFile("CNEOStaticBuffer::SetSize():ERROR!nSize=%d\n",nSize);////////neoqueue.cppä¸­åŒ…å«neomem.h,neomem.h ä¸­å¹¶ä¸åŒ…å«neodebug.h
         return false;
     }
     m_nDataLen=nSize;
     return true;
 }
-bool CNEOStaticBuffer::InsertSpaceToHead(int nAddBytes)//ÔÚÇ°Ãæ²åÈë¿Õ°×
+bool CNEOStaticBuffer::InsertSpaceToHead(int nAddBytes)//åœ¨å‰é¢æ’å…¥ç©ºç™½
 {
     if(0>=m_nDataLen)
     {
-        //Èç¹ûÃ»ÓĞÔ­Ê¼Êı¾İ£¬ÔòÊÓÎªÉèÖÃ»º³åÇø´óĞ¡
+        //å¦‚æœæ²¡æœ‰åŸå§‹æ•°æ®ï¼Œåˆ™è§†ä¸ºè®¾ç½®ç¼“å†²åŒºå¤§å°
         m_nDataLen=nAddBytes;
         return true;
     }
@@ -312,18 +312,18 @@ bool CNEOStaticBuffer::InsertSpaceToHead(int nAddBytes)//ÔÚÇ°Ãæ²åÈë¿Õ°×
         return false;
     }
     {
-    //´Ë´¦µÄ´óÀ¨ºÅ£¬ÊÇÏŞ¶¨±äÁ¿szBufferµÄ×÷ÓÃ·¶Î§
+    //æ­¤å¤„çš„å¤§æ‹¬å·ï¼Œæ˜¯é™å®šå˜é‡szBufferçš„ä½œç”¨èŒƒå›´
         char szBuffer[NEO_SAFE_BUFFER_MAX_SIZE];
         memset(szBuffer,'\0',NEO_SAFE_BUFFER_MAX_SIZE);
-        //µÚÒ»´Î£¬°ÑÔ­ÓĞÊı¾İ¿½±´µ½ĞÂÇø
+        //ç¬¬ä¸€æ¬¡ï¼ŒæŠŠåŸæœ‰æ•°æ®æ‹·è´åˆ°æ–°åŒº
         memcpy(szBuffer+nAddBytes,m_pData,m_nDataLen);
         m_nDataLen+=nAddBytes;
-        //µÚ¶ş´Î£¬½«»º³åÇøÊı¾İ¿½±´»Ø±¾¶ÔÏó»º³åÇø
+        //ç¬¬äºŒæ¬¡ï¼Œå°†ç¼“å†²åŒºæ•°æ®æ‹·è´å›æœ¬å¯¹è±¡ç¼“å†²åŒº
         memcpy(m_pData,szBuffer,m_nDataLen);
     }
     return true;
 }
-bool CNEOStaticBuffer::AddSpaceToTail(int nAddBytes)//ÔÚºóÃæ²åÈë¿Õ°×
+bool CNEOStaticBuffer::AddSpaceToTail(int nAddBytes)//åœ¨åé¢æ’å…¥ç©ºç™½
 {
     if(0>=m_nDataLen)
     {
@@ -338,7 +338,7 @@ bool CNEOStaticBuffer::AddSpaceToTail(int nAddBytes)//ÔÚºóÃæ²åÈë¿Õ°×
     m_nDataLen+=nAddBytes;
     return true;
 }
-void CNEOStaticBuffer::CutHead(int nBytes)// ´ÓÇ°Ãæ¼ôµôÒ»¶ÎÊı¾İ
+void CNEOStaticBuffer::CutHead(int nBytes)// ä»å‰é¢å‰ªæ‰ä¸€æ®µæ•°æ®
 {
     if(0>=m_nDataLen)
     {
@@ -348,17 +348,17 @@ void CNEOStaticBuffer::CutHead(int nBytes)// ´ÓÇ°Ãæ¼ôµôÒ»¶ÎÊı¾İ
     }
     if(nBytes>m_nDataLen)
     {
-        //´ÓºóÏòÇ°ÒÆ¶¯¿½±´
+        //ä»åå‘å‰ç§»åŠ¨æ‹·è´
         m_pMemPool->m_pDebug->DebugToFile("CNEOStaticBuffer::CutHead();ERROR!m_nDataLen=%d,nBytes=%d,too small!\n",m_nDataLen,nBytes);
         m_nDataLen=0;
         return;
     }
     m_nDataLen-=nBytes;
-    //´ÓºóÏòÇ°¿½±´£¬¼·³öÔ­ÓĞÊı¾İ
+    //ä»åå‘å‰æ‹·è´ï¼ŒæŒ¤å‡ºåŸæœ‰æ•°æ®
     memcpy(m_pData,m_pData+nBytes,m_nDataLen);
     return;
 }
-void CNEOStaticBuffer::CutTail(int nBytes)//´ÓºóÃæ¼ôµôÒ»¶ÎÊı¾İ
+void CNEOStaticBuffer::CutTail(int nBytes)//ä»åé¢å‰ªæ‰ä¸€æ®µæ•°æ®
 {
         if(0>=m_nDataLen)
     {
@@ -368,7 +368,7 @@ void CNEOStaticBuffer::CutTail(int nBytes)//´ÓºóÃæ¼ôµôÒ»¶ÎÊı¾İ
     }
     if(nBytes>m_nDataLen)
     {
-        //´ÓºóÏòÇ°ÒÆ¶¯¿½±´
+        //ä»åå‘å‰ç§»åŠ¨æ‹·è´
         m_pMemPool->m_pDebug->DebugToFile("CNEOStaticBuffer::CutTail();ERROR!m_nDataLen=%d,nBytes=%d,too small!\n",m_nDataLen,nBytes);
         m_nDataLen=0;
         return;
@@ -377,48 +377,48 @@ void CNEOStaticBuffer::CutTail(int nBytes)//´ÓºóÃæ¼ôµôÒ»¶ÎÊı¾İ
     return;
 }
 ////////////////////////////////////////
-//ÊıÖµ×ª»»º¯Êı
-bool CNEOStaticBuffer::SetInt(int n)//½²Ò»¸öÕûÊıÒÔ¶ş½øÖÆ·½Ê½¿½±´µ½»º³åÇø´øÍøÂç×Ö½ÚĞò
+//æ•°å€¼è½¬æ¢å‡½æ•°
+bool CNEOStaticBuffer::SetInt(int n)//è®²ä¸€ä¸ªæ•´æ•°ä»¥äºŒè¿›åˆ¶æ–¹å¼æ‹·è´åˆ°ç¼“å†²åŒºå¸¦ç½‘ç»œå­—èŠ‚åº
 {
     int nSave=htonl(n);
-    //¿½±´µ½±¾µØ»º³åÇø
+    //æ‹·è´åˆ°æœ¬åœ°ç¼“å†²åŒº
     return BinCopyFrom((char *)&nSave,sizeof(int));
 }
-int CNEOStaticBuffer::GetInt(void)//ÒÔÕûÊı·½Ê½»ñµÃ»º³åÇøµÄÊıÖµ
+int CNEOStaticBuffer::GetInt(void)//ä»¥æ•´æ•°æ–¹å¼è·å¾—ç¼“å†²åŒºçš„æ•°å€¼
 {
     if(0>=m_nDataLen)
         return 0;
     int *pData=(int *)m_pData;
     int nRet=*pData;
-    return ntohl(nRet);//ÓÃÕâÖÖ·½Ê½È¡µÃÇ°ËÄ×Ö½Ú
+    return ntohl(nRet);//ç”¨è¿™ç§æ–¹å¼å–å¾—å‰å››å­—èŠ‚
 }
-bool CNEOStaticBuffer::SetShort(short n)//½²Ò»¸ö¶ÌÕûÊıÒÔ¶ş½øÖÆ·½Ê½¿½±´µ½»º³åÇø´øÍøÂç×Ö½ÚĞò
+bool CNEOStaticBuffer::SetShort(short n)//è®²ä¸€ä¸ªçŸ­æ•´æ•°ä»¥äºŒè¿›åˆ¶æ–¹å¼æ‹·è´åˆ°ç¼“å†²åŒºå¸¦ç½‘ç»œå­—èŠ‚åº
 {
     short sSave=htons(n);
     return BinCopyFrom((char *)&sSave,sizeof(short));
 }
 
-short CNEOStaticBuffer::GetShort(void)//¶Ë¿ÚºÅ
+short CNEOStaticBuffer::GetShort(void)//ç«¯å£å·
 {
     if(0>=m_nDataLen)
         return 0;
     short *pData=(short *)m_pData;
     short sRet=*pData;
-    return ntohs(sRet);//ÓÃÕâÖÖ·½Ê½È¡µÃÇ°ËÄ×Ö½Ú
+    return ntohs(sRet);//ç”¨è¿™ç§æ–¹å¼å–å¾—å‰å››å­—èŠ‚
 }
-bool CNEOStaticBuffer::SetChar(char n)//½«Ò»¸ö×Ö½ÚÒÔ¶ş½øÖÆ·½Ê½¿½±´µ½»º³åÇø
+bool CNEOStaticBuffer::SetChar(char n)//å°†ä¸€ä¸ªå­—èŠ‚ä»¥äºŒè¿›åˆ¶æ–¹å¼æ‹·è´åˆ°ç¼“å†²åŒº
 {
     *m_pData=n;
     m_nDataLen=sizeof(char);
     return true;
 }
-char CNEOStaticBuffer::GetChar(void)//ÒÔ×Ö½Ú·½Ê½»ñµÃ»º³åÇøµÄÊıÖµ
+char CNEOStaticBuffer::GetChar(void)//ä»¥å­—èŠ‚æ–¹å¼è·å¾—ç¼“å†²åŒºçš„æ•°å€¼
 {
     return *m_pData;
 }
 //////////////////////////////////////////
-//¶ş½øÖÆÊı¾İ×·¼Óº¯Êı
-//×·¼ÓÊı¾İµ½×îºó£¬·µ»ØĞÂµÄ³¤¶È
+//äºŒè¿›åˆ¶æ•°æ®è¿½åŠ å‡½æ•°
+//è¿½åŠ æ•°æ®åˆ°æœ€åï¼Œè¿”å›æ–°çš„é•¿åº¦
 int CNEOStaticBuffer::AddData(char *szData,int nDataLen)
 {
     int nNewSize=m_nDataLen+nDataLen;
@@ -431,7 +431,7 @@ int CNEOStaticBuffer::AddData(char *szData,int nDataLen)
     m_nDataLen=nNewSize;
     return m_nDataLen;
 }
-//²åÈëÊı¾İµÄ×îÇ°Ãæ£¬·µ»ØĞÂµÄÊı¾İ³¤¶È
+//æ’å…¥æ•°æ®çš„æœ€å‰é¢ï¼Œè¿”å›æ–°çš„æ•°æ®é•¿åº¦
 int CNEOStaticBuffer::InsertDataToHead(char *szData,int nDataLen)
 {
     if(!InsertSpaceToHead(nDataLen))
@@ -444,8 +444,8 @@ int CNEOStaticBuffer::InsertDataToHead(char *szData,int nDataLen)
     return m_nDataLen;
 }
 /////////////////////////////////////////
-//¶ş½øÖÆÊı¾İ¿½±´º¯Êı
-//¿½±´µ½Ò»¿éÄ¿±ê»º³åÇøÓò£¬ÊÜ´«ÈëµÄ»º³åÇø³¤¶ÈÏŞÖÆ
+//äºŒè¿›åˆ¶æ•°æ®æ‹·è´å‡½æ•°
+//æ‹·è´åˆ°ä¸€å—ç›®æ ‡ç¼“å†²åŒºåŸŸï¼Œå—ä¼ å…¥çš„ç¼“å†²åŒºé•¿åº¦é™åˆ¶
 int CNEOStaticBuffer::BinCopyTo(char *szBuffer,int nBufferSize)
 {
     if(m_nDataLen>nBufferSize)
@@ -458,11 +458,11 @@ int CNEOStaticBuffer::BinCopyTo(char *szBuffer,int nBufferSize)
         m_pMemPool->m_pDebug->DebugToFile("CNEOStaticBuffer::BinCopyTo();ERROR!szBuffer=NULL\n");
         return 0;
     }
-    //Ö´ĞĞÕæÊÇµÄ¿½±´Âß¼­
+    //æ‰§è¡ŒçœŸæ˜¯çš„æ‹·è´é€»è¾‘
     memcpy(szBuffer,m_pData,m_nDataLen);
     return m_nDataLen;
 }
-//´ÓÒ»¿éÀ´Ô´»º³åÇø¿½±´Êı¾İµ½±¾¶ÔÏóÖĞ
+//ä»ä¸€å—æ¥æºç¼“å†²åŒºæ‹·è´æ•°æ®åˆ°æœ¬å¯¹è±¡ä¸­
 int CNEOStaticBuffer::BinCopyFrom(char *szData,int nDataLen)
 {
     if(NEO_SAFE_BUFFER_MAX_SIZE<nDataLen)
@@ -480,22 +480,22 @@ int CNEOStaticBuffer::BinCopyFrom(char *szData,int nDataLen)
         m_pMemPool->m_pDebug->DebugToFile("CNEOStaticBuffer::BinCopyFrom();ERROR!0>=nDataLen\n");
         return 0;
     }
-    //¿½±´¶¯×÷
+    //æ‹·è´åŠ¨ä½œ
     memcpy(m_pData,szData,nDataLen);
     m_nDataLen=nDataLen;
     return m_nDataLen;
 }
-//´ÓÁíÍâÒ»¸öBuffer¶ÔÏó¿½±´Êı¾İµ½±¾¶ÔÏó
+//ä»å¦å¤–ä¸€ä¸ªBufferå¯¹è±¡æ‹·è´æ•°æ®åˆ°æœ¬å¯¹è±¡
 int CNEOStaticBuffer::BinCopyFrom(CNEODynamicBuffer *pBuffer)
 {
     return BinCopyFrom(pBuffer->m_pData,pBuffer->m_nDataLen);
 }
 /////////////////////////////////////////////
-//ÎÄ±¾Êı¾İ¿½±´¹¹½¨º¯Êı
+//æ–‡æœ¬æ•°æ®æ‹·è´æ„å»ºå‡½æ•°
 int CNEOStaticBuffer::StrCopyFrom(char *szString)
 {
     int n=strlen(szString);
-    n++;//Á÷³ö¡°\n¡±
+    n++;//æµå‡ºâ€œ\nâ€
     return BinCopyFrom(szString,n);
 }
 int CNEOStaticBuffer::Printf(char *szFormat,...)
@@ -512,7 +512,7 @@ int CNEOStaticBuffer::Printf(char *szFormat,...)
     return StrCopyFrom(szBuf);
 }
 /////////////////////////////////////////////
-//Êı¾İ±È½Ïº¯Êı
+//æ•°æ®æ¯”è¾ƒå‡½æ•°
 int CNEOStaticBuffer::memcmp(char *szData,int nDataLen)
 {
     if(0>=m_nDataLen)
@@ -544,7 +544,7 @@ int CNEOStaticBuffer::GetBufferLength(void)
 }
 
 ////////////////////////////////////////////
-//·şÎñº¯Êı
+//æœåŠ¡å‡½æ•°
 bool CNEOStaticBuffer::IHaveData(void)
 {
     if(0>=m_nDataLen)
@@ -556,28 +556,28 @@ bool CNEOStaticBuffer::IHaveData(void)
 ///////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////
 
-//»ù±¾¶ÓÁĞÄ£ĞÍ
+//åŸºæœ¬é˜Ÿåˆ—æ¨¡å‹
 
-CNEOPopBuffer::CNEOPopBuffer(char *szBuffer,           //»º³åÇøÖ¸Õë
-    int nBufferSize,                    //»º³åÇø³ß´ç
-    bool bInitFlag)                //ÊÇ·ñ³õÊ¼»¯±êÖ¾
+CNEOPopBuffer::CNEOPopBuffer(char *szBuffer,           //ç¼“å†²åŒºæŒ‡é’ˆ
+    int nBufferSize,                    //ç¼“å†²åŒºå°ºå¯¸
+    bool bInitFlag)                //æ˜¯å¦åˆå§‹åŒ–æ ‡å¿—
 {
     m_pHead=NULL;
     m_pBuffer=NULL;
     m_nBufferSize=nBufferSize;
     Set(szBuffer,nBufferSize);
-    if(bInitFlag)//ĞèÒª³õÊ¼»¯
-        Clean();//ÔòÇå¿Õ¶ÓÁĞ
+    if(bInitFlag)//éœ€è¦åˆå§‹åŒ–
+        Clean();//åˆ™æ¸…ç©ºé˜Ÿåˆ—
 }
 CNEOPopBuffer::~CNEOPopBuffer(){}
-//ÊµÏÖÕ³ºÏµÄ·½·¨,Íâ²¿´«ÈëµÄ»º³åÇøÓòÄÚ²¿»º³åÇøµÄÖ¸Õë¹Ò½Ó
+//å®ç°ç²˜åˆçš„æ–¹æ³•,å¤–éƒ¨ä¼ å…¥çš„ç¼“å†²åŒºåŸŸå†…éƒ¨ç¼“å†²åŒºçš„æŒ‡é’ˆæŒ‚æ¥
 void CNEOPopBuffer::Set(char *szBuffer,int nBufferSize)
 {
     m_pBuffer=szBuffer;
     m_nBufferSize=nBufferSize;
     m_pHead=(SNEOPopBufferHead*)m_pBuffer;
 }
-//Çå¿ÕÕû¸öÇøÓò£¬Êı¾İÇåÁã£¬»º³åÇø²»ÊÍ·Å
+//æ¸…ç©ºæ•´ä¸ªåŒºåŸŸï¼Œæ•°æ®æ¸…é›¶ï¼Œç¼“å†²åŒºä¸é‡Šæ”¾
 void CNEOPopBuffer::Clean(void)
 {
     if(m_pHead)
@@ -586,7 +586,7 @@ void CNEOPopBuffer::Clean(void)
         m_pHead->m_nAllByteSCount=SNEOPopBufferHeadSize;
     }
 }
-//ÄÚ²¿ĞÅÏ¢´òÓ¡º¯Êı
+//å†…éƒ¨ä¿¡æ¯æ‰“å°å‡½æ•°
 void CNEOPopBuffer::PrintInside()
 {
     if(!ICanWork())
@@ -594,13 +594,13 @@ void CNEOPopBuffer::PrintInside()
         NEO_PRINTF("CNEOPopBuffer::PrintInside();ERROR!m_pBuffer=null\n");
         return;
     }
-    //¶¨Òå¿ªÊ¼µÄÖ¸Õë
+    //å®šä¹‰å¼€å§‹çš„æŒ‡é’ˆ
     char *pTokenBegin=NEO_POP_BUFFER_FIRST_TOKEN_BEGIN(m_pBuffer);
-    // ¶¨ÒåÔªËØµÄÍ·Ö¸Õë
+    // å®šä¹‰å…ƒç´ çš„å¤´æŒ‡é’ˆ
     SNEOPopBufferTokenHead *pTokenHead=(SNEOPopBufferTokenHead*)pTokenBegin;
     char *pTokenData=NEO_POP_BUFFER_TOKEN_DATA_BEGIN(pTokenBegin);
     int i=0;
-    //Ô¤´òÓ¡Õû¸ö¶ÓÁĞµÄĞÅÏ¢
+    //é¢„æ‰“å°æ•´ä¸ªé˜Ÿåˆ—çš„ä¿¡æ¯
     NEO_PRINTF("CNEOPopBuffer::PrintInside():Token:%d Bytes:%d\n",m_pHead->m_nTokenCount,m_pHead->m_nAllByteSCount);
     for(i=0;i<m_pHead->m_nTokenCount;i++)
     {
@@ -611,7 +611,7 @@ void CNEOPopBuffer::PrintInside()
         pTokenData=NEO_POP_BUFFER_TOKEN_DATA_BEGIN(pTokenBegin);
     }
 }
-//ÄÜ·ñÕıÈ·¹¤×÷µÄ±êÖ¾º¯Êı
+//èƒ½å¦æ­£ç¡®å·¥ä½œçš„æ ‡å¿—å‡½æ•°
 bool CNEOPopBuffer::ICanWork(void)
 {
     if(!m_pBuffer)
@@ -622,7 +622,7 @@ bool CNEOPopBuffer::ICanWork(void)
         return false;
     return true;
 }
-//¶ÓÁĞ×î¾­µäµÄ¹¦ÄÜ£¬×·¼Óµ½Ä©Î²£¬
+//é˜Ÿåˆ—æœ€ç»å…¸çš„åŠŸèƒ½ï¼Œè¿½åŠ åˆ°æœ«å°¾ï¼Œ
 int CNEOPopBuffer::AddLast(const char *szData,int nDataLength)
 {
     int nRet=0;
@@ -634,16 +634,16 @@ int CNEOPopBuffer::AddLast(const char *szData,int nDataLength)
         goto CNEOPopBuffer_AddLast_End;
     if(!ICanSave(nDataLength))
         goto CNEOPopBuffer_AddLast_End;
-    {//×÷ÓÃÓòÏŞ¶¨
-        char *pTokenBegin=m_pBuffer+m_pHead->m_nAllByteSCount;//ÓÃm_nAllByteSCountÇó³ö¶ÓÁĞ×îÎ²µÄÖ¸Õë
-        SNEOPopBufferTokenHead *pTokenHead=(SNEOPopBufferTokenHead*)pTokenBegin;//Ç¿ÖÆÖ¸ÕëÀàĞÍÎªTokenÍ·Ö¸Õë£»
-        char *pTokenData=NEO_POP_BUFFER_TOKEN_DATA_BEGIN(pTokenBegin);//Çó³öTokenÊı¾İÇøµÄÖ¸Õë
-        //¾ßÌåÌí¼Ó¶¯×÷
-        pTokenHead->m_nDataLen=nDataLength;//³¤¶È¸³Öµ
+    {//ä½œç”¨åŸŸé™å®š
+        char *pTokenBegin=m_pBuffer+m_pHead->m_nAllByteSCount;//ç”¨m_nAllByteSCountæ±‚å‡ºé˜Ÿåˆ—æœ€å°¾çš„æŒ‡é’ˆ
+        SNEOPopBufferTokenHead *pTokenHead=(SNEOPopBufferTokenHead*)pTokenBegin;//å¼ºåˆ¶æŒ‡é’ˆç±»å‹ä¸ºTokenå¤´æŒ‡é’ˆï¼›
+        char *pTokenData=NEO_POP_BUFFER_TOKEN_DATA_BEGIN(pTokenBegin);//æ±‚å‡ºTokenæ•°æ®åŒºçš„æŒ‡é’ˆ
+        //å…·ä½“æ·»åŠ åŠ¨ä½œ
+        pTokenHead->m_nDataLen=nDataLength;//é•¿åº¦èµ‹å€¼
         memcpy(pTokenData,szData,nDataLength);
-        m_pHead->m_nTokenCount++;//ÔªËØ¸öÊı¼ÓÒ»
+        m_pHead->m_nTokenCount++;//å…ƒç´ ä¸ªæ•°åŠ ä¸€
         m_pHead->m_nAllByteSCount+=NEO_POP_BUFFER_TOKEN_LENGTH(nDataLength);
-        nRet=nDataLength;//·µ»ØÖµµÄ´¿Êı¾İ³¤¶È
+        nRet=nDataLength;//è¿”å›å€¼çš„çº¯æ•°æ®é•¿åº¦
     }
 CNEOPopBuffer_AddLast_End:
     return nRet;
@@ -660,21 +660,21 @@ int CNEOPopBuffer::AddLast(CNEOStaticBuffer *pBuffer)
         return 0;
     return AddLast(pBuffer->GetBuffer(),pBuffer->GetBufferLength());
 }
-//»ñµÃµ±Ç°ÄÚ²¿ÔªËØ¸öÊı
+//è·å¾—å½“å‰å†…éƒ¨å…ƒç´ ä¸ªæ•°
 int CNEOPopBuffer::GetTokenCount(void)
 {
     if(!ICanWork())
         return 0;
     return m_pHead->m_nTokenCount;
 }
-//»ñµÃËùÓĞµÄ×Ö½ÚÊı
+//è·å¾—æ‰€æœ‰çš„å­—èŠ‚æ•°
 int CNEOPopBuffer::GetAllBytes(void)
 {
     if(!ICanWork())
         return 0;
     return m_pHead->m_nAllByteSCount;
 }
-//ÅĞ¶ÏÄÚ²¿Ê£Óà¿Õ¼äÊÇ·ñ¹»ÓÃ,ÊÇ·ñ¹»ĞÂ¼ÓÈëµÄÊı¾İÓÃ
+//åˆ¤æ–­å†…éƒ¨å‰©ä½™ç©ºé—´æ˜¯å¦å¤Ÿç”¨,æ˜¯å¦å¤Ÿæ–°åŠ å…¥çš„æ•°æ®ç”¨
 bool CNEOPopBuffer::ICanSave(int nDataLen)
 {
     int nLeaveBytes=0;
@@ -686,32 +686,32 @@ bool CNEOPopBuffer::ICanSave(int nDataLen)
     else
         return true;
 }
-//»ñµÃµÚÒ»¸öÔªËØµÄ³¤¶È
+//è·å¾—ç¬¬ä¸€ä¸ªå…ƒç´ çš„é•¿åº¦
 int CNEOPopBuffer::GetFirstTokenLength(void)
 {
     if(!ICanWork())
         return 0;
-    char *pFirstTokenBegin=NEO_POP_BUFFER_FIRST_TOKEN_BEGIN(m_pBuffer);//¼ÆËãµÚÒ»¸ötokenÆğÊ¼µã
-    SNEOPopBufferTokenHead *pFirstTokenHead=(SNEOPopBufferTokenHead*)pFirstTokenBegin;//Ç¿ÖÆ×ª»»
+    char *pFirstTokenBegin=NEO_POP_BUFFER_FIRST_TOKEN_BEGIN(m_pBuffer);//è®¡ç®—ç¬¬ä¸€ä¸ªtokenèµ·å§‹ç‚¹
+    SNEOPopBufferTokenHead *pFirstTokenHead=(SNEOPopBufferTokenHead*)pFirstTokenBegin;//å¼ºåˆ¶è½¬æ¢
     return pFirstTokenHead->m_nDataLen;
 }
-//»ñÈ¡µÚÒ»¸öÔªËØ
+//è·å–ç¬¬ä¸€ä¸ªå…ƒç´ 
 int CNEOPopBuffer::GetFirst(char *szBuffer,int nBufferSize)
 {
     int nRet=0;
     if(!ICanWork())
         goto CNEOPopBuffer_GetFirst_End;
-    //ÅĞ¶¨¶ÓÁĞÊÇ·ñÎª¿Õ
+    //åˆ¤å®šé˜Ÿåˆ—æ˜¯å¦ä¸ºç©º
     if(!GetTokenCount())
         goto CNEOPopBuffer_GetFirst_End;
-    //ÅĞ¶¨¸ø¶¨µÄ²ÎÊıÊÇ·ñºÏ·¨
+    //åˆ¤å®šç»™å®šçš„å‚æ•°æ˜¯å¦åˆæ³•
     if(GetFirstTokenLength()>nBufferSize)
         goto CNEOPopBuffer_GetFirst_End;
-    {//×÷ÓÃÓòÏŞ¶¨
-        char *pFirstTokenBegin=NEO_POP_BUFFER_FIRST_TOKEN_BEGIN(m_pBuffer);//¼ÆËãµÚÒ»¸ötokenÆğÊ¼µã
-        SNEOPopBufferTokenHead *pFirstTokenHead=(SNEOPopBufferTokenHead*)pFirstTokenBegin;//Ç¿ÖÆ×ª»»
+    {//ä½œç”¨åŸŸé™å®š
+        char *pFirstTokenBegin=NEO_POP_BUFFER_FIRST_TOKEN_BEGIN(m_pBuffer);//è®¡ç®—ç¬¬ä¸€ä¸ªtokenèµ·å§‹ç‚¹
+        SNEOPopBufferTokenHead *pFirstTokenHead=(SNEOPopBufferTokenHead*)pFirstTokenBegin;//å¼ºåˆ¶è½¬æ¢
         char *pFirstTokenData=NEO_POP_BUFFER_TOKEN_DATA_BEGIN(pFirstTokenBegin);
-        memcpy(szBuffer,pFirstTokenData,pFirstTokenHead->m_nDataLen);//¿½±´Êı¾İµ½»º³åÇø
+        memcpy(szBuffer,pFirstTokenData,pFirstTokenHead->m_nDataLen);//æ‹·è´æ•°æ®åˆ°ç¼“å†²åŒº
         nRet=pFirstTokenHead->m_nDataLen;
     }
 CNEOPopBuffer_GetFirst_End:
@@ -737,21 +737,21 @@ int CNEOPopBuffer::GetFirst(CNEOStaticBuffer *pBuffer)
         return 0;
     return GetFirst(pBuffer->GetBuffer(),pBuffer->GetBufferLength());
 }
-//É¾³ıÒ»¸öÔªËØ
+//åˆ é™¤ä¸€ä¸ªå…ƒç´ 
 bool CNEOPopBuffer::DeleteFirst(void)
 {
     bool bRet=false;
     if(!ICanWork())
         goto CNEOPopBuffer_DeleteFirst_End;
-    //ÅĞ¶¨¶ÓÁĞÊÇ·ñÎª¿Õ
+    //åˆ¤å®šé˜Ÿåˆ—æ˜¯å¦ä¸ºç©º
     if(!GetTokenCount())
         goto CNEOPopBuffer_DeleteFirst_End;
-    {//×÷ÓÃÓòÏŞ¶¨
-        char *pFirstTokenBegin=NEO_POP_BUFFER_FIRST_TOKEN_BEGIN(m_pBuffer);//¼ÆËãµÚÒ»¸ötokenÆğÊ¼µã
-        SNEOPopBufferTokenHead *pFirstTokenHead=(SNEOPopBufferTokenHead*)pFirstTokenBegin;//Ç¿ÖÆ×ª»»
-        int nFirstTokenLen=NEO_POP_BUFFER_TOKEN_LENGTH(pFirstTokenHead->m_nDataLen);//µÚÒ»¸ötoken×Ü³¤¶È
-        char *pSecondTokenBegin=pFirstTokenBegin+nFirstTokenLen;//Çó³öµÚ¶ş¸ötokenµÄÆğµã
-        int nCopyBytesCount=m_pHead->m_nAllByteSCount-SNEOPopBufferHeadSize-nFirstTokenLen;//ĞèÒªÒÆ¶¯µÄ×Ö½ÚÊı
+    {//ä½œç”¨åŸŸé™å®š
+        char *pFirstTokenBegin=NEO_POP_BUFFER_FIRST_TOKEN_BEGIN(m_pBuffer);//è®¡ç®—ç¬¬ä¸€ä¸ªtokenèµ·å§‹ç‚¹
+        SNEOPopBufferTokenHead *pFirstTokenHead=(SNEOPopBufferTokenHead*)pFirstTokenBegin;//å¼ºåˆ¶è½¬æ¢
+        int nFirstTokenLen=NEO_POP_BUFFER_TOKEN_LENGTH(pFirstTokenHead->m_nDataLen);//ç¬¬ä¸€ä¸ªtokenæ€»é•¿åº¦
+        char *pSecondTokenBegin=pFirstTokenBegin+nFirstTokenLen;//æ±‚å‡ºç¬¬äºŒä¸ªtokençš„èµ·ç‚¹
+        int nCopyBytesCount=m_pHead->m_nAllByteSCount-SNEOPopBufferHeadSize-nFirstTokenLen;//éœ€è¦ç§»åŠ¨çš„å­—èŠ‚æ•°
         memcpy(pFirstTokenBegin,pSecondTokenBegin,nCopyBytesCount);
         m_pHead->m_nAllByteSCount-=nFirstTokenLen;
         m_pHead->m_nTokenCount--;
@@ -760,12 +760,12 @@ bool CNEOPopBuffer::DeleteFirst(void)
 CNEOPopBuffer_DeleteFirst_End:
     return bRet;
 }
-//´Ó¶ÓÁĞ×Üµ¯³öµÚÒ»¸öÔªËØ
+//ä»é˜Ÿåˆ—æ€»å¼¹å‡ºç¬¬ä¸€ä¸ªå…ƒç´ 
 int CNEOPopBuffer::GetAndDeleteFirst(char *szBuffer,int nBufferSize)
 {
     if(!ICanWork())
         return 0;
-    int nRet=GetFirst(szBuffer,nBufferSize);//»ñµÃµÚÒ»¸öÔªËØ
+    int nRet=GetFirst(szBuffer,nBufferSize);//è·å¾—ç¬¬ä¸€ä¸ªå…ƒç´ 
     DeleteFirst();
     return nRet;
 }
@@ -785,7 +785,7 @@ int CNEOPopBuffer::GetAndDeleteFirst(CNEOStaticBuffer *pBuffer)
     DeleteFirst();
     return nRet;
 }
-//Ã¶¾Ù±éÀúËùÓĞÊı¾İ£¬Ìá½»»Øµ÷º¯Êı´¦Àí£¬²¢É¾³ıÊı¾İ
+//æšä¸¾éå†æ‰€æœ‰æ•°æ®ï¼Œæäº¤å›è°ƒå‡½æ•°å¤„ç†ï¼Œå¹¶åˆ é™¤æ•°æ®
 int CNEOPopBuffer::MoveAllData(_NEO_ENUM_DATA_CALLBACK pCallBack,void *pCallParam)
 {
     int nMovedTokenCount=0;
@@ -797,7 +797,7 @@ int CNEOPopBuffer::MoveAllData(_NEO_ENUM_DATA_CALLBACK pCallBack,void *pCallPara
     while(m_pHead->m_nTokenCount)
     {
         char *pFirstTokenBegin=NEO_POP_BUFFER_FIRST_TOKEN_BEGIN(m_pBuffer);
-        SNEOPopBufferTokenHead *pFirstTokenHead=(SNEOPopBufferTokenHead*)pFirstTokenBegin;//Ç¿ÖÆ×ª»»
+        SNEOPopBufferTokenHead *pFirstTokenHead=(SNEOPopBufferTokenHead*)pFirstTokenBegin;//å¼ºåˆ¶è½¬æ¢
         char *pFirstTokenData=NEO_POP_BUFFER_TOKEN_DATA_BEGIN(pFirstTokenBegin);
         if(pCallBack)
         {
@@ -815,10 +815,10 @@ CNEOPopBuffer_MoveAllData_End:
 //////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
-//¶¯Ì¬ÄÚ´æ·ÖÅä£¬¶ÓÁĞ²ÉÓÃÁĞ±íµÄ(ÒÀÀµÄÚ´æ³Ø)
+//åŠ¨æ€å†…å­˜åˆ†é…ï¼Œé˜Ÿåˆ—é‡‡ç”¨åˆ—è¡¨çš„(ä¾èµ–å†…å­˜æ± )
 CNEOMemQueue::CNEOMemQueue(CNEOLowDebug *pDebug,CNEOMemPoolWithLock *pMemPool,
-    const char *szAppName,                    // Ó¦ÓÃ³ÌĞòÃû£¬´ú±í¶ÓÁĞÃû
-    int nMaxToken  //×î´ótokenÉÏÏŞ
+    const char *szAppName,                    // åº”ç”¨ç¨‹åºåï¼Œä»£è¡¨é˜Ÿåˆ—å
+    int nMaxToken  //æœ€å¤§tokenä¸Šé™
     ):m_nMaxToken(nMaxToken),m_nTokenCount(0),
     m_pHead(NULL),m_pLast(NULL),
     m_pDebug(pDebug),m_pMemPool(pMemPool)
@@ -835,7 +835,7 @@ CNEOMemQueue::~CNEOMemQueue()
 {
     if(m_pHead)
     {
-        DeleteATokenAndHisNext(m_pHead);//µİ¹éÊÍ·Å
+        DeleteATokenAndHisNext(m_pHead);//é€’å½’é‡Šæ”¾
         m_pHead=NULL;
     }
 }
@@ -847,56 +847,56 @@ bool CNEOMemQueue::ICanWork(void)
         return false;
     return true;
 }
-void CNEOMemQueue::CleanAll(void)              //Çå³ıËùÓĞtoken
+void CNEOMemQueue::CleanAll(void)              //æ¸…é™¤æ‰€æœ‰token
 {
     if(!ICanWork())
         return;
-    while(DeleteFirst()){}       //Ñ­»·É¾³ıµÚÒ»¸ö¶ÔÏóÖªµÀ¶ÓÁĞÎª¿Õ
+    while(DeleteFirst()){}       //å¾ªç¯åˆ é™¤ç¬¬ä¸€ä¸ªå¯¹è±¡çŸ¥é“é˜Ÿåˆ—ä¸ºç©º
 }
-int CNEOMemQueue::GetFirstLength(void)        // »ñµÃµÚÒ»¸ötokenÊı¾İ³¤¶È
+int CNEOMemQueue::GetFirstLength(void)        // è·å¾—ç¬¬ä¸€ä¸ªtokenæ•°æ®é•¿åº¦
 {
     int nRet=0;
-    if(m_pHead)                  //ICAnWorkÎª·ñ£¬m_pHead±ØÎªNULL
+    if(m_pHead)                  //ICAnWorkä¸ºå¦ï¼Œm_pHeadå¿…ä¸ºNULL
     {
         nRet=m_pHead->m_nDataLen;
     }
     return nRet;
 }
-int CNEOMemQueue::GetTokenCount(void)        //»ñµÃtoken×ÜÊı
+int CNEOMemQueue::GetTokenCount(void)        //è·å¾—tokenæ€»æ•°
 {
     return m_nTokenCount;
 }
-void CNEOMemQueue::PrintInside(void)         //´òÓ¡ËÑÓĞ¶ÓÁĞÄÚ²¿tokenÊı¾İ
+void CNEOMemQueue::PrintInside(void)         //æ‰“å°æœæœ‰é˜Ÿåˆ—å†…éƒ¨tokenæ•°æ®
 {
     if(!ICanWork())
         return;
     NEO_PRINTF("Queue:Token Count=%d,Head=0x%p,Last=0x%p\n",
         m_nTokenCount,m_pHead,m_pLast);
     if(m_pHead)
-        PrintAToken(m_pHead);//´Ó¶ÓÁĞÍ·¿ªÊ¼µİ¹é
+        PrintAToken(m_pHead);//ä»é˜Ÿåˆ—å¤´å¼€å§‹é€’å½’
 }
-int CNEOMemQueue::AddLast(const char *szData       //Êı¾İÖ¸Õë
-    ,int nDataLen,             //Êı¾İ³¤¶È
-    int nLimit)              //·ÀÖ¹µİ¹é³¤¶È¹ıÉñ
+int CNEOMemQueue::AddLast(const char *szData       //æ•°æ®æŒ‡é’ˆ
+    ,int nDataLen,             //æ•°æ®é•¿åº¦
+    int nLimit)              //é˜²æ­¢é€’å½’é•¿åº¦è¿‡ç¥
 {          
     int nRet=0;
     if(!ICanWork())
         goto CNEOMemQueue_AddLast_End;
-    if(0>=nLimit)               //Ó¦ÓÃÏŞÖÆÖµ
+    if(0>=nLimit)               //åº”ç”¨é™åˆ¶å€¼
     {
-        // ÕâÊÇÎŞÏŞÖÆ
-        if(m_nMaxToken<=m_nTokenCount)//ÎŞÏŞÖÆÊ±£¬ÒÔm_nMaxToken×÷Îª±ß½çÏŞÖÆ
+        // è¿™æ˜¯æ— é™åˆ¶
+        if(m_nMaxToken<=m_nTokenCount)//æ— é™åˆ¶æ—¶ï¼Œä»¥m_nMaxTokenä½œä¸ºè¾¹ç•Œé™åˆ¶
             goto CNEOMemQueue_AddLast_End;
     }//if
     else
     {
-        //ÕâÊÇÏŞÖÆ
-        if(nLimit<=m_nTokenCount) //Èç¹ûÓĞnlimit£¬ÔòÊ¹ÓÃÕâ¸ö²ÎÊıÏŞÖÆ
+        //è¿™æ˜¯é™åˆ¶
+        if(nLimit<=m_nTokenCount) //å¦‚æœæœ‰nlimitï¼Œåˆ™ä½¿ç”¨è¿™ä¸ªå‚æ•°é™åˆ¶
             goto CNEOMemQueue_AddLast_End;
     }
     if(!m_pHead)
     {
-        m_pHead=GetAToken();//Á´Í·µÄµÚÒ»´Î³õÊ¼»¯
+        m_pHead=GetAToken();//é“¾å¤´çš„ç¬¬ä¸€æ¬¡åˆå§‹åŒ–
         if(!m_pHead)
         {
             m_pDebug->DebugToFile("%s::AddLast():malloc m_pHead fail \n",m_szAppName);
@@ -904,11 +904,11 @@ int CNEOMemQueue::AddLast(const char *szData       //Êı¾İÖ¸Õë
         }
 
     }
-    if(m_pLast)//¼ÓËÙÒò×Ó×÷ÓÃ£¬Ö±½ÓÌøÈë
+    if(m_pLast)//åŠ é€Ÿå› å­ä½œç”¨ï¼Œç›´æ¥è·³å…¥
     {
         nRet=AddLastToThisToken(m_pLast,szData,nDataLen);
     }
-    else if(m_pHead)//¼ÓËÙÒò×ÓÎŞÖµ£¬´«Í³Ä£Ê½£¬±éÀú²åÈë
+    else if(m_pHead)//åŠ é€Ÿå› å­æ— å€¼ï¼Œä¼ ç»Ÿæ¨¡å¼ï¼Œéå†æ’å…¥
     {
         nRet=AddLastToThisToken(m_pHead,szData,nDataLen);
     }
@@ -920,14 +920,14 @@ int CNEOMemQueue::GetFirst(char *szBuffer,int nBufferSize)
     int nRet=0;
     if(!ICanWork())
         goto CNEOMemQueue_GetFirst_End;
-    if(!m_pHead)                       //¼ì²éÁ´±íÊÇ·ñÓĞÊı¾İ
+    if(!m_pHead)                       //æ£€æŸ¥é“¾è¡¨æ˜¯å¦æœ‰æ•°æ®
         goto CNEOMemQueue_GetFirst_End;
-    if(!m_pHead->m_pBuffer)           //¼ì²éµÚÒ»¸öTokenÊÇ·ñÓĞÊı¾İ
+    if(!m_pHead->m_pBuffer)           //æ£€æŸ¥ç¬¬ä¸€ä¸ªTokenæ˜¯å¦æœ‰æ•°æ®
     {
         m_pDebug->DebugToFile("%s::GetFirst():m_pHead->m_pBuffer=NULL\n",m_szAppName);
         goto CNEOMemQueue_GetFirst_End;
     }
-    if(m_pHead->m_nDataLen>nBufferSize)//¼ì²é¸ø¶¨µÄ»º³åÇøÊÇ·ñ×ã¹»
+    if(m_pHead->m_nDataLen>nBufferSize)//æ£€æŸ¥ç»™å®šçš„ç¼“å†²åŒºæ˜¯å¦è¶³å¤Ÿ
     {
         m_pDebug->DebugToFile("%s::GetFirst():m_pHead->m_nDataLen>nBufferSize\n",m_szAppName);
         goto CNEOMemQueue_GetFirst_End;
@@ -956,7 +956,7 @@ int CNEOMemQueue::GetFirst(CNEODynamicBuffer *pBuffer)
 bool CNEOMemQueue::DeleteFirst(void)
 {
     bool bRet=false;
-    SNEOQueueTokenHead *pSecond=NULL;//Ö¸ÏòµÚ¶ş¸öTokenµÄÁÙÊ±Ö¸Õë
+    SNEOQueueTokenHead *pSecond=NULL;//æŒ‡å‘ç¬¬äºŒä¸ªTokençš„ä¸´æ—¶æŒ‡é’ˆ
     if(!ICanWork())
         goto CNEOMemQueue_DeleteFirst_End;
     if(!m_pHead)
@@ -967,10 +967,10 @@ bool CNEOMemQueue::DeleteFirst(void)
     if(bRet)
     {
         m_pHead=pSecond;
-        if(!m_pHead)//ÈôÈô¶ÓÁĞßÂÉ¾¿Õ£¬ÔòÇå³ş¼ÓËÙÒò×Ó
+        if(!m_pHead)//è‹¥è‹¥é˜Ÿåˆ—å‘—åˆ ç©ºï¼Œåˆ™æ¸…æ¥šåŠ é€Ÿå› å­
             m_pLast=NULL;
     }
-    else//É¾³ıÊ§°Ü
+    else//åˆ é™¤å¤±è´¥
     {
         m_pDebug->DebugToFile("%s::DeleteFirst():delete m_pHead fail\n",m_szAppName);
         m_pHead->m_pNext=pSecond;
@@ -1000,7 +1000,7 @@ int CNEOMemQueue::GetAndDeleteFirst(CNEODynamicBuffer *pBuffer)
     return nRet;
 }
     
-//´ÓÇ°Ãæµ¯³öÒ»ÅúÊı¾İ£¬
+//ä»å‰é¢å¼¹å‡ºä¸€æ‰¹æ•°æ®ï¼Œ
 int CNEOMemQueue::PopFromFirst(char *szBuffer,int nBufferSize)
 {
     int nCopyBytes=0;
@@ -1016,7 +1016,7 @@ int CNEOMemQueue::PopFromFirst(char *szBuffer,int nBufferSize)
 CNEOMemQueue_PopFromFirst_End:
     return nCopyBytes;
 }
-//´ÓpopbufferµÄÊı¾İÇøµ¯³öËùÓĞÊı¾İ£¬×·¼Óµ½¶ÓÁĞÎ²
+//ä»popbufferçš„æ•°æ®åŒºå¼¹å‡ºæ‰€æœ‰æ•°æ®ï¼Œè¿½åŠ åˆ°é˜Ÿåˆ—å°¾
 int CNEOMemQueue::PushToLast(char *szData,int nDataLen)
 {
     int nRet=0;
@@ -1024,14 +1024,14 @@ int CNEOMemQueue::PushToLast(char *szData,int nDataLen)
     if(!ICanWork())
         goto CNEOMemQueue_PushToLast_End;
 
-    //´Ë´¦µ÷ÓÃpopbufferµÄº¯ÊıÉ¾³ıËµÓĞÊı¾İ£¬²¢Ê¹ÓÃ»Øµ÷º¯Êı´¦ÀíÊı¾İ
-    //»Øµ÷º¯ÊıÔÚ´Ë´¦´«ÈëCNEOMemQueue¶ÔÏó£¨±¾¶ÔÏó),²¢µ÷ÓÃ¸Ã¶ÔÏóµÄaddlast£¬
-    //ÒÀ´Î½«¶ÔÏóÍÆÈëmemqueue
+    //æ­¤å¤„è°ƒç”¨popbufferçš„å‡½æ•°åˆ é™¤è¯´æœ‰æ•°æ®ï¼Œå¹¶ä½¿ç”¨å›è°ƒå‡½æ•°å¤„ç†æ•°æ®
+    //å›è°ƒå‡½æ•°åœ¨æ­¤å¤„ä¼ å…¥CNEOMemQueueå¯¹è±¡ï¼ˆæœ¬å¯¹è±¡),å¹¶è°ƒç”¨è¯¥å¯¹è±¡çš„addlastï¼Œ
+    //ä¾æ¬¡å°†å¯¹è±¡æ¨å…¥memqueue
     cPopBuffer.MoveAllData(PushDataCallback,this);
 CNEOMemQueue_PushToLast_End:
     return nRet;
 }
-    //¶ÓÁĞÊı¾İĞ´Èë´ÅÅÌ
+    //é˜Ÿåˆ—æ•°æ®å†™å…¥ç£ç›˜
 void CNEOMemQueue::WriteToFile(const char *szFileName)
 {
     FILE *fp=NULL;
@@ -1049,7 +1049,7 @@ void CNEOMemQueue::WriteToFile(const char *szFileName)
         fclose(fp);
     }
 }
-//¶ÓÁĞÊı¾İ´Ó´ÅÅÌ¶Á³ö
+//é˜Ÿåˆ—æ•°æ®ä»ç£ç›˜è¯»å‡º
 int CNEOMemQueue::ReadFromFile(const char *szFileName)
 {
     FILE *fp=NULL;
@@ -1091,14 +1091,14 @@ int CNEOMemQueue::ReadFromFile(const char *szFileName)
             m_pDebug->DebugToFile("%s::ReadFromFile():remalloc pTempBuffer fail!\n",m_szAppName);
             goto CNEOMemQueue_ReadFromFile_End;
         }
-        //¿ªÊ¼¶ÁÈë token Êı¾İ
+        //å¼€å§‹è¯»å…¥ token æ•°æ®
         n=fread((void *)pTempBuffer,sizeof(char),nDataLen,fp);
         if(nDataLen>n)
         {
             m_pDebug->DebugToFile("%s::ReadFromFile():read data  fail!\n",m_szAppName);
             goto CNEOMemQueue_ReadFromFile_End;
         }
-        //¶ÁÈë³É¹¦
+        //è¯»å…¥æˆåŠŸ
         if(!AddLast(pTempBuffer,nDataLen))
             break;
     }
@@ -1124,8 +1124,8 @@ void CNEOMemQueue::PrintAToken(SNEOQueueTokenHead *pToken)
                 pToken,pToken->m_pBuffer,
                 pToken->m_nDataLen,pToken->m_pNext);
     if(pToken->m_pBuffer)
-        Debug_bin(pToken->m_pBuffer,pToken->m_nDataLen);                         ///ĞèÒªµ¼ÈëDebugÎÄ¼ş
-    if(pToken->m_pNext)//µİ¹é
+        Debug_bin(pToken->m_pBuffer,pToken->m_nDataLen);                         ///éœ€è¦å¯¼å…¥Debugæ–‡ä»¶
+    if(pToken->m_pNext)//é€’å½’
         PrintAToken(pToken->m_pNext);
 
 }
@@ -1143,10 +1143,10 @@ void CNEOMemQueue::WriteATokenToFile(SNEOQueueTokenHead *pToken,FILE *fp)
         return;
     if(!pToken->m_nDataLen)
         return;
-    //Ğ´Èë´ÅÅÌ
+    //å†™å…¥ç£ç›˜
     fwrite((void *)&(pToken->m_nDataLen),sizeof(int),1,fp);
     fwrite((void *)pToken->m_pBuffer,sizeof(char),pToken->m_nDataLen,fp);
-    if(pToken->m_pNext)//µİ¹éµ½ÏÂÒ»¸ötoken
+    if(pToken->m_pNext)//é€’å½’åˆ°ä¸‹ä¸€ä¸ªtoken
         WriteATokenToFile(pToken->m_pNext,fp);
 }
 int CNEOMemQueue::PopFromFirst4NEOPopBuffer(CNEOPopBuffer *pPopBuffer)
@@ -1174,7 +1174,7 @@ int CNEOMemQueue::PopFromFirst4NEOPopBuffer(CNEOPopBuffer *pPopBuffer)
     nRet=pPopBuffer->AddLast(m_pHead->m_pBuffer,m_pHead->m_nDataLen);
     if(m_pHead->m_nDataLen!=nRet)
     {
-        //ÕâÊÇbuffer ×°ÂúÁË
+        //è¿™æ˜¯buffer è£…æ»¡äº†
         goto CNEOMemQueue_PopFromFirst4NEOPopBuffer_End;
     }
     if(!DeleteFirst())
@@ -1182,31 +1182,31 @@ int CNEOMemQueue::PopFromFirst4NEOPopBuffer(CNEOPopBuffer *pPopBuffer)
         m_pDebug->DebugToFile("%s::PopFromFirst4NEOPopBuffer():DeleteFirst fail\n",m_szAppName);
         goto CNEOMemQueue_PopFromFirst4NEOPopBuffer_End;
     }
-    if(m_pHead)//µİ¹é£¬¼ÌĞøµ¯³ö
+    if(m_pHead)//é€’å½’ï¼Œç»§ç»­å¼¹å‡º
         nRet+=PopFromFirst4NEOPopBuffer(pPopBuffer);
 CNEOMemQueue_PopFromFirst4NEOPopBuffer_End:
     return nRet;
 }
-//ÉêÇëÓÃÀ´´æ´¢Êı¾İµÄÄÚ´æ
+//ç”³è¯·ç”¨æ¥å­˜å‚¨æ•°æ®çš„å†…å­˜
 int CNEOMemQueue::AddLastToThisToken(SNEOQueueTokenHead *pToken,const char *szData,int nDataLen)
 {
     int nRet=0;
     char szNameBuffer[256];
     if(!ICanWork())
         goto CNEOMemQueue_AddLastToThisToken_End;
-    //Ö¸Õë²»Îª¿Õ£¬ËµÃ÷´æÔÚÊı¾İ£¬Ìøµ½nextÖ¸Õë´¦
+    //æŒ‡é’ˆä¸ä¸ºç©ºï¼Œè¯´æ˜å­˜åœ¨æ•°æ®ï¼Œè·³åˆ°nextæŒ‡é’ˆå¤„
     if(!pToken->m_pBuffer)
     {
-        //Èç¹û±¾Token²»°üº¬ÓĞĞ§Êı¾İ£¬Ôò±£´æµ½×Ô¼º
-        SafePrintf(szNameBuffer,256,"%s::pToken->m_pBuffer",m_szAppName);  //¸ñÊ½»¯ËµÃ÷ÎÄ×Ö
-        pToken->m_pBuffer=(char *)m_pMemPool->Malloc(nDataLen,szNameBuffer);//ÏòÄÚ´æ³ØÉêÇëÊı¾İ¿é
+        //å¦‚æœæœ¬Tokenä¸åŒ…å«æœ‰æ•ˆæ•°æ®ï¼Œåˆ™ä¿å­˜åˆ°è‡ªå·±
+        SafePrintf(szNameBuffer,256,"%s::pToken->m_pBuffer",m_szAppName);  //æ ¼å¼åŒ–è¯´æ˜æ–‡å­—
+        pToken->m_pBuffer=(char *)m_pMemPool->Malloc(nDataLen,szNameBuffer);//å‘å†…å­˜æ± ç”³è¯·æ•°æ®å—
         if(!pToken->m_pBuffer)
         {
-        //ÉêÇëÊ§°Ü
+        //ç”³è¯·å¤±è´¥
             m_pDebug->DebugToFile("%s::AddLastToThisToken():Malloc new Token fail!\n",m_szAppName);
             goto CNEOMemQueue_AddLastToThisToken_End;
         }
-        memcpy(pToken->m_pBuffer,szData,nDataLen); //¿½±´ÒµÎñÊı¾İµ½ÄÚ´æ¿é
+        memcpy(pToken->m_pBuffer,szData,nDataLen); //æ‹·è´ä¸šåŠ¡æ•°æ®åˆ°å†…å­˜å—
         pToken->m_nDataLen=nDataLen;
         nRet=nDataLen;
         m_pLast=pToken;
@@ -1214,42 +1214,42 @@ int CNEOMemQueue::AddLastToThisToken(SNEOQueueTokenHead *pToken,const char *szDa
     }//if
     else
     {
-        //nextÎª¿Õ£¬ÔòÔÚnextÏÂÃæ²åÈë
+        //nextä¸ºç©ºï¼Œåˆ™åœ¨nextä¸‹é¢æ’å…¥
         if(!pToken->m_pNext)
         {
-            //Èç¹ûÏÂ¼ÒµÄÁ´Ö¸ÕëÎª¿Õ£¬¾ÍÀûÓÃGetAToken´´½¨Í·
+            //å¦‚æœä¸‹å®¶çš„é“¾æŒ‡é’ˆä¸ºç©ºï¼Œå°±åˆ©ç”¨GetATokenåˆ›å»ºå¤´
             pToken->m_pNext=GetAToken();
             if(!pToken->m_pNext)
             {
-                //´´½¨Ê§°Ü±¨¾¯
+                //åˆ›å»ºå¤±è´¥æŠ¥è­¦
                 m_pDebug->DebugToFile("%s::AddLastToThisToken():malloc pToken->m_pNext fail!!\n",m_szAppName);
                 goto CNEOMemQueue_AddLastToThisToken_End;
             }
         }
-        if(pToken->m_pNext)//µİ¹éµ÷ÓÃ
+        if(pToken->m_pNext)//é€’å½’è°ƒç”¨
             nRet=AddLastToThisToken(pToken->m_pNext,szData,nDataLen);
     }
 CNEOMemQueue_AddLastToThisToken_End:
     return nRet;
 }
-//ÉêÇëÒ»¸ötokenÍ·
-SNEOQueueTokenHead *CNEOMemQueue::GetAToken(void)//·µ»ØÖ¸Õë£¬²»×ñÊØË­ÉêÇëË­ÊÍ·ÅµÄÔ­Ôò
+//ç”³è¯·ä¸€ä¸ªtokenå¤´
+SNEOQueueTokenHead *CNEOMemQueue::GetAToken(void)//è¿”å›æŒ‡é’ˆï¼Œä¸éµå®ˆè°ç”³è¯·è°é‡Šæ”¾çš„åŸåˆ™
 {
     SNEOQueueTokenHead *pToken=NULL;
-    char *pTokenBuffer=NULL;                 //ÁÙÊ±Ö¸Õë
-    char szNameBuffer[NEO_APPLICATION_NAME_SIZE];//ËµÃ÷ÎÄ×Ö»º³åÇø
+    char *pTokenBuffer=NULL;                 //ä¸´æ—¶æŒ‡é’ˆ
+    char szNameBuffer[NEO_APPLICATION_NAME_SIZE];//è¯´æ˜æ–‡å­—ç¼“å†²åŒº
     if(!ICanWork())
         goto CNEOMemQueue_GetAToken_End;
     SafePrintf(szNameBuffer,256,"%s::Token_Head",m_szAppName);
 
-    //¿ªÊ¼ÉêÇëTokenÍ·ÄÚ´æ¿é
+    //å¼€å§‹ç”³è¯·Tokenå¤´å†…å­˜å—
     pTokenBuffer=(char *)m_pMemPool->Malloc(SNEOQueueTokenHeadSize,szNameBuffer);
     if(!pTokenBuffer)
     {
         m_pDebug->DebugToFile("%s::GetAToken:Malloc new Token fail!\n",m_szAppName);
         goto CNEOMemQueue_GetAToken_End;
     }
-    //Ç¿ÖÆÖ¸Õë×ª»»
+    //å¼ºåˆ¶æŒ‡é’ˆè½¬æ¢
     pToken=(SNEOQueueTokenHead *)pTokenBuffer;
     pToken->m_nDataLen=0;
     pToken->m_pNext=NULL;
@@ -1263,14 +1263,14 @@ bool CNEOMemQueue::DeleteATokenAndHisNext(SNEOQueueTokenHead *pToken)
     bool bRet=false;
     if(!ICanWork())
         goto CNEOMemQueue_DeleteATokenAndHisNext_End;
-    if(pToken->m_pNext)//µİ¹éÉ¾³ı
+    if(pToken->m_pNext)//é€’å½’åˆ é™¤
     {
         DeleteATokenAndHisNext(pToken->m_pNext);
         pToken->m_pNext=NULL;
     }
-    if(pToken->m_pBuffer)//¿ªÊ¼É¾³ı±¾¶ÔÏó
+    if(pToken->m_pBuffer)//å¼€å§‹åˆ é™¤æœ¬å¯¹è±¡
     {
-        m_pMemPool->Free(pToken->m_pBuffer);//ÏòÄÚ´æ»º³å³ØÊÍ·ÅÊı¾İ»º³å
+        m_pMemPool->Free(pToken->m_pBuffer);//å‘å†…å­˜ç¼“å†²æ± é‡Šæ”¾æ•°æ®ç¼“å†²
         pToken->m_nDataLen=0;
         pToken->m_pBuffer=NULL;
     }
@@ -1281,7 +1281,7 @@ CNEOMemQueue_DeleteATokenAndHisNext_End:
     m_pLast=NULL;
     return bRet;
 }
-//»Øµ÷º¯ÊıÉêÃ÷
+//å›è°ƒå‡½æ•°ç”³æ˜
 bool CNEOMemQueue::PushDataCallback(char *szData,int nDataLen,void *pCallParam)
 {
     CNEOMemQueue *pThis=(CNEOMemQueue *)pCallParam;
@@ -1294,10 +1294,10 @@ bool CNEOMemQueue::PushDataCallback(char *szData,int nDataLen,void *pCallParam)
         return false;
     }
 }
-//´ø°²È«ËøµÄÀà
+//å¸¦å®‰å…¨é”çš„ç±»
 CNEOMemQueueWithLock::CNEOMemQueueWithLock(CNEOLowDebug *pDebug,
     CNEOMemPoolWithLock *pMemPool,
-    const char *szAppName,                    // Ó¦ÓÃ³ÌĞòÃû£¬´ú±í¶ÓÁĞÃû
+    const char *szAppName,                    // åº”ç”¨ç¨‹åºåï¼Œä»£è¡¨é˜Ÿåˆ—å
     int nMaxToken
     )
 {

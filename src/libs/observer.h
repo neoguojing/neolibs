@@ -1,4 +1,4 @@
-#ifndef _NEOOBSERVER_H_
+ï»¿#ifndef _NEOOBSERVER_H_
 #define _NEOOBSERVER_H_
 
 #include <iostream>
@@ -10,11 +10,11 @@ namespace NEOLIB{
 
 /*
     Observer:
-    1.ÓÃ»§¼Ì³Ğ¸ÃÀà£¬²¢ÊµÏÖUpdate£»
-    2.×ÓÀàµÄ¹¹Ôìº¯ÊıÖĞĞèÒªµ÷ÓÃObservable»òÆä×ÓÀàµÄAttach½øĞĞ×¢²á
+    1.ç”¨æˆ·ç»§æ‰¿è¯¥ç±»ï¼Œå¹¶å®ç°Updateï¼›
+    2.å­ç±»çš„æ„é€ å‡½æ•°ä¸­éœ€è¦è°ƒç”¨Observableæˆ–å…¶å­ç±»çš„Attachè¿›è¡Œæ³¨å†Œ
     Observable:
-    ÓÃ»§¼Ì³Ğ¸ÃÀà£¬×ÔÓÉÊµÏÖ×ÔÉíÂß¼­£»
-    ÖØÒªµÄÊÇµ÷ÓÃSetChange ºÍ NotifyÍ¨Öª¹Û²ìÕß×ÔÉíµÄ×´Ì¬±ä»¯
+    ç”¨æˆ·ç»§æ‰¿è¯¥ç±»ï¼Œè‡ªç”±å®ç°è‡ªèº«é€»è¾‘ï¼›
+    é‡è¦çš„æ˜¯è°ƒç”¨SetChange å’Œ Notifyé€šçŸ¥è§‚å¯Ÿè€…è‡ªèº«çš„çŠ¶æ€å˜åŒ–
 
 
 
@@ -81,7 +81,7 @@ public:
         m_Bbvs->clear();
     }
 
-    /*×ÓÀà¸²¸Ç¸Ã·½·¨£¬ÉèÖÃ×ÔÉíÊı¾İ£¬²¢µ÷ÓÃNotify£¬Í¨Öª¹Û²ìÕß*/
+    /*å­ç±»è¦†ç›–è¯¥æ–¹æ³•ï¼Œè®¾ç½®è‡ªèº«æ•°æ®ï¼Œå¹¶è°ƒç”¨Notifyï¼Œé€šçŸ¥è§‚å¯Ÿè€…*/
     virtual void SetChange()
     {
         m_ChangeFlag =true;
@@ -104,7 +104,7 @@ protected:
     }
 private: 
     set<Observer*> *m_Bbvs;
-    /*×´Ì¬±ä»¯±ê¼Ç*/
+    /*çŠ¶æ€å˜åŒ–æ ‡è®°*/
     bool m_ChangeFlag;
 };
 

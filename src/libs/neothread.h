@@ -1,4 +1,4 @@
-#ifndef NEOTHREAD
+ï»¿#ifndef NEOTHREAD
 
 #define NEOTHREAD
 #include "neolock.h"
@@ -16,121 +16,121 @@ class CNEOMemQueueWithLock;
 ///////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////
 /*
-//Ïß³Ì³Ø²âÊÔµ÷ÓÃÊ¾ÀıÀà
+//çº¿ç¨‹æ± æµ‹è¯•è°ƒç”¨ç¤ºä¾‹ç±»
 class CTestThreadPool
 { 
 public:
 	CTestThreadPool()
     {
-        m_bThreadContinue.Set(true); //Ïß³Ì³ÖĞø±êÖ¾ÖÃÎªÕæ
-        m_nThreadCount.Set(0); //Ïß³Ì¼ÆÊıÆ÷ÖÃÎª0£¬ÕâĞ©ÊÇ¸³³õÖµ¶¯×÷
-        m_pDebug=new CTonyLowDebug("","",true); //´´½¨debug ¶ÔÏó
-        m_pThreadPool=new CTonyThreadPool(m_pDebug);//´´½¨Ïß³Ì³Ø¶ÔÏó
+        m_bThreadContinue.Set(true); //çº¿ç¨‹æŒç»­æ ‡å¿—ç½®ä¸ºçœŸ
+        m_nThreadCount.Set(0); //çº¿ç¨‹è®¡æ•°å™¨ç½®ä¸º0ï¼Œè¿™äº›æ˜¯èµ‹åˆå€¼åŠ¨ä½œ
+        m_pDebug=new CTonyLowDebug("","",true); //åˆ›å»ºdebug å¯¹è±¡
+        m_pThreadPool=new CTonyThreadPool(m_pDebug);//åˆ›å»ºçº¿ç¨‹æ± å¯¹è±¡
         if(m_pThreadPool)
-        { //Èç¹ûÒ»ÇĞOK£¬Ôò¿ªÊ¼×¢²áÈÎÎñÏß³Ì»Øµ÷¡£
-            m_nThreadCount.Add(); //×¢Òâ£¬Ïß³ÌÆô¶¯Ç°£¬¼ÆÊıÆ÷ÏÈ+1
-            //×¢²áÏß³Ìº¯Êı£¬×¢Òâ£¬ÓÉÓÚÏß³Ìº¯ÊıĞèÒª·ÃÎÊ±¾ÀàµÄ¹ÜÀí±äÁ¿£¬ÕâÀï°Ñthis Ö¸Õë´«Èë
+        { //å¦‚æœä¸€åˆ‡OKï¼Œåˆ™å¼€å§‹æ³¨å†Œä»»åŠ¡çº¿ç¨‹å›è°ƒã€‚
+            m_nThreadCount.Add(); //æ³¨æ„ï¼Œçº¿ç¨‹å¯åŠ¨å‰ï¼Œè®¡æ•°å™¨å…ˆ+1
+            //æ³¨å†Œçº¿ç¨‹å‡½æ•°ï¼Œæ³¨æ„ï¼Œç”±äºçº¿ç¨‹å‡½æ•°éœ€è¦è®¿é—®æœ¬ç±»çš„ç®¡ç†å˜é‡ï¼Œè¿™é‡ŒæŠŠthis æŒ‡é’ˆä¼ å…¥
             m_pThreadPool->ThreadPoolRegTask(TestThread,this);
         }
     }
 	~CTestThreadPool()
     {
-        //Çë×¢Òâ£¬ÕâÀïÊÇÀûÓÃ±¾ÀàµÄÏß³Ì¿ØÖÆ±äÁ¿£¬ÍË³ö±¾ÀàµÄÏß³Ì
-        //´Ó±¾ÀıµÄÂß¼­¿´£¬Õâ¸öÉè¼ÆÉÔÎ¢ÓĞµã¶àÓà£¬ÒòÎªÏß³Ì³ØËæºóµÄ´İ»Ù¶¯×÷£¬Ò²»áÍË³öÏß³Ì
-        //µ«Çë×¢Òâ£¬ÔÚÊÀ¼Í¹¤³ÌÖĞ£¬Ïß³Ì³ØÍùÍùÊÇÈ«¾ÖÎ¨Ò»£¬ÊÇÍâ²¿´«Èë£¬Òò´Ë
-        //Ô­ÔòÉÏ£¬Ã¿¸ö¿ªÆôÏß³ÌµÄÓ¦ÓÃÀà£¬¶¼Ó¦¸ÃÓĞ×Ô¼ºµÄÏß³Ì¿ØÖÆÊÖ¶Î
-        //ÔÚ±¾¶ÔÏó¹Ø±Õ»ò´İ»ÙÊ±£¬±ØĞë°²È«ÍË³ö×Ô¼ºËùÊôµÄËùÓĞÏß³Ì£¬·½ÄÜ·ÀÖ¹bug¡£
-        m_bThreadContinue.Set(false); //±ê×¼ÍË³öÂß¼­
+        //è¯·æ³¨æ„ï¼Œè¿™é‡Œæ˜¯åˆ©ç”¨æœ¬ç±»çš„çº¿ç¨‹æ§åˆ¶å˜é‡ï¼Œé€€å‡ºæœ¬ç±»çš„çº¿ç¨‹
+        //ä»æœ¬ä¾‹çš„é€»è¾‘çœ‹ï¼Œè¿™ä¸ªè®¾è®¡ç¨å¾®æœ‰ç‚¹å¤šä½™ï¼Œå› ä¸ºçº¿ç¨‹æ± éšåçš„æ‘§æ¯åŠ¨ä½œï¼Œä¹Ÿä¼šé€€å‡ºçº¿ç¨‹
+        //ä½†è¯·æ³¨æ„ï¼Œåœ¨ä¸–çºªå·¥ç¨‹ä¸­ï¼Œçº¿ç¨‹æ± å¾€å¾€æ˜¯å…¨å±€å”¯ä¸€ï¼Œæ˜¯å¤–éƒ¨ä¼ å…¥ï¼Œå› æ­¤
+        //åŸåˆ™ä¸Šï¼Œæ¯ä¸ªå¼€å¯çº¿ç¨‹çš„åº”ç”¨ç±»ï¼Œéƒ½åº”è¯¥æœ‰è‡ªå·±çš„çº¿ç¨‹æ§åˆ¶æ‰‹æ®µ
+        //åœ¨æœ¬å¯¹è±¡å…³é—­æˆ–æ‘§æ¯æ—¶ï¼Œå¿…é¡»å®‰å…¨é€€å‡ºè‡ªå·±æ‰€å±çš„æ‰€æœ‰çº¿ç¨‹ï¼Œæ–¹èƒ½é˜²æ­¢bugã€‚
+        m_bThreadContinue.Set(false); //æ ‡å‡†é€€å‡ºé€»è¾‘
         while(m_nThreadCount.Get()) {Sleep(MIN_SLEEP);}
-        if(m_pThreadPool) //´İ»ÙÏß³Ì³Ø
+        if(m_pThreadPool) //æ‘§æ¯çº¿ç¨‹æ± 
         {
             delete m_pThreadPool;
             m_pThreadPool=null;
         } 
-        if(m_pDebug) //´İ»Ùdebug ¶Ô        Ïó
+        if(m_pDebug) //æ‘§æ¯debug å¯¹        è±¡
         {
             delete m_pDebug;
             m_pDebug=null;
         }
     }
 	private:
-	//Ïß³Ì³ØµÄ»Øµ÷º¯Êı£¬Ò²ÊÇ¾ÍÓ¦ÓÃ³ÌĞòµÄÏß³Ìº¯Êı
-    //²âÊÔÏß³Ì£¬×¢ÒâÆäÍêÈ«·ûºÏÏß³Ì³Ø»Øµ÷º¯Êı¹¹ĞÍ£¬ÇÒÊÇ¾²Ì¬º¯Êı
+	//çº¿ç¨‹æ± çš„å›è°ƒå‡½æ•°ï¼Œä¹Ÿæ˜¯å°±åº”ç”¨ç¨‹åºçš„çº¿ç¨‹å‡½æ•°
+    //æµ‹è¯•çº¿ç¨‹ï¼Œæ³¨æ„å…¶å®Œå…¨ç¬¦åˆçº¿ç¨‹æ± å›è°ƒå‡½æ•°æ„å‹ï¼Œä¸”æ˜¯é™æ€å‡½æ•°
 	static void TestThread (void* pCallParam,MBOOL& bThreadContinue)
     {
-        //Ç¿ÖÆÖ¸ÕëÀàĞÍ×ª»»£¬»ñµÃ±¾¶ÔÏóÖ¸Õë
+        //å¼ºåˆ¶æŒ‡é’ˆç±»å‹è½¬æ¢ï¼Œè·å¾—æœ¬å¯¹è±¡æŒ‡é’ˆ
         CTestThreadPool* pThis=(CTestThreadPool*)pCallParam;
-        while(XMG(bThreadContinue)) //ÕâÊÇ±ê×¼Ğ´·¨£¬¼´Ïß³Ì³ØÍË³öÖ§³Ö
-        {   //×¢ÒâÕâÒ»¾ä£¬Ò»¸öÑ­»·¿ÉÒÔÓĞ¶à¸öÍË³öµã
-            //´Ë´¦Ôö¼ÓÕâÒ»¾ä£¬ÊÇÖ§³Ö±¾¶ÔÏóµÄÍË³öÇëÇó
+        while(XMG(bThreadContinue)) //è¿™æ˜¯æ ‡å‡†å†™æ³•ï¼Œå³çº¿ç¨‹æ± é€€å‡ºæ”¯æŒ
+        {   //æ³¨æ„è¿™ä¸€å¥ï¼Œä¸€ä¸ªå¾ªç¯å¯ä»¥æœ‰å¤šä¸ªé€€å‡ºç‚¹
+            //æ­¤å¤„å¢åŠ è¿™ä¸€å¥ï¼Œæ˜¯æ”¯æŒæœ¬å¯¹è±¡çš„é€€å‡ºè¯·æ±‚
             if(!pThis->m_bThreadContinue.Get()) break;
-            //...³ÌĞòÂß¼­
-            Sleep(MIN_SLEEP); //Ï°¹ßĞÔË¯Ãß
-        } pThis->m_nThreadCount.Dec(); //×¢Òâ£¬ÍË³öÊ±¼ÆÊıÆ÷-1
+            //...ç¨‹åºé€»è¾‘
+            Sleep(MIN_SLEEP); //ä¹ æƒ¯æ€§ç¡çœ 
+        } pThis->m_nThreadCount.Dec(); //æ³¨æ„ï¼Œé€€å‡ºæ—¶è®¡æ•°å™¨-1
     }
 private:
-	CTonyLowDebug* m_pDebug; //Debug ¶ÔÏóÖ¸Õë
-	CTonyThreadPool* m_pThreadPool; //Ïß³Ì³Ø¶ÔÏóÖ¸Õë
-	//ÕâÊÇ±È½ÏÌØÊâµÄÒ»¸öÀı×Ó£¬ËäÈ»Ïß³Ì³ØÌá¹©ÁË×îÖÕµÄÏß³Ì°²È«ÍË³öÊÖ¶Î
-	//µ«ÊÇ£¬ÎÒÃÇÒªÖªµÀ£¬ºÜ¶àÊ±ºò£¬ÎÒÃÇµÄÒ»¸öÓ¦ÓÃÀà£¬ºÍÏß³Ì³ØµÄÉúÃüÖÜÆÚ²¢²»Ò»ÖÂ
-	//Í¨³£Çé¿öÏÂ£¬Ó¦ÓÃÀàÉúÃüÖÜÆÚ½Ï¶Ì£¬Òò´Ë£¬Ó¦ÓÃÀàÓ¦¸ÃÓĞ×Ô¼ºµÄÏß³Ì°²È«ÍË³öÊÖ¶Î
-	//Òò´Ë£¬ÕâÀï·ÂÔìÏß³Ì³ØµÄÉè¼Æ£¬Ò²ÉùÃ÷ÁËÁ½¸öÏß³Ì°²È«µÄ¹ÜÀí±äÁ¿
+	CTonyLowDebug* m_pDebug; //Debug å¯¹è±¡æŒ‡é’ˆ
+	CTonyThreadPool* m_pThreadPool; //çº¿ç¨‹æ± å¯¹è±¡æŒ‡é’ˆ
+	//è¿™æ˜¯æ¯”è¾ƒç‰¹æ®Šçš„ä¸€ä¸ªä¾‹å­ï¼Œè™½ç„¶çº¿ç¨‹æ± æä¾›äº†æœ€ç»ˆçš„çº¿ç¨‹å®‰å…¨é€€å‡ºæ‰‹æ®µ
+	//ä½†æ˜¯ï¼Œæˆ‘ä»¬è¦çŸ¥é“ï¼Œå¾ˆå¤šæ—¶å€™ï¼Œæˆ‘ä»¬çš„ä¸€ä¸ªåº”ç”¨ç±»ï¼Œå’Œçº¿ç¨‹æ± çš„ç”Ÿå‘½å‘¨æœŸå¹¶ä¸ä¸€è‡´
+	//é€šå¸¸æƒ…å†µä¸‹ï¼Œåº”ç”¨ç±»ç”Ÿå‘½å‘¨æœŸè¾ƒçŸ­ï¼Œå› æ­¤ï¼Œåº”ç”¨ç±»åº”è¯¥æœ‰è‡ªå·±çš„çº¿ç¨‹å®‰å…¨é€€å‡ºæ‰‹æ®µ
+	//å› æ­¤ï¼Œè¿™é‡Œä»¿é€ çº¿ç¨‹æ± çš„è®¾è®¡ï¼Œä¹Ÿå£°æ˜äº†ä¸¤ä¸ªçº¿ç¨‹å®‰å…¨çš„ç®¡ç†å˜é‡
 	CMbool m_bThreadContinue;
 	CMint m_nThreadCount;
 };
 
 
 */
-//Ïß³Ì³Ø»Øµ÷º¯Êı
-//Ã¿¸ö»Øµ÷º¯ÊıÓĞÒ»´ÎÔËĞĞÈ¨
-//ÔËĞĞ½áÊø£¬Ïß³Ì²»ÍË³ö£¬½øÈë¿ÕÏĞ×´Ì¬
+//çº¿ç¨‹æ± å›è°ƒå‡½æ•°
+//æ¯ä¸ªå›è°ƒå‡½æ•°æœ‰ä¸€æ¬¡è¿è¡Œæƒ
+//è¿è¡Œç»“æŸï¼Œçº¿ç¨‹ä¸é€€å‡ºï¼Œè¿›å…¥ç©ºé—²çŠ¶æ€
 typedef void(*_TPOOL_CALLBACK)(void *pCallParam,MBOOL &bThreadContinue);
 
-//Ïß³Ì³Ø¹ÜÀíÊı¾İ½á¹¹
+//çº¿ç¨‹æ± ç®¡ç†æ•°æ®ç»“æ„
 typedef struct _THREAD_TOKEN_
 {
-	int m_nExitCode;             //±¾Ïß³ÌÔÚÕû¸öÏß³Ì³ØµÄ±àºÅ
-	MINT m_nState;                //Ïß³Ì×´Ì¬»úMIINT
-	THREAD m_hThread;             //Ïß³Ì¾ä±ú
-	THREADID m_nThreadID;         //Ïß³ÌID
-	_TPOOL_CALLBACK m_pCallback; //»Øµ÷º¯Êı
-	void* m_pCallParam;          //»Øµ÷º¯Êı²ÎÊı
-	CNEOThreadPool *m_pThreadPoolObjext;//Ö¸ÏòÏß³Ì³Ø¶ÔÏóµÄÖ¸Õë
+	int m_nExitCode;             //æœ¬çº¿ç¨‹åœ¨æ•´ä¸ªçº¿ç¨‹æ± çš„ç¼–å·
+	MINT m_nState;                //çº¿ç¨‹çŠ¶æ€æœºMIINT
+	THREAD m_hThread;             //çº¿ç¨‹å¥æŸ„
+	THREADID m_nThreadID;         //çº¿ç¨‹ID
+	_TPOOL_CALLBACK m_pCallback; //å›è°ƒå‡½æ•°
+	void* m_pCallParam;          //å›è°ƒå‡½æ•°å‚æ•°
+	CNEOThreadPool *m_pThreadPoolObjext;//æŒ‡å‘çº¿ç¨‹æ± å¯¹è±¡çš„æŒ‡é’ˆ
 }SThreadToken;
-const unsigned long SThreadTokenSize=sizeof(SThreadToken);//½á¹¹Ìå³¤¶È
+const unsigned long SThreadTokenSize=sizeof(SThreadToken);//ç»“æ„ä½“é•¿åº¦
 //////////////////////////////////////////////////////////////
-//Àà¶¨Òå
+//ç±»å®šä¹‰
 class  CNEOThreadPool
 {
 public:
 	CNEOThreadPool(CNEOLowDebug *pDebug);
 	~CNEOThreadPool();
 private:
-	SThreadToken m_TToken[THIS_POOLTHREAD_MAX];//Ïß³Ì³ØÈÎÎñ²ÎÊı¾²Ì¬Êı×é
-	MBOOL m_bThreadContinue;                   //ËùÓĞthread¼ÌĞøµÄ±êÖ¾
-	MINT m_nThreadPoolThreadCount;             //thread¼ÆÊıÆ÷
-	MINT m_nThreadPoolIdleThreadCount;         //¿ÕÏĞµÄÏß³ÌÊıÁ¿
-	MUTEX m_RegisterLock;                      //Ïß³Ì×¢²áÁÙ½çÇø
-	CNEOLowDebug *m_pDebug;                    //debugµÄ¶ÔÏóÖ¸Õë
+	SThreadToken m_TToken[THIS_POOLTHREAD_MAX];//çº¿ç¨‹æ± ä»»åŠ¡å‚æ•°é™æ€æ•°ç»„
+	MBOOL m_bThreadContinue;                   //æ‰€æœ‰threadç»§ç»­çš„æ ‡å¿—
+	MINT m_nThreadPoolThreadCount;             //threadè®¡æ•°å™¨
+	MINT m_nThreadPoolIdleThreadCount;         //ç©ºé—²çš„çº¿ç¨‹æ•°é‡
+	MUTEX m_RegisterLock;                      //çº¿ç¨‹æ³¨å†Œä¸´ç•ŒåŒº
+	CNEOLowDebug *m_pDebug;                    //debugçš„å¯¹è±¡æŒ‡é’ˆ
 private:
-	//ÕâÊÇÕæÊµµÄ²Ù×÷ÏµÍ³Ïß³Ìº¯Êı
-	static THREADFUNC(ThreadPoolThread,pParam);     //Ïß³Ì³Ø·şÎñÏß³Ì
+	//è¿™æ˜¯çœŸå®çš„æ“ä½œç³»ç»Ÿçº¿ç¨‹å‡½æ•°
+	static THREADFUNC(ThreadPoolThread,pParam);     //çº¿ç¨‹æ± æœåŠ¡çº¿ç¨‹
 	//static unsigned WINAPI ThreadPoolThread(LPVOID pParam);
-	static THREADFUNC(ThreadPoolCtrlThread,pParam); //Ïß³Ì³Ø¹ÜÀíÏß³Ì
+	static THREADFUNC(ThreadPoolCtrlThread,pParam); //çº¿ç¨‹æ± ç®¡ç†çº¿ç¨‹
 	//static unsigned WINAPI ThreadPoolCtrlThread(LPVOID pParam);
 private:
-	//¼ìË÷Ã»ÓĞÊ¹ÓÃµÄToken
+	//æ£€ç´¢æ²¡æœ‰ä½¿ç”¨çš„Token
 	int SearchForNotUseToken(void);
-	//»ñµÃÒ»¸ö¿ÕÏĞÏß³Ì
+	//è·å¾—ä¸€ä¸ªç©ºé—²çº¿ç¨‹
 	int GetAIdleThread(void);
-	//Íê³É¾ßÌå×¢²á¶¯×÷
+	//å®Œæˆå…·ä½“æ³¨å†ŒåŠ¨ä½œ
 	int ThreadPoolRegisterANewThread(_TPOOL_CALLBACK pCallback,void *pParam);
 	int ThreadPoolRegisterANewThreadWhile(_TPOOL_CALLBACK pCallback,void *pParam);
 public:
-	//×¢²áÒ»¸öĞÂÏß³Ì
-	int ThreadPoolRegTask(_TPOOL_CALLBACK pCallback,void *pParam,bool bWaitForSuccess=true/*ÊÇ·ñµÈ´ı×¢²á³É¹¦*/);
-	bool TPALLThreadIsIdle(void);           //¼ì²éËùÓĞÏß³ÌÊÇ·ñ¿ÕÏĞ
-	bool ThreadPoolIsContinue(void);        //¼ì²éÏß³ÌÔËĞĞ×´Ì¬
+	//æ³¨å†Œä¸€ä¸ªæ–°çº¿ç¨‹
+	int ThreadPoolRegTask(_TPOOL_CALLBACK pCallback,void *pParam,bool bWaitForSuccess=true/*æ˜¯å¦ç­‰å¾…æ³¨å†ŒæˆåŠŸ*/);
+	bool TPALLThreadIsIdle(void);           //æ£€æŸ¥æ‰€æœ‰çº¿ç¨‹æ˜¯å¦ç©ºé—²
+	bool ThreadPoolIsContinue(void);        //æ£€æŸ¥çº¿ç¨‹è¿è¡ŒçŠ¶æ€
 	int getThreadPoolThreadCount(void);    
 	int getThreadPoolIdleThreadCount(void);
 	SThreadToken* getTToken(void);
@@ -140,42 +140,42 @@ void printThreadInfo(void *pCallParam,MBOOL &bThreadContinue);
 /////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////
-//ÈÎÎñ³Ø
+//ä»»åŠ¡æ± 
 /*
-//ÈÎÎñ³ØÈÎÎñº¯ÊıÊ¾Àı£¬¾²Ì¬º¯Êı
+//ä»»åŠ¡æ± ä»»åŠ¡å‡½æ•°ç¤ºä¾‹ï¼Œé™æ€å‡½æ•°
 static bool TaskCallback(void* pCallParam,int& nStatus)
 {
 	//...
 	switch(nStatus)
 	{ 
-	case 0: //init //³õÊ¼»¯´úÂë
+	case 0: //init //åˆå§‹åŒ–ä»£ç 
 		//...
 		nStatus++;
 		break;
-	case 1: //loop //Ñ­»·Ìå
+	case 1: //loop //å¾ªç¯ä½“
 		//...
-		if(...) //Ä³ÖÖÌõ¼şÏÂ£¬ÖĞ¶ÏÑ­»·
+		if(...) //æŸç§æ¡ä»¶ä¸‹ï¼Œä¸­æ–­å¾ªç¯
 		nStatus++;
 		break;
-	default: //exit //½áÊø´úÂë
+	default: //exit //ç»“æŸä»£ç 
 		//...
-		return false; //·µ»Ø¼Ù£¬ÈÎÎñ½áÊø
+		return false; //è¿”å›å‡ï¼Œä»»åŠ¡ç»“æŸ
 	} 
-	return true; //Õı³£Çé¿öÏÂ£¬·µ»ØÕæ£¬ÈÎÎñ¼ÌĞø
+	return true; //æ­£å¸¸æƒ…å†µä¸‹ï¼Œè¿”å›çœŸï¼Œä»»åŠ¡ç»§ç»­
 }
 */
-//¸Ä»Øµ÷nStatusÔÚRegisterATaskÖĞ±»¸³ÖµÎª0
+//æ”¹å›è°ƒnStatusåœ¨RegisterATaskä¸­è¢«èµ‹å€¼ä¸º0
 typedef bool(*_TASKPOOL_CALLBACK)(void *pCallParam,int &nStatus);
 ////////////////////////////////////////////////////////////////////////////
-//#define TASK_POOL_TOKEN_MAX (16*1024)      //×î¶à²¢·¢ÈÎÎñÊı
-//#define DEFAULT_THREAD_MAX (30)             //Ä¬ÈÏ×î´óÏß³ÌÊı
+//#define TASK_POOL_TOKEN_MAX (16*1024)      //æœ€å¤šå¹¶å‘ä»»åŠ¡æ•°
+//#define DEFAULT_THREAD_MAX (30)             //é»˜è®¤æœ€å¤§çº¿ç¨‹æ•°
 /////////////////////////////////////////////////////////////////////////
-//ÈÎÎñ³ØºËĞÄÊı¾İ½á¹¹
+//ä»»åŠ¡æ± æ ¸å¿ƒæ•°æ®ç»“æ„
 typedef struct _TASK_POOL_TOKEN_
 {
-	_TASKPOOL_CALLBACK m_pCallback;                      //»Øµ÷º¯ÊıÖ¸Õë
-	void               *m_pUserParam;                     //ÌæÓÃ»§´«µİµÄ»Øµ÷º¯Êı²ÎÊı
-	int                m_nUserStatus;                     //´úÌæÓÃ»§´«µİµÄ×´Ì¬Öµ£¬³õÊ¼Îª0
+	_TASKPOOL_CALLBACK m_pCallback;                      //å›è°ƒå‡½æ•°æŒ‡é’ˆ
+	void               *m_pUserParam;                     //æ›¿ç”¨æˆ·ä¼ é€’çš„å›è°ƒå‡½æ•°å‚æ•°
+	int                m_nUserStatus;                     //ä»£æ›¿ç”¨æˆ·ä¼ é€’çš„çŠ¶æ€å€¼ï¼Œåˆå§‹ä¸º0
 }STaskPoolToken;
 const unsigned long STaskPoolTokenSize=sizeof(STaskPoolToken);
 ////////////////////////////////////////////////////////////////////////
@@ -189,22 +189,22 @@ public:
 private:
 	CMRSWbool m_bThreadContinue;           
 	CMRSWint m_nThreadCount;
-	CNEOMemQueueWithLock *m_pTaskQueue;  //ºËĞÄÈÎÎñ¶ÓÁĞ
-	CNEOThreadPool *m_pThreadPool;       //Ïß³Ì³ØÖ¸Õë
-	int m_nMaxThread;                    //×î´óÏß³ÌµÄ±£´æ±äÁ¿
+	CNEOMemQueueWithLock *m_pTaskQueue;  //æ ¸å¿ƒä»»åŠ¡é˜Ÿåˆ—
+	CNEOThreadPool *m_pThreadPool;       //çº¿ç¨‹æ± æŒ‡é’ˆ
+	int m_nMaxThread;                    //æœ€å¤§çº¿ç¨‹çš„ä¿å­˜å˜é‡
 	CMRSWint m_nThreadID;
 	CNEOLowDebug *m_pDebug;    
 	CNEOMemPoolWithLock *m_pMemPool;
 	CNEOLog *m_pLog;
 	
 private:
-	//ÕæÊµµÄÄÚ²¿×¢²áº¯Êı
+	//çœŸå®çš„å†…éƒ¨æ³¨å†Œå‡½æ•°
 	bool RegisterATaskDolt(STaskPoolToken *pToken,int nLimit=-1);
-	//·şÎñÕßÏß³Ì
+	//æœåŠ¡è€…çº¿ç¨‹
 	bool TaskServiceThreadDolt(STaskPoolToken &Task);
 	static void TaskServiceThread(void *pCallParam,
 		MBOOL &bThreadContinue);
-	//¹ÜÀíÕßÏß³Ì
+	//ç®¡ç†è€…çº¿ç¨‹
 	static void TaskCtrlThread(void *pCallParam,
 		MBOOL &bThreadContinue);
 public:
@@ -216,7 +216,7 @@ public:
 	int getThreadID(void);
 	int getThreadCount(void);
 public:
-	//×¢²áÒ»¸öĞÂÈÎÎñ
+	//æ³¨å†Œä¸€ä¸ªæ–°ä»»åŠ¡
 	bool RegisterATask(_TASKPOOL_CALLBACK pCallback,void *pUserParam=NULL);
 };
 /*
@@ -227,30 +227,30 @@ bool printTaskPoolInfo(void *pCallParam,int &nStatus);
 ////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////
 
-//ÈÎÎñ³Ø¼ò»¯Àà
-//#define NEO_TASK_RUN_MAX_TASK 16              //×î¶à²½¶¯×÷
+//ä»»åŠ¡æ± ç®€åŒ–ç±»
+//#define NEO_TASK_RUN_MAX_TASK 16              //æœ€å¤šæ­¥åŠ¨ä½œ
 typedef struct _NEO_TASK_RUN_INFO_
 {
-	int m_nTaskCount;                         //×Ü¹²¶àÉÙ²½Öè
-	void *m_pCallParam;                       //¹«ÓÃµÄ»Øµ÷º¯Êı²ÎÊı
-	//¶¯×÷»Øµ÷º¯ÊıÊı×é
+	int m_nTaskCount;                         //æ€»å…±å¤šå°‘æ­¥éª¤
+	void *m_pCallParam;                       //å…¬ç”¨çš„å›è°ƒå‡½æ•°å‚æ•°
+	//åŠ¨ä½œå›è°ƒå‡½æ•°æ•°ç»„
 	_TASKPOOL_CALLBACK m_CallbackArray[NEO_TASK_RUN_MAX_TASK];
 }SNEOTaskRunInfo;
 const unsigned long SNEOTaskRunInfoSize=sizeof(SNEOTaskRunInfo);
-//ÓÃÓÚCNEOTaskRunµÄ½á¹¹
+//ç”¨äºCNEOTaskRunçš„ç»“æ„
 typedef struct _NEOTeskRunTaskCallback_Param_
 {
-	SNEOTaskRunInfo m_Info;                  //ÈÎÎñ½á¹¹ÃèÊöÌå
-	//CNEOBaseLibrary *m_pNEOBaseLib;          //»ù±¾¾ÛºÏ¹¤¾ßÀà
-	CNEOTaskRun *m_pThis;                    //ÈÎÎñÔËĞĞÌå¶ÔÏóÖ¸Õë
-	int m_nRunIndex;                         //µ±Ç°Ö´ĞĞµÄ²½¾İ
-	char szAppName[256];                     //Ó¦ÓÃÃû
+	SNEOTaskRunInfo m_Info;                  //ä»»åŠ¡ç»“æ„æè¿°ä½“
+	//CNEOBaseLibrary *m_pNEOBaseLib;          //åŸºæœ¬èšåˆå·¥å…·ç±»
+	CNEOTaskRun *m_pThis;                    //ä»»åŠ¡è¿è¡Œä½“å¯¹è±¡æŒ‡é’ˆ
+	int m_nRunIndex;                         //å½“å‰æ‰§è¡Œçš„æ­¥æ®
+	char szAppName[256];                     //åº”ç”¨å
 }SNEOTestRunTaskCallbackParam;
 const unsigned long SNEOTestRunTaskCallbackParamSize=sizeof(SNEOTestRunTaskCallbackParam);
-//ÈÎÎñÔËĞĞĞÅÏ¢
+//ä»»åŠ¡è¿è¡Œä¿¡æ¯
 /*
-	CNEOTaskRunInfoÊÇÒ»¸ö¹¤¾ßÀà£¬Îª
-	CNEOTaskRunÌá¹©·şÎñ£¬¸ºÔğÈÎÎñµÄ×¢²á
+	CNEOTaskRunInfoæ˜¯ä¸€ä¸ªå·¥å…·ç±»ï¼Œä¸º
+	CNEOTaskRunæä¾›æœåŠ¡ï¼Œè´Ÿè´£ä»»åŠ¡çš„æ³¨å†Œ
 */
 class  CNEOTaskRunInfo
 {
@@ -265,53 +265,53 @@ public:
 private:
 	static void Init(SNEOTaskRunInfo *pInfo);
 public:
-	//»ñµÃµ±Ç°Êµ¼ÊÊ¹ÓÃµÄÊı¾İÇø
+	//è·å¾—å½“å‰å®é™…ä½¿ç”¨çš„æ•°æ®åŒº
 	SNEOTaskRunInfo *GetInfoPoint(void);
-	//ÉèÖÃ¹²ÓÃ²ÎÊıÖ¸Õë
+	//è®¾ç½®å…±ç”¨å‚æ•°æŒ‡é’ˆ
 	void SetCallbackParam(void *pCallParam);
-	//½«ĞÂµÄÈÎÎñ»Øµ÷º¯ÊıÌí¼Óµ½ÄÚ²¿Êı¾İÇøµÄÊı×éÄ©Î²
+	//å°†æ–°çš„ä»»åŠ¡å›è°ƒå‡½æ•°æ·»åŠ åˆ°å†…éƒ¨æ•°æ®åŒºçš„æ•°ç»„æœ«å°¾
 	bool AddTask(_TASKPOOL_CALLBACK pCallback,void *pCallParam);
 	bool AddTask(_TASKPOOL_CALLBACK pCallback);
-	//½«Êı¾İ½á¹¹µÄÄÚÈİ¿½±´µ½µ±Ç°±¾¶ÔÏóÊ¹ÓÃµÄÊı¾İ½á¹¹ÌåÖĞ
+	//å°†æ•°æ®ç»“æ„çš„å†…å®¹æ‹·è´åˆ°å½“å‰æœ¬å¯¹è±¡ä½¿ç”¨çš„æ•°æ®ç»“æ„ä½“ä¸­
 	void CopyFrom(SNEOTaskRunInfo *pInfo);
 };
 /////////////////////////////////////////////////////////////////////////
 /*
-ÊÊÓÃÓÚÒ»´ÎĞÔÖ´ĞĞµÄÈÎÎñ
-//ÓÉÓÚÊµ¼ÊÈÎÎñ¿ª·¢½ÏÎª¸´ÔÓ£¬ÒÀÀµÌõ¼ş½Ï¶à£¬ÎÒÃÇÕâÀï¼ÙÉèÒ»¸ö¾ÛºÏ¹¤¾ßÀàÖ¸Õë
-CTonyBaseLibrary* g_pTonyBaseLib; //ÑİÊ¾ÓÃµÄ¾ÛºÏ¹¤¾ßÀàÖ¸Õë
+é€‚ç”¨äºä¸€æ¬¡æ€§æ‰§è¡Œçš„ä»»åŠ¡
+//ç”±äºå®é™…ä»»åŠ¡å¼€å‘è¾ƒä¸ºå¤æ‚ï¼Œä¾èµ–æ¡ä»¶è¾ƒå¤šï¼Œæˆ‘ä»¬è¿™é‡Œå‡è®¾ä¸€ä¸ªèšåˆå·¥å…·ç±»æŒ‡é’ˆ
+CTonyBaseLibrary* g_pTonyBaseLib; //æ¼”ç¤ºç”¨çš„èšåˆå·¥å…·ç±»æŒ‡é’ˆ
 class CTestTaskRun
 { 
 private:
-	//ÎÒÃÇ¼ÙÉè±¾¶ÔÏóµÄÈÎÎñ·ÖÈı¸öÆ¬¶Î£¬¾ÍÊÇÇ°ÎÄËùÊöµÄÈı¶ÎÊ½¿ª·¢£¬´úÂë´Ë´¦ÂÔ
-	static bool TaskInit(void* pCallParam,int& nStatus); //³õÊ¼»¯
-	static bool TaskLoop(void* pCallParam,int& nStatus); //Ñ­»·Ìå
-	static bool TaskExit(void* pCallParam,int& nStatus); //½áÊø´úÂë
-	CTonyTaskRun* m_pTonyTaskRun; //Ïß³Ì³ØÔËĞĞÌåÖ¸Õë
+	//æˆ‘ä»¬å‡è®¾æœ¬å¯¹è±¡çš„ä»»åŠ¡åˆ†ä¸‰ä¸ªç‰‡æ®µï¼Œå°±æ˜¯å‰æ–‡æ‰€è¿°çš„ä¸‰æ®µå¼å¼€å‘ï¼Œä»£ç æ­¤å¤„ç•¥
+	static bool TaskInit(void* pCallParam,int& nStatus); //åˆå§‹åŒ–
+	static bool TaskLoop(void* pCallParam,int& nStatus); //å¾ªç¯ä½“
+	static bool TaskExit(void* pCallParam,int& nStatus); //ç»“æŸä»£ç 
+	CTonyTaskRun* m_pTonyTaskRun; //çº¿ç¨‹æ± è¿è¡Œä½“æŒ‡é’ˆ
 public:
 	CTestTaskRun()
 	{
-		//´´½¨Ïß³Ì³ØÔËĞĞÌå
+		//åˆ›å»ºçº¿ç¨‹æ± è¿è¡Œä½“
 		m_pTonyTaskRun=new CTonyTaskRun(g_pTonyBaseLib);
-		//×¢ÒâÕâÀï£¬ÉèÖÃÒ»¸öÃèÊö¶ÔÏó
+		//æ³¨æ„è¿™é‡Œï¼Œè®¾ç½®ä¸€ä¸ªæè¿°å¯¹è±¡
 		CTonyTaskRunInfo tri;
-		tri.AddTask(TaskInit,this); //Çë×¢Òâ£¬ÒÀ´ÎÌí¼Ó£¬Ë³Ğò²»ÄÜÂÒÁË
+		tri.AddTask(TaskInit,this); //è¯·æ³¨æ„ï¼Œä¾æ¬¡æ·»åŠ ï¼Œé¡ºåºä¸èƒ½ä¹±äº†
 		tri.AddTask(TaskLoop,this);
 		tri.AddTask(TaskExit,this);
-		m_pTonyTaskRun->StartTask(&tri); //Æô¶¯ÈÎÎñ
+		m_pTonyTaskRun->StartTask(&tri); //å¯åŠ¨ä»»åŠ¡
 	} 
 	~CTestTaskRun()
 	{
 		if(m_pTonyTaskRun)
 		{
-			m_pTonyTaskRun->StopAll(); //½áÊøËùÓĞÈÎÎñ
-			delete m_pTonyTaskRun; //ÊÍ·Å×ÊÔ´
+			m_pTonyTaskRun->StopAll(); //ç»“æŸæ‰€æœ‰ä»»åŠ¡
+			delete m_pTonyTaskRun; //é‡Šæ”¾èµ„æº
 			m_pTonyTaskRun=null;
 		}
 	}
 };
 */
-//ÈÎÎñÔËĞĞÀà
+//ä»»åŠ¡è¿è¡Œç±»
 class  CNEOTaskRun
 {
 public:
@@ -319,24 +319,24 @@ public:
 	CNEOTaskRun(CNEOMemPoolWithLock *pMemPool,CNEOLog *pLog,CNEOTaskPool *pTaskPool);
 	~CNEOTaskRun();
 private:
-	//ÈÎÎñ»Øµ÷º¯Êı
+	//ä»»åŠ¡å›è°ƒå‡½æ•°
 	 static bool NEOTestRunTaskCallback(void *pCallParam,int &nStatus);
 	CThreadManager m_ThreadManager;  
 	//CNEOBaseLibrary *m_pNEOBaseLib;
-	  //ÈÕÖ¾Ä£¿é
+	  //æ—¥å¿—æ¨¡å—
     CNEOLog *m_pLog;
-    //ÄÚ´æ³Ø
+    //å†…å­˜æ± 
     CNEOMemPoolWithLock *m_pMemPool;
-    //Ïß³Ì³Ø
+    //çº¿ç¨‹æ± 
     CNEOTaskPool *m_pTaskPool;
 public:
 	void XGSysLog(const char *szFormat,...);
-	//Æô¶¯Ò»¸öÈÎÎñ
+	//å¯åŠ¨ä¸€ä¸ªä»»åŠ¡
 	bool StartTask(_TASKPOOL_CALLBACK pCallback,void *pCallParam=NULL,char *szAppName=NULL);
-	//ÀûÓÃInfoÃèÊöÆô¶¯¶à´ÎÈÎÎñ
+	//åˆ©ç”¨Infoæè¿°å¯åŠ¨å¤šæ¬¡ä»»åŠ¡
 	bool StartTask(SNEOTaskRunInfo *pInfoStruct,char *szAppName=NULL);
 	bool StartTask(CNEOTaskRunInfo *pInfoObject,char *szAppName=NULL);
-	//Í£Ö¹ËùÓĞÈÎÎñ
+	//åœæ­¢æ‰€æœ‰ä»»åŠ¡
 	void StopAll(void);
 	bool IsRunning(void);
 	int GetThreadCount(void);
