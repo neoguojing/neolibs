@@ -1,4 +1,4 @@
-#ifndef _NEOMEMENTO_H_
+ï»¿#ifndef _NEOMEMENTO_H_
 #define _NEOMEMENTO_H_
 
 #include <iostream>
@@ -6,28 +6,28 @@ using namespace std;
 namespace NEOLIB{
 
 /*
-    AbtractMemento£º½Ó¿ÚÀà£¬ÎªÁËÆÁ±ÎMementoµÄÊµÏÖ
-    Memento£º±¸·İÀà£¬¼Ì³Ğ×ÔAbtractMemento£¬½öĞèÊµÏÖ×´Ì¬µÄget/set²Ù×÷ÒÔ¼°Print
-    Originator£ºÓÃ»§Àà£¬ĞèÒªÊµÏÖ´´½¨/»Ö¸´±¸·İ£¬×´Ì¬µÄget/set;
-    Caretaker£º±¸·İ¹ÜÀíÀà£¬½öĞèÊµÏÖMementoµÄget/setµÄ²Ù×÷;ÓÃ»§Ö»Ğè¼Ì³Ğ¸ÃÀà
+    AbtractMementoï¼šæ¥å£ç±»ï¼Œä¸ºäº†å±è”½Mementoçš„å®ç°
+    Mementoï¼šå¤‡ä»½ç±»ï¼Œç»§æ‰¿è‡ªAbtractMementoï¼Œä»…éœ€å®ç°çŠ¶æ€çš„get/setæ“ä½œä»¥åŠPrint
+    Originatorï¼šç”¨æˆ·ç±»ï¼Œéœ€è¦å®ç°åˆ›å»º/æ¢å¤å¤‡ä»½ï¼ŒçŠ¶æ€çš„get/set;
+    Caretakerï¼šå¤‡ä»½ç®¡ç†ç±»ï¼Œä»…éœ€å®ç°Mementoçš„get/setçš„æ“ä½œ;ç”¨æˆ·åªéœ€ç»§æ‰¿è¯¥ç±»
 
-    ×¢£º
-    ±¾½Ó¿Ú¶ÔÓÚ¼òµ¥µÄÓ¦ÓÃ£¬ÔÚÊ¹ÓÃMementoÀàµÄÊ±ºò£¬ÓÃ»§¿ÉÒÔ¼òµ¥¼Ì³ĞOriginator¿ìËÙÊµÏÖÏà¹Ø
-    ¹¦ÄÜ£»·ñÔò£¬ÓÃ»§ĞèÒªÖØĞÂÉè¼Æ×Ô¼ºµÄMementoºÍOriginator
-    ÊµÀı£º
-    //´´½¨¹¦ÄÜ¶ÔÏóºÍ±¸·İ¶ÔÏó
+    æ³¨ï¼š
+    æœ¬æ¥å£å¯¹äºç®€å•çš„åº”ç”¨ï¼Œåœ¨ä½¿ç”¨Mementoç±»çš„æ—¶å€™ï¼Œç”¨æˆ·å¯ä»¥ç®€å•ç»§æ‰¿Originatorå¿«é€Ÿå®ç°ç›¸å…³
+    åŠŸèƒ½ï¼›å¦åˆ™ï¼Œç”¨æˆ·éœ€è¦é‡æ–°è®¾è®¡è‡ªå·±çš„Mementoå’ŒOriginator
+    å®ä¾‹ï¼š
+    //åˆ›å»ºåŠŸèƒ½å¯¹è±¡å’Œå¤‡ä»½å¯¹è±¡
     Originator<string> *o = new Originator<string>();
     Caretaker *caretaker = new Caretaker();
-    //¸Ä±ä×´Ì¬
+    //æ”¹å˜çŠ¶æ€
     o->SetState("on");
-    //±¸·İ¹¦ÄÜ¶ÔÏóµÄ×´Ì¬
+    //å¤‡ä»½åŠŸèƒ½å¯¹è±¡çš„çŠ¶æ€
     caretaker->SetMemento(o->CreateBackups());
     o->Print();
     caretaker->GetMemento()->Print();
-    //¹¦ÄÜÀà×´Ì¬¸Ä±ä
+    //åŠŸèƒ½ç±»çŠ¶æ€æ”¹å˜
     o->SetState("off");
     o->Print();
-    //»Ö¸´¹¦ÄÜÀà×´Ì¬
+    //æ¢å¤åŠŸèƒ½ç±»çŠ¶æ€
     o->RestoreBackups(caretaker->GetMemento());
     o->Print();
     caretaker->GetMemento()->Print();
@@ -42,7 +42,7 @@ template <typename STATE>
 class Memento:public AbtractMemento
 {
 public:
-    //¹¹ÔìµÄÊ±ºò±¸·İÊı¾İ
+    //æ„é€ çš„æ—¶å€™å¤‡ä»½æ•°æ®
     Memento(STATE state):m_State(state){};
 
     virtual STATE GetState()
@@ -63,17 +63,17 @@ protected:
     STATE m_State;
 };
 
-//·¢ÆğÕßÀà±¸·İ×Ô¼ºµÄ×´Ì¬
+//å‘èµ·è€…ç±»å¤‡ä»½è‡ªå·±çš„çŠ¶æ€
 template <typename STATE>
 class Originator
 {
 public:
-    //½¨Á¢±¸·İ
+    //å»ºç«‹å¤‡ä»½
     AbtractMemento* CreateBackups()
     {
         return new Memento<STATE>(m_State);
     }
-    //»Ö¸´±¸·İÄÚÈİ
+    //æ¢å¤å¤‡ä»½å†…å®¹
     void RestoreBackups(AbtractMemento* pMemento)
     {
         m_State = dynamic_cast<Memento<STATE>*>(pMemento)->GetState();
@@ -89,7 +89,7 @@ public:
         m_State = state;
     }
 
-    //ÏÔÊ¾×´Ì¬
+    //æ˜¾ç¤ºçŠ¶æ€
     void Print() 
     {
         cout<<"Originator::Print m_State="<<m_State<<endl;
@@ -98,16 +98,16 @@ protected:
     STATE m_State;
 };
 
-//¹ÜÀíÕßÀà¹ÜÀí±¸·İ
+//ç®¡ç†è€…ç±»ç®¡ç†å¤‡ä»½
 class Caretaker
 {
 public:
-    //µÃµ½±¸·İ
+    //å¾—åˆ°å¤‡ä»½
     AbtractMemento* GetMemento()
     {
         return m_Memento;
     }
-    //ÉèÖÃ±¸·İ
+    //è®¾ç½®å¤‡ä»½
     void SetMemento(AbtractMemento* pMemento)
     {
         m_Memento = pMemento;

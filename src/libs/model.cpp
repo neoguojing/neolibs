@@ -1,4 +1,4 @@
-#ifdef NEOLIB_C_PLUS_PLUS
+﻿#ifdef NEOLIB_C_PLUS_PLUS
 extern "C" {
 #endif
 

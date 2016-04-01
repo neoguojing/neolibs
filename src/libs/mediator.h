@@ -1,15 +1,15 @@
-#ifndef _NEOMEDIATOR_H_ 
+﻿#ifndef _NEOMEDIATOR_H_ 
 #define _NEOMEDIATOR_H_
 #include <iostream>
 using namespace std;
 namespace NEOLIB{
 
 /*
-    ʹ�ã�
-    Mediator���ǵ�ͣ�ߵĻ��࣬�û��̳и��࣬����Colleage����Ľ����ڸ�����ʵ�֣�
-        �������Colleage������
-    Colleage��Ҳ��ͬ���࣬��Ϣ���������⣬�û��̳и���ʵ����Ӧ�ӿ�
-        ����ʹ��m_Mdt�������غ�����ʵ��
+    使用：
+    Mediator类是调停者的基类，用户继承该类，所有Colleage对象的交互在该类中实现；
+        该类持有Colleage的引用
+    Colleage类也叫同事类，消息交互的主题，用户继承该类实现相应接口
+        该类使用m_Mdt，完成相关函数的实现
 */
 class Mediator;
 

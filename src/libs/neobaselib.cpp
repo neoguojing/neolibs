@@ -1,4 +1,4 @@
-
+ï»¿
 
 #include "neoindex.h" 
 #include "neolock.h"     
@@ -23,11 +23,11 @@ CNEOBaseLibrary* CNEOBaseLibrary::m_Instance = NULL;
 CNEOBaseLibrary::CNEOBaseLibrary(const char *szAppName,
     const char *szLogPath,
     const char *szTempPath,
-    _BASE_LIBRARY_PRINT_INFO_CALLBACK pPrintInfoCallback, //infoÊä³ö»Øµ÷º¯ÊıÖ¸Õë
-    int nTaskPoolThreadMax, //ÈÎÎñ³Ø×î´óµÄÏß³ÌÊı
-    bool bDebugToTTYFlag,                 //debugÊä³öµ½ÆÁÄ»¿ª¹Ø
-    void* pPrintInfoCallbackParam,       //info»Øµ÷º¯ÊıÖ¸Õë
-    _APP_INFO_OUT_CALLBACK pInfoOutCallback,// Ó¦ÓÃ³ÌĞò»Øµ÷º¯Êı
+    _BASE_LIBRARY_PRINT_INFO_CALLBACK pPrintInfoCallback, //infoè¾“å‡ºå›è°ƒå‡½æ•°æŒ‡é’ˆ
+    int nTaskPoolThreadMax, //ä»»åŠ¡æ± æœ€å¤§çš„çº¿ç¨‹æ•°
+    bool bDebugToTTYFlag,                 //debugè¾“å‡ºåˆ°å±å¹•å¼€å…³
+    void* pPrintInfoCallbackParam,       //infoå›è°ƒå‡½æ•°æŒ‡é’ˆ
+    _APP_INFO_OUT_CALLBACK pInfoOutCallback,// åº”ç”¨ç¨‹åºå›è°ƒå‡½æ•°
     void *pInfoOutCallbackParam
     ):m_pPrintInfoCallback(pPrintInfoCallback),m_pInfoOutCallbackParam(pInfoOutCallbackParam)
 {
@@ -35,12 +35,13 @@ CNEOBaseLibrary::CNEOBaseLibrary(const char *szAppName,
     m_pTaskPool=NULL;
     m_pMemPool=NULL;
     m_pLog=NULL;
+    m_pMemQueue=NULL;
     SafeStrcpy(m_szAppName,szAppName,NEO_APPLICATION_NAME_SIZE);
     SafeStrcpy(m_szLogPathName,szLogPath,NEO_APP_LOG_PATH_NAME_SIZE);
     SafeStrcpy(m_szTempPathName,szTempPath,NEO_APP_TEMP_PATH_NAME_SIZE);
-    //±£´æĞÅÏ¢´òÓ¡»Øµ÷º¯ÊıÏà¹ØÖ¸Õë
+    //ä¿å­˜ä¿¡æ¯æ‰“å°å›è°ƒå‡½æ•°ç›¸å…³æŒ‡é’ˆ
     srand((unsigned int)time(NULL));
-    //³õÊ¼»¯debug ¶ÔÏó
+    //åˆå§‹åŒ–debug å¯¹è±¡
     m_pDebug=new CNEOLowDebug(m_szLogPathName,
         m_szAppName,
         pInfoOutCallback,
@@ -52,25 +53,8 @@ CNEOBaseLibrary::CNEOBaseLibrary(const char *szAppName,
     }
     m_pDebug->DebugToFile("_____________________\n");
     m_pDebug->DebugToFile("Hello World\n");
-#ifdef WIN32
-    {
-       m_bSocketInitFlag=false;
-       int err;
-       wVersionRequested=MAKEWORD(2,2);
-       err=WSAStartup(wVersionRequested,&m_wsaData);
-       if(err!=0)
-       {
-          m_pDebug->DebugToFile("Socket Init fail!\n");
-       }
-       else
-       {
-          m_bSocketInitFlag=true;
-       }
-    }
-#else
-#endif
     
-    //³õÊ¼»¯ÄÚ´æ³Ø
+    //åˆå§‹åŒ–å†…å­˜æ± 
     m_pMemPool=new CNEOMemPoolWithLock(m_pDebug);
     if(!m_pMemPool)
     {
@@ -78,7 +62,7 @@ CNEOBaseLibrary::CNEOBaseLibrary(const char *szAppName,
        return;
     }
     
-    //³õÊ¼»¯ÈÕÖ¾ÏµÍ³
+    //åˆå§‹åŒ–æ—¥å¿—ç³»ç»Ÿ
     m_pLog=new CNEOLog(m_pDebug,m_pMemPool,m_szLogPathName,m_szAppName);
     if(!m_pLog)
     {
@@ -93,11 +77,20 @@ CNEOBaseLibrary::CNEOBaseLibrary(const char *szAppName,
         m_pDebug->DebugToFile("CNEOBaseLibrary():m_pTaskPool new fail\n");
         return;
     }
-    //´ËÊ±¿ÉÒÔÀûÓÃÄÚ´æ³ØµÄ×¢²á»úÖÆ
+    //æ­¤æ—¶å¯ä»¥åˆ©ç”¨å†…å­˜æ± çš„æ³¨å†Œæœºåˆ¶
     m_pMemPool->Register(m_pTaskPool,"CNEOBaseLibrary::m_pTaskPool");
 
-    //Æô¶¯Ïß³Ì´òÓ¡ĞÅÏ¢ÈÎÎñ
-    TimeSetNow(m_tLastPrint);                 //¼ÆÊ±Òò×Ó/////////////////////////////////???????
+    //å¯åŠ¨é˜Ÿåˆ—
+    m_pMemQueue = new CNEOMemQueueWithLock(m_pDebug,m_pMemPool,m_szAppName);
+    if(!m_pMemQueue)
+    {
+        m_pDebug->DebugToFile("CNEOBaseLibrary():m_pMemQueue new fail\n");
+        return;
+    }
+    m_pMemPool->Register(m_pMemQueue,"CNEOBaseLibrary::m_pMemQueue");
+
+    //å¯åŠ¨çº¿ç¨‹æ‰“å°ä¿¡æ¯ä»»åŠ¡
+    TimeSetNow(m_tLastPrint);                 //è®¡æ—¶å› å­/////////////////////////////////???????
 
     m_pDebug->DebugToFile(">>>>>>>>>>>>>>>>>>>>>>>>>>>\n");
 }
@@ -137,19 +130,7 @@ CNEOBaseLibrary::~CNEOBaseLibrary()
        m_pDebug=NULL;
     }
     NEO_PRINTF("9\n");
-#ifdef WIN32
-    {
-       if(m_bSocketInitFlag)
-       {
-          if(LOBYTE(&m_wsaData,wVersionRequested)!=2 || HIBYTE(&m_wsaData,wVersionRequested)!=2)
-          {
-             WSACleanup();
-          }
-          m_bSocketInitFlag=false;
-       }
-    }
-#else
-#endif
+
 }
 //#define MAIN_LOOP_DELAY 2
 bool CNEOBaseLibrary::InfoPrintTaskCallback(void *pCallParam,int &nStatus)
@@ -159,7 +140,7 @@ bool CNEOBaseLibrary::InfoPrintTaskCallback(void *pCallParam,int &nStatus)
     {
        TimeSetNow(pThis->m_tLastPrint);
        NEO_PRINTF("*************************\n");
-       pThis->m_pTaskPool->PrintInfo();      // ´òÓ¡ÈÎÎñ³ØĞÅÏ¢
+       pThis->m_pTaskPool->PrintInfo();      // æ‰“å°ä»»åŠ¡æ± ä¿¡æ¯
        pThis->m_pMemPool->PrintInfo();
        if(pThis->m_pPrintInfoCallback)
        {
@@ -174,11 +155,11 @@ bool CNEOBaseLibrary::InfoPrintTaskCallback(void *pCallParam,int &nStatus)
 CNEOBaseLibrary *CNEOBaseLibrary::getInstance(const char *szAppName,
     const char *szLogPath,
     const char *szTempPath,
-    _BASE_LIBRARY_PRINT_INFO_CALLBACK pPrintInfoCallback, //infoÊä³ö»Øµ÷º¯ÊıÖ¸Õë
-    int nTaskPoolThreadMax, //ÈÎÎñ³Ø×î´óµÄÏß³ÌÊı
-    bool bDebugToTTYFlag,                 //debugÊä³öµ½ÆÁÄ»¿ª¹Ø
-    void* pPrintInfoCallbackParam,       //info»Øµ÷º¯ÊıÖ¸Õë
-    _APP_INFO_OUT_CALLBACK pInfoOutCallback,// Ó¦ÓÃ³ÌĞò»Øµ÷º¯Êı
+    _BASE_LIBRARY_PRINT_INFO_CALLBACK pPrintInfoCallback, //infoè¾“å‡ºå›è°ƒå‡½æ•°æŒ‡é’ˆ
+    int nTaskPoolThreadMax, //ä»»åŠ¡æ± æœ€å¤§çš„çº¿ç¨‹æ•°
+    bool bDebugToTTYFlag,                 //debugè¾“å‡ºåˆ°å±å¹•å¼€å…³
+    void* pPrintInfoCallbackParam,       //infoå›è°ƒå‡½æ•°æŒ‡é’ˆ
+    _APP_INFO_OUT_CALLBACK pInfoOutCallback,// åº”ç”¨ç¨‹åºå›è°ƒå‡½æ•°
     void *pInfoOutCallbackParam)
 {
 	if(m_Instance==NULL)
