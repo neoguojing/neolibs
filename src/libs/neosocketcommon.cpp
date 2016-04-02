@@ -64,6 +64,17 @@ void CClient::eraseDataBuffer()
 	ZeroMemory(&m_IoSend,sizeof(IO_OPERATION_DATA));
 }
 #else
+
+void CClient::setDataBuffer(char *buf, const unsigned long buffsize,IOTYPE iotype)
+{
+	
+}
+
+void CClient::eraseDataBuffer()
+{
+	
+}
+
 #endif
 
 #ifdef WIN32
