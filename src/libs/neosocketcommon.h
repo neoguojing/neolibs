@@ -42,13 +42,10 @@ public:
    WIN_LINUX_SOCKET m_s;
 
    struct sockaddr_in m_addr;
-#ifdef WIN32
+
    IO_OPERATION_DATA m_IoRecv;
 
    IO_OPERATION_DATA m_IoSend;
-#else
-
-#endif
 };
 
 

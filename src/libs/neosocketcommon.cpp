@@ -144,12 +144,12 @@ bool CClient::Recv(const SERVICE_TYPE svctype, char *buf, int len)
 
     if(svctype == ::TCP)
     {
-        if(read(m_Socket,buf,len) < 0)
+        if(read(m_s,buf,len) < 0)
             return false;
     }
     else if(svctype == ::UDP)
     {
-        recvfrom(m_Socket,buf,len,0,(struct sockaddr *)&m_addr,(socklen_t*)&addrsize);
+        recvfrom(m_s,buf,len,0,(struct sockaddr *)&m_addr,(socklen_t*)&addrsize);
     }
 	return true;
 }
