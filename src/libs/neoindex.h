@@ -27,6 +27,10 @@
 #define ERR_NULLPOINT 3
 #define ERR_AREADY_EXIST 4
 
+#ifndef WIN32
+extern int errno;
+#endif
+
 
 #else
 

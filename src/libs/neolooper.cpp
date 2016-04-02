@@ -3,9 +3,6 @@
 #include "neohandler.h"
 #include "neolooper.h"
 
-#ifndef WIN32
-extern int errno;
-#endif
 namespace NEOLIB {
 
 ThreadLocal<Looper> * Looper::gLooperThreadLocal = NULL;

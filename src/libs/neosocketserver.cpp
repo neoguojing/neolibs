@@ -40,6 +40,8 @@ void* doReadTask(void *pParam)
         total += result;
     }
 
+	printf("recv msg = %s!\r\n",pReadWriteParam.buffer);
+
     if (result == -1 && errno != EAGAIN)
     {
         printf("doReadTask fail!\r\n");
@@ -551,6 +553,8 @@ bool NeoServer::doSend(CClient* pClient)
         ReadWriteParam param;
         param.events = events;
         param.epollfd = m_epollFd;
+		param.buffer = new char[NEO_SERVER_RECEIVE_BUFFER_SIZE];
+		param.bufsize = NEO_SERVER_RECEIVE_BUFFER_SIZE;
         WorkerThread *readThread = new WorkerThread(doReadTask,param);
         readThread->start();
 

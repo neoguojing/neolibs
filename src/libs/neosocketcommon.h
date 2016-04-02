@@ -3,10 +3,6 @@
 #define NEOSOCKETCOMMOM
 #include "neoindex.h" 
 
-#ifndef WIN32
-extern int errno;
-#endif
-
 namespace NEOLIB {
 
 class CNEOBaseLibrary;

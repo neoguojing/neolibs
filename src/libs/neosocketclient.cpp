@@ -150,8 +150,8 @@ bool NeoClient::recvTask(void *pThis,int &nStatus)
     while(tThis->clientSwitch)
     {
         char buffer[NEO_CLIENT_RECEIVE_BUFFER_SIZE] = {0};
-#ifdef WIN32
-        while((recvRet = recv(tThis->m_Socket, buffer, 1024, 0)) > 0)
+
+        while((recvRet = recv(tThis->m_Socket, buffer, NEO_CLIENT_RECEIVE_BUFFER_SIZE, 0)) > 0)
         {
             tThis->m_pNEOBaseLib->m_pDebug->DebugToFile(
                             "NeoClient::loop got msg:msg=%s,recvsize=%d,buffersize=1024!,\r\n",
@@ -167,14 +167,17 @@ bool NeoClient::recvTask(void *pThis,int &nStatus)
         }
         else
         {
-            int err=WSAGetLastError();
+            int err = 0;
+#ifdef WIN32
+			err = WSAGetLastError();
+#else
+			err = errno;
+#endif
             tThis->m_pNEOBaseLib->m_pDebug->DebugToFile("recv err=%d",err);
 			continue;
         }
 
-#else
 
-#endif
     }//while(tThis->clientSwitch)
 
     return needContinue;
@@ -188,17 +191,17 @@ bool NeoClient::myTask(void *pThis,int &nStatus)
 
     tThis->m_pNEOBaseLib->m_pDebug->DebugToFile("my task started!\r\n");
 
-#ifdef WIN32
     if((sendRet = send(tThis->m_Socket, "i am a client", 14, 0)) < 0)
     {
-            int err=WSAGetLastError();
+		int err=0;
+#ifdef WIN32
+		err = WSAGetLastError();
+#else
+		err = errno;
+#endif
             tThis->m_pNEOBaseLib->m_pDebug->DebugToFile("send err=%d",err);
             return true;
     }
-
-#else
-
-#endif
 
     return needContinue;
 }
