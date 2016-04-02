@@ -127,6 +127,7 @@ void * doWriteTask(void *pParam)
         {
             m_pNEOBaseLib->m_pDebug->DebugToFile("Socket listen fail!\r\n");
             ::WIN_LINUX_CloseSocket(m_Socket);
+			return;
         }
 
 #ifndef WIN32
@@ -248,7 +249,7 @@ void * doWriteTask(void *pParam)
             tThis->m_Event.events = EPOLL_ET_IN;
             tThis->m_Event.data.fd = tThis->m_connSocket;
 
-           addEvent(tThis->m_epollFd, tThis->m_connSocket,tThis->m_Event);
+            addEvent(tThis->m_epollFd, tThis->m_connSocket,tThis->m_Event);
         }
 
         if (-1 == tThis->m_connSocket)
