@@ -67,7 +67,7 @@ public:
 
 #ifndef WIN32
     bool send(ReadWriteParam& param);
-    bool recv(unsigned int events, WIN_LINUX_SOCKET socket);
+    bool recv(unsigned int events);
 #endif
 
     void close();

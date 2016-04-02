@@ -544,7 +544,7 @@ bool NeoServer::doSend(CClient* pClient)
 
     }
 
-    bool NeoServer::recv(unsigned int events, WIN_LINUX_SOCKET socket)
+    bool NeoServer::recv(unsigned int events)
     {
         //也可以用task pool处理 
         ReadWriteParam param;
