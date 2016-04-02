@@ -108,17 +108,17 @@ void * doWriteTask(void *pParam)
         }
 #endif
 
-        if(svctyoe == SERVICE_TYPE::TCP)
+        if(svctyoe == ::TCP)
         {
             TCP(addr,port);
         }
-        else if(svctyoe == SERVICE_TYPE::UDP)
+        else if(svctyoe == ::UDP)
         {
             UDP(addr,port);
         }
-        else if(svctyoe == SERVICE_TYPE::RAW)
+        else if(svctyoe == ::RAW)
             RAW(addr,port);
-        else if(svctyoe == SERVICE_TYPE::LOCAL)
+        else if(svctyoe == ::LOCAL)
             LOCAL();
 
         m_pNEOBaseLib->m_pMemPool->RegisterSocket(m_Socket,"NeoServer::m_Socket");

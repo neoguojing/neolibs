@@ -60,13 +60,13 @@ bool NeoClient::init(const SERVICE_TYPE svctype)
     }
 #endif
 
-    if(svctype == SERVICE_TYPE::TCP)
+    if(svctype == ::TCP)
         m_Socket = socket(AF_INET,SOCK_STREAM,IPPROTO_TCP);
-    else if(svctype == SERVICE_TYPE::UDP)
+    else if(svctype == ::UDP)
         m_Socket = socket(AF_INET,SOCK_DGRAM,IPPROTO_UDP);
-    else if(svctype == SERVICE_TYPE::RAW)
+    else if(svctype == ::RAW)
         m_Socket = socket(AF_INET,SOCK_RAW,IPPROTO_IP);
-    else if(svctype == SERVICE_TYPE::LOCAL)
+    else if(svctype == ::LOCAL)
         m_Socket = socket(AF_UNIX,SOCK_DGRAM,IPPROTO_TCP);
 
     m_pNEOBaseLib->m_pMemPool->RegisterSocket(m_Socket);
