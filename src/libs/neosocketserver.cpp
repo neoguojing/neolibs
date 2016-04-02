@@ -240,9 +240,10 @@ void * doWriteTask(void *pParam)
         
         tThis->m_pNEOBaseLib->m_pDebug->DebugToFile("accept thread started!\r\n");
 #ifndef WIN32
-        while(tThis->serverSwitch)
+        while((tThis->m_connSocket = ::accept
+			(tThis->m_Socket,(struct sockaddr *)&tThis->m_ClientAddr,(socklen_t*)&size)) > 0)
         {
-            tThis->m_connSocket = ::accept(tThis->m_Socket,(struct sockaddr *)&tThis->m_ClientAddr,(socklen_t*)&size);
+
             if(tThis->m_connSocket == WIN_LINUX_InvalidSocket)
                 continue;
 
