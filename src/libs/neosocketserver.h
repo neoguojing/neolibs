@@ -13,10 +13,6 @@
 */
 using namespace std;
 
-#ifndef WIN32
-extern int errno;
-#endif
-
 namespace NEOLIB {
 
 class CNEOBaseLibrary;
@@ -31,7 +27,7 @@ typedef struct
     int bufsize;
     unsigned int events;
     int epollfd; 
-    void *buffer;
+    char *buffer;
 }ReadWriteParam;
 
 #else
