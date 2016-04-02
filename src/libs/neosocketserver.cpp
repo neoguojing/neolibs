@@ -406,7 +406,7 @@ bool NeoServer::doSend(CClient* pClient)
 
          while(tThis->serverSwitch)
          {
-            tThis->m_pNEOBaseLib->m_pDebug->DebugToFile("epoll_wait loop!\r\n");
+            //tThis->m_pNEOBaseLib->m_pDebug->DebugToFile("epoll_wait loop!\r\n");
             numofwaitingfds = epoll_wait(tThis->m_epollFd, tThis->m_Events, EPOLL_SIZE_HINT, -1);
             if (-1 == numofwaitingfds)
             {
@@ -579,8 +579,8 @@ bool NeoServer::sendTask(void *pThis,int &nStatus)
     CClient *tThis = (CClient*)pThis;
 
 #ifdef WIN32
-   tThis->setDataBuffer("i am the server",16,IOWrite);
-   needContinue = tThis->Send();
+    tThis->setDataBuffer("i am the server",16,IOWrite);
+    needContinue = tThis->Send();
 #else
 
 #endif
