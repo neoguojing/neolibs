@@ -155,7 +155,7 @@ bool CClient::Recv(const SERVICE_TYPE svctype)
 	wsabuf.len= m_IoRecv.dataBuf.len;
 	DWORD flag=0;
 
-    if(svctype == SERVICE_TYPE::TCP)
+    if(svctype == ::TCP)
     {
 	    int ret=WSARecv(m_s,&wsabuf,1,&m_IoRecv.len,&flag,&m_IoRecv.overlapped,NULL);
 	    if(ret==SOCKET_ERROR)
@@ -167,7 +167,7 @@ bool CClient::Recv(const SERVICE_TYPE svctype)
 		    }
 	    }
     }
-    else if(svctype == SERVICE_TYPE::UDP)
+    else if(svctype == ::UDP)
     {
         recvfrom(m_s,wsabuf.buf,wsabuf.len,flag,(SOCKADDR*)&m_addr,&addrsize);
     }
@@ -185,7 +185,7 @@ bool CClient::Send(const SERVICE_TYPE svctype)
 	wsabuf.buf = m_IoSend.dataBuf.buf;
 	wsabuf.len = m_IoSend.dataBuf.len;
 
-    if(svctype == SERVICE_TYPE::TCP)
+    if(svctype == ::TCP)
     {
 	    int ret=WSASend(m_s,&wsabuf,1,&wsabuf.len,flag,&m_IoSend.overlapped,NULL);
 	    if(ret==SOCKET_ERROR)
@@ -197,7 +197,7 @@ bool CClient::Send(const SERVICE_TYPE svctype)
 		    }
 	    }
     }
-    else if(svctype == SERVICE_TYPE::UDP)
+    else if(svctype == ::UDP)
     {
         int rtn = sendto(m_s, wsabuf.buf, wsabuf.len, flag, (struct sockaddr *)&m_addr, sizeof(m_addr));  
         if (rtn < 0)  
@@ -221,12 +221,12 @@ bool CClient::Recv(const SERVICE_TYPE svctype, char *buf, int len)
 {
     int addrsize = sizeof(m_addr);
 
-    if(svctype == SERVICE_TYPE::TCP)
+    if(svctype == ::TCP)
     {
         if(read(m_Socket,buf,len) < 0)
             return false;
     }
-    else if(svctype == SERVICE_TYPE::UDP)
+    else if(svctype == ::UDP)
     {
         recvfrom(m_Socket,buf,len,0,(struct sockaddr *)&m_addr,(socklen_t*)&addrsize);
     }
@@ -235,12 +235,12 @@ bool CClient::Recv(const SERVICE_TYPE svctype, char *buf, int len)
 
 bool CClient::Send(const SERVICE_TYPE svctype, char *buf, int len)
 {
-    if(svctype == SERVICE_TYPE::TCP)
+    if(svctype == ::TCP)
     {
         if(0 > write(m_s, buf,len))
             return false;
     }
-    else if(svctype == SERVICE_TYPE::UDP)
+    else if(svctype == ::UDP)
     {
         int rtn = sendto(m_s, buf, len, 0, (struct sockaddr *)&m_addr, sizeof(m_addr));  
         if (rtn < 0)  
