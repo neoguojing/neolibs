@@ -397,7 +397,7 @@ bool NeoServer::doSend(CClient* pClient)
          if (addEvent(tThis->m_epollFd,tThis->m_Socket,tThis->m_Event) == -1)
          {
              tThis->m_pNEOBaseLib->m_pDebug->DebugToFile("addEvent m_Socket fail!\r\n");
-             return true
+             return true;
          }
 
          while(tThis->serverSwitch)
