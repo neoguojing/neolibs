@@ -1,14 +1,15 @@
-#ifndef NEOBASELIB 
+ï»¿#ifndef NEOBASELIB 
 
 #define NEOBASELIB 
 
 namespace NEOLIB {
+
 ////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////// 
-//ÆÁÄ»Êä³ö»Øµ÷º¯ÊıÔ­ĞÍ
+//å±å¹•è¾“å‡ºå›è°ƒå‡½æ•°åŸå‹
 typedef void (*_BASE_LIBRARY_PRINT_INFO_CALLBACK)(void *pCallParam);
-//Ó¦ÓÃ³ÌĞòÊä³ö»Øµ÷º¯Êı
+//åº”ç”¨ç¨‹åºè¾“å‡ºå›è°ƒå‡½æ•°
 typedef void (*_APP_INFO_OUT_CALLBACK)(char *szInfo,void *pCallParam);
 
 class CNEOLog;
@@ -16,6 +17,7 @@ class CNEOMemPoolWithLock;
 class CNEOTaskPool;
 class CNEOTaskRun;
 class CNEOLowDebug;
+class CNEOMemQueueWithLock;
 
 class  CNEOBaseLibrary
 {
@@ -24,61 +26,60 @@ private:
     CNEOBaseLibrary(const char *szAppName,
         const char *szLogPath,
         const char *szTempPath,
-         _BASE_LIBRARY_PRINT_INFO_CALLBACK pPrintInfoCallback, //infoÊä³ö»Øµ÷º¯ÊıÖ¸Õë
-        int nTaskPoolThreadMax=DEFAULT_THREAD_MAX, //ÈÎÎñ³Ø×î´óµÄÏß³ÌÊı
-        bool bDebugToTTYFlag=true,                 //debugÊä³öµ½ÆÁÄ»¿ª¹Ø
-        void* pPrintInfoCallbackParam=NULL,       //info»Øµ÷º¯ÊıÖ¸Õë
-        _APP_INFO_OUT_CALLBACK pInfoOutCallback=NULL,// Ó¦ÓÃ³ÌĞò»Øµ÷º¯Êı
+         _BASE_LIBRARY_PRINT_INFO_CALLBACK pPrintInfoCallback, //infoè¾“å‡ºå›è°ƒå‡½æ•°æŒ‡é’ˆ
+        int nTaskPoolThreadMax=DEFAULT_THREAD_MAX, //ä»»åŠ¡æ± æœ€å¤§çš„çº¿ç¨‹æ•°
+        bool bDebugToTTYFlag=true,                 //debugè¾“å‡ºåˆ°å±å¹•å¼€å…³
+        void* pPrintInfoCallbackParam=NULL,       //infoå›è°ƒå‡½æ•°æŒ‡é’ˆ
+        _APP_INFO_OUT_CALLBACK pInfoOutCallback=NULL,// åº”ç”¨ç¨‹åºå›è°ƒå‡½æ•°
         void *pInfoOutCallbackParam=NULL
         );
+
+protected:
+	CNEOBaseLibrary()
+	{
+		printf("create by singleton!\n");
+	}
 
 public:
     ~CNEOBaseLibrary();
 private:
-    //info´òÓ¡ÈÎÎñ
+    //infoæ‰“å°ä»»åŠ¡
     static bool InfoPrintTaskCallback(void *pCallParam,int &nStatus);
     time_t m_tLastPrint;
-    //´òÓ¡ĞÅÏ¢»Øµ÷º¯Êı
+    //æ‰“å°ä¿¡æ¯å›è°ƒå‡½æ•°
     _BASE_LIBRARY_PRINT_INFO_CALLBACK m_pPrintInfoCallback;
     void *m_pInfoOutCallbackParam;  
 public:
-    //Ó¦ÓÃÃûµÄ±¸·İ±£´æ
+    //åº”ç”¨åçš„å¤‡ä»½ä¿å­˜
     char m_szAppName[NEO_APPLICATION_NAME_SIZE];
-    //ÈÕÖ¾Â·¾¶
+    //æ—¥å¿—è·¯å¾„
     char m_szLogPathName[NEO_APP_LOG_PATH_NAME_SIZE];
-    //ÁÙÊ±ÎÄ¼şÂ·¾¶
+    //ä¸´æ—¶æ–‡ä»¶è·¯å¾„
     char m_szTempPathName[NEO_APP_TEMP_PATH_NAME_SIZE];
-    //ÈÕÖ¾Ä£¿é
+    //æ—¥å¿—æ¨¡å—
     CNEOLog *m_pLog;
-    //ÄÚ´æ³Ø
+    //å†…å­˜æ± 
     CNEOMemPoolWithLock *m_pMemPool;
-    //Ïß³Ì³Ø
+    //çº¿ç¨‹æ± 
     CNEOTaskPool *m_pTaskPool;
-    //Ïß³Ì³ØÔËĞĞÌå
-    CNEOTaskRun *m_pTaskRun;
-    //debugÃ»ÔËĞĞÒ»´Î£¬¸²¸ÇÉÏ´Î
+    //debugæ²¡è¿è¡Œä¸€æ¬¡ï¼Œè¦†ç›–ä¸Šæ¬¡
     CNEOLowDebug *m_pDebug;
-	//°²È«Ëø
+    //æ¶ˆæ¯é˜Ÿåˆ—
+    CNEOMemQueueWithLock *m_pMemQueue;
+	//å®‰å…¨é”
 	static CNEOBaseLibrary *getInstance(const char *szAppName,
 								const char *szLogPath,
 								const char *szTempPath,
-								 _BASE_LIBRARY_PRINT_INFO_CALLBACK pPrintInfoCallback, //infoÊä³ö»Øµ÷º¯ÊıÖ¸Õë
-								int nTaskPoolThreadMax=DEFAULT_THREAD_MAX, //ÈÎÎñ³Ø×î´óµÄÏß³ÌÊı
-								bool bDebugToTTYFlag=true,                 //debugÊä³öµ½ÆÁÄ»¿ª¹Ø
-								void* pPrintInfoCallbackParam=NULL,       //info»Øµ÷º¯ÊıÖ¸Õë
-								_APP_INFO_OUT_CALLBACK pInfoOutCallback=NULL,// Ó¦ÓÃ³ÌĞò»Øµ÷º¯Êı
+								 _BASE_LIBRARY_PRINT_INFO_CALLBACK pPrintInfoCallback, //infoè¾“å‡ºå›è°ƒå‡½æ•°æŒ‡é’ˆ
+								int nTaskPoolThreadMax=DEFAULT_THREAD_MAX, //ä»»åŠ¡æ± æœ€å¤§çš„çº¿ç¨‹æ•°
+								bool bDebugToTTYFlag=true,                 //debugè¾“å‡ºåˆ°å±å¹•å¼€å…³
+								void* pPrintInfoCallbackParam=NULL,       //infoå›è°ƒå‡½æ•°æŒ‡é’ˆ
+								_APP_INFO_OUT_CALLBACK pInfoOutCallback=NULL,// åº”ç”¨ç¨‹åºå›è°ƒå‡½æ•°
 								void *pInfoOutCallbackParam=NULL);
 
-#ifdef WIN32
-       bool m_bSocketInitFlag;
-       WORD wVersionRequested;
-       WSADATA m_wsaData;
-
-#else
-#endif
-};
+};//CNEOBaseLibrary
 
 
-}
+}//NEOLIB
 #endif
 

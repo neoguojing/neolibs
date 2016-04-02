@@ -1,92 +1,96 @@
-#ifndef NEOQUEUE 
+ï»¿#ifndef NEOQUEUE 
 
 #define NEOQUEUE 
+#include "neoindex.h"
+#include "neolock.h"
 
 namespace NEOLIB {
-//pop bufferÊı¾İ½á¹¹
-//¶ÓÁĞµÄÍ·
+//pop bufferæ•°æ®ç»“æ„
+//é˜Ÿåˆ—çš„å¤´
 typedef struct _NEO_POP_BUFFER_HEAD_
 {
-	int m_nTokenCount;             //ÄÚ²¿°üº¬µÄÔªËØ¸öÊı
-	int m_nAllByteSCount;          //Ê¹ÓÃµÄ×Ö½Ú×ÜÊı
+	int m_nTokenCount;             //å†…éƒ¨åŒ…å«çš„å…ƒç´ ä¸ªæ•°
+	int m_nAllByteSCount;          //ä½¿ç”¨çš„å­—èŠ‚æ€»æ•°
 }SNEOPopBufferHead;
 const unsigned long SNEOPopBufferHeadSize=sizeof(SNEOPopBufferHead);
 
-//¶ÓÁĞÖĞÃ¿¸öÔªËØµÄÍ·
+//é˜Ÿåˆ—ä¸­æ¯ä¸ªå…ƒç´ çš„å¤´
 typedef struct _NEO_POP_BUFFER_TOKEN_HEAD_
 {
-	int m_nDataLen;              //±êÊ¾¸Ãµ¥ÔªµÄÊı¾İ³¤¶È
+	int m_nDataLen;              //æ ‡ç¤ºè¯¥å•å…ƒçš„æ•°æ®é•¿åº¦
 }SNEOPopBufferTokenHead;
 const unsigned long SNEOPopBufferTokenHeadSize=sizeof(SNEOPopBufferTokenHead);
 ////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////
-//mem queue µÄÊı¾İ½á¹¹
+//mem queue çš„æ•°æ®ç»“æ„
 typedef struct _NEO_QUEUE_TOKEN_HEAD_
 {
-	int m_nDataLen;                    //´æ´¢µÄÒµÎñÊı¾İ³¤¶È
-	char *m_pBuffer;                   //Ö¸ÏòÒµÎñÊı¾İ¿éµÄÖ¸Õë
+	int m_nDataLen;                    //å­˜å‚¨çš„ä¸šåŠ¡æ•°æ®é•¿åº¦
+	char *m_pBuffer;                   //æŒ‡å‘ä¸šåŠ¡æ•°æ®å—çš„æŒ‡é’ˆ
 	struct _NEO_QUEUE_TOKEN_HEAD_ *m_pNext;
 }SNEOQueueTokenHead;
 const unsigned long SNEOQueueTokenHeadSize=sizeof(SNEOQueueTokenHead);
 ///////////////////////////////////////////////////////////////
 //#define NEO_APPLICATION_NAME_SIZE 256
 //#define NEO_CHAIN_TOKEN_MAX 1024
-//Ö÷ÒªÎªÁËÊµÏÖ±¨ÎÄÆ´½ÓºÍĞÅÁî¹¹½¨£¨ÒÀÀµÄÚ´æ³Ø£©
-//¶¯Ì¬buffer
+//ä¸»è¦ä¸ºäº†å®ç°æŠ¥æ–‡æ‹¼æ¥å’Œä¿¡ä»¤æ„å»ºï¼ˆä¾èµ–å†…å­˜æ± ï¼‰
+//åŠ¨æ€buffer
+class CNEOMemPoolWithLock;
+class CNEOLowDebug;
 class  CNEODynamicBuffer
 { 
 public:
 	CNEODynamicBuffer(CNEOMemPoolWithLock *pMemPool);
 	~CNEODynamicBuffer();
 public:
-	CNEOMemPoolWithLock *m_pMemPool;//ÄÚ´æ³ØÖ¸Õë
-	char *m_pData;//¶¯Ì¬ÄÚ´æ»º³åÇøÖ¸Õë
-	int m_nDataLen;//ÄÚ´æ»º³åÇø³¤¶È
+	CNEOMemPoolWithLock *m_pMemPool;//å†…å­˜æ± æŒ‡é’ˆ
+	char *m_pData;//åŠ¨æ€å†…å­˜ç¼“å†²åŒºæŒ‡é’ˆ
+	int m_nDataLen;//å†…å­˜ç¼“å†²åŒºé•¿åº¦
 public:
 	///////////////////////////////
-	//³ß´çÉèÖÃº¯Êı
-	bool SetSize(int nSize); //ÉèÖÃĞÂµÄ´óĞ¡
-	bool InsertSpaceToHead(int nAddBytes);//ÔÚÇ°Ãæ²åÈë¿Õ°×
-	bool AddSpaceToTail(int nAddBytes);//ÔÚºóÃæ²åÈë¿Õ°×
-	void CutHead(int nBytes);// ´ÓÇ°Ãæ¼ôµôÒ»¶ÎÊı¾İ;
-	void CutTail(int nBytes);//´ÓºóÃæ¼ôµôÒ»¶ÎÊı¾İ
+	//å°ºå¯¸è®¾ç½®å‡½æ•°
+	bool SetSize(int nSize); //è®¾ç½®æ–°çš„å¤§å°
+	bool InsertSpaceToHead(int nAddBytes);//åœ¨å‰é¢æ’å…¥ç©ºç™½
+	bool AddSpaceToTail(int nAddBytes);//åœ¨åé¢æ’å…¥ç©ºç™½
+	void CutHead(int nBytes);// ä»å‰é¢å‰ªæ‰ä¸€æ®µæ•°æ®;
+	void CutTail(int nBytes);//ä»åé¢å‰ªæ‰ä¸€æ®µæ•°æ®
     ////////////////////////////////////////
-	//ÊıÖµ×ª»»º¯Êı
-	bool SetInt(int n);//½²Ò»¸öÕûÊıÒÔ¶ş½øÖÆ·½Ê½¿½±´µ½»º³åÇø´øÍøÂç×Ö½ÚĞò
-	int GetInt(void);//ÒÔÕûÊı·½Ê½»ñµÃ»º³åÇøµÄÊıÖµ
-	bool SetShort(short n);//½²Ò»¸ö¶ÌÕûÊıÒÔ¶ş½øÖÆ·½Ê½¿½±´µ½»º³åÇø´øÍøÂç×Ö½ÚĞò
+	//æ•°å€¼è½¬æ¢å‡½æ•°
+	bool SetInt(int n);//è®²ä¸€ä¸ªæ•´æ•°ä»¥äºŒè¿›åˆ¶æ–¹å¼æ‹·è´åˆ°ç¼“å†²åŒºå¸¦ç½‘ç»œå­—èŠ‚åº
+	int GetInt(void);//ä»¥æ•´æ•°æ–¹å¼è·å¾—ç¼“å†²åŒºçš„æ•°å€¼
+	bool SetShort(short n);//è®²ä¸€ä¸ªçŸ­æ•´æ•°ä»¥äºŒè¿›åˆ¶æ–¹å¼æ‹·è´åˆ°ç¼“å†²åŒºå¸¦ç½‘ç»œå­—èŠ‚åº
 
-	short GetShort(void);//¶Ë¿ÚºÅ
-	bool SetChar(char n);//½«Ò»¸ö×Ö½ÚÒÔ¶ş½øÖÆ·½Ê½¿½±´µ½»º³åÇø
-	char GetChar(void);//ÒÔ×Ö½Ú·½Ê½»ñµÃ»º³åÇøµÄÊıÖµ
+	short GetShort(void);//ç«¯å£å·
+	bool SetChar(char n);//å°†ä¸€ä¸ªå­—èŠ‚ä»¥äºŒè¿›åˆ¶æ–¹å¼æ‹·è´åˆ°ç¼“å†²åŒº
+	char GetChar(void);//ä»¥å­—èŠ‚æ–¹å¼è·å¾—ç¼“å†²åŒºçš„æ•°å€¼
 	//////////////////////////////////////////
-	//¶ş½øÖÆÊı¾İ×·¼Óº¯Êı
-	//×·¼ÓÊı¾İµ½×îºó£¬·µ»ØĞÂµÄ³¤¶È
+	//äºŒè¿›åˆ¶æ•°æ®è¿½åŠ å‡½æ•°
+	//è¿½åŠ æ•°æ®åˆ°æœ€åï¼Œè¿”å›æ–°çš„é•¿åº¦
 	int AddData(char *szData,int nDataLen);
-	//²åÈëÊı¾İµÄ×îÇ°Ãæ£¬·µ»ØĞÂµÄÊı¾İ³¤¶È
+	//æ’å…¥æ•°æ®çš„æœ€å‰é¢ï¼Œè¿”å›æ–°çš„æ•°æ®é•¿åº¦
 	int InsertDataToHead(char *szData,int nDataLen);
 	/////////////////////////////////////////
-	//¶ş½øÖÆÊı¾İ¿½±´º¯Êı
-	//¿½±´µ½Ò»¿éÄ¿±ê»º³åÇøÓò£¬ÊÜ´«ÈëµÄ»º³åÇø³¤¶ÈÏŞÖÆ
+	//äºŒè¿›åˆ¶æ•°æ®æ‹·è´å‡½æ•°
+	//æ‹·è´åˆ°ä¸€å—ç›®æ ‡ç¼“å†²åŒºåŸŸï¼Œå—ä¼ å…¥çš„ç¼“å†²åŒºé•¿åº¦é™åˆ¶
 	int BinCopyTo(char *szBuffer,int nBufferSize);
-	//´ÓÒ»¿éÀ´Ô´»º³åÇø¿½±´Êı¾İµ½±¾¶ÔÏóÖĞ
+	//ä»ä¸€å—æ¥æºç¼“å†²åŒºæ‹·è´æ•°æ®åˆ°æœ¬å¯¹è±¡ä¸­
 	int BinCopyFrom(char *szData,int nDataLen);
-	//´ÓÁíÍâÒ»¸öBuffer¶ÔÏó¿½±´Êı¾İµ½±¾¶ÔÏó
+	//ä»å¦å¤–ä¸€ä¸ªBufferå¯¹è±¡æ‹·è´æ•°æ®åˆ°æœ¬å¯¹è±¡
 	int BinCopyFrom(CNEODynamicBuffer *pBuffer);
 	/////////////////////////////////////////////
-	//ÎÄ±¾Êı¾İ¿½±´¹¹½¨º¯Êı
+	//æ–‡æœ¬æ•°æ®æ‹·è´æ„å»ºå‡½æ•°
 	int StrCopyFrom(char *szString);
 	int Printf(const char *szFormat,...);
 	/////////////////////////////////////////////
-	//Êı¾İ±È½Ïº¯Êı
+	//æ•°æ®æ¯”è¾ƒå‡½æ•°
 	int memcmp(char *szData,int nDataLen);
 	int strcmp(char *szString);
 	/**/
 	char* GetBuffer(void);
 	int GetBufferLength(void);
 };
-//¾²Ì¬Buffer
+//é™æ€Buffer
 class  CNEOStaticBuffer
 {
 public:
@@ -94,50 +98,50 @@ public:
 	CNEOStaticBuffer(CNEOMemPoolWithLock *pMemPool);
 	~CNEOStaticBuffer();
 public:
-	CNEOMemPoolWithLock *m_pMemPool;       //ÄÚ´æ³ØÖ¸Õë
-	char m_pData[NEO_SAFE_BUFFER_MAX_SIZE];//¾²Ì¬Êı×é
-	int m_nDataLen;                        //ÄÚ´æ»º³åÇø³¤¶È
+	CNEOMemPoolWithLock *m_pMemPool;       //å†…å­˜æ± æŒ‡é’ˆ
+	char m_pData[NEO_SAFE_BUFFER_MAX_SIZE];//é™æ€æ•°ç»„
+	int m_nDataLen;                        //å†…å­˜ç¼“å†²åŒºé•¿åº¦
 public:
 	///////////////////////////////
-	//³ß´çÉèÖÃº¯Êı
-	bool SetSize(int nSize); //ÉèÖÃĞÂµÄ´óĞ¡
-	bool InsertSpaceToHead(int nAddBytes);//ÔÚÇ°Ãæ²åÈë¿Õ°×
-	bool AddSpaceToTail(int nAddBytes);//ÔÚºóÃæ²åÈë¿Õ°×
-	void CutHead(int nBytes);// ´ÓÇ°Ãæ¼ôµôÒ»¶ÎÊı¾İ
-	void CutTail(int nBytes);//´ÓºóÃæ¼ôµôÒ»¶ÎÊı¾İ
+	//å°ºå¯¸è®¾ç½®å‡½æ•°
+	bool SetSize(int nSize); //è®¾ç½®æ–°çš„å¤§å°
+	bool InsertSpaceToHead(int nAddBytes);//åœ¨å‰é¢æ’å…¥ç©ºç™½
+	bool AddSpaceToTail(int nAddBytes);//åœ¨åé¢æ’å…¥ç©ºç™½
+	void CutHead(int nBytes);// ä»å‰é¢å‰ªæ‰ä¸€æ®µæ•°æ®
+	void CutTail(int nBytes);//ä»åé¢å‰ªæ‰ä¸€æ®µæ•°æ®
     ////////////////////////////////////////
-	//ÊıÖµ×ª»»º¯Êı
-	bool SetInt(int n);//½²Ò»¸öÕûÊıÒÔ¶ş½øÖÆ·½Ê½¿½±´µ½»º³åÇø´øÍøÂç×Ö½ÚĞò
-	int GetInt(void);//ÒÔÕûÊı·½Ê½»ñµÃ»º³åÇøµÄÊıÖµ
-	bool SetShort(short n);//½²Ò»¸ö¶ÌÕûÊıÒÔ¶ş½øÖÆ·½Ê½¿½±´µ½»º³åÇø´øÍøÂç×Ö½ÚĞò
+	//æ•°å€¼è½¬æ¢å‡½æ•°
+	bool SetInt(int n);//è®²ä¸€ä¸ªæ•´æ•°ä»¥äºŒè¿›åˆ¶æ–¹å¼æ‹·è´åˆ°ç¼“å†²åŒºå¸¦ç½‘ç»œå­—èŠ‚åº
+	int GetInt(void);//ä»¥æ•´æ•°æ–¹å¼è·å¾—ç¼“å†²åŒºçš„æ•°å€¼
+	bool SetShort(short n);//è®²ä¸€ä¸ªçŸ­æ•´æ•°ä»¥äºŒè¿›åˆ¶æ–¹å¼æ‹·è´åˆ°ç¼“å†²åŒºå¸¦ç½‘ç»œå­—èŠ‚åº
 
-	short GetShort(void);//¶Ë¿ÚºÅ
-	bool SetChar(char n);//½«Ò»¸ö×Ö½ÚÒÔ¶ş½øÖÆ·½Ê½¿½±´µ½»º³åÇø
-	char GetChar(void);//ÒÔ×Ö½Ú·½Ê½»ñµÃ»º³åÇøµÄÊıÖµ
+	short GetShort(void);//ç«¯å£å·
+	bool SetChar(char n);//å°†ä¸€ä¸ªå­—èŠ‚ä»¥äºŒè¿›åˆ¶æ–¹å¼æ‹·è´åˆ°ç¼“å†²åŒº
+	char GetChar(void);//ä»¥å­—èŠ‚æ–¹å¼è·å¾—ç¼“å†²åŒºçš„æ•°å€¼
 	//////////////////////////////////////////
-	//¶ş½øÖÆÊı¾İ×·¼Óº¯Êı
-	//×·¼ÓÊı¾İµ½×îºó£¬·µ»ØĞÂµÄ³¤¶È
+	//äºŒè¿›åˆ¶æ•°æ®è¿½åŠ å‡½æ•°
+	//è¿½åŠ æ•°æ®åˆ°æœ€åï¼Œè¿”å›æ–°çš„é•¿åº¦
 	int AddData(char *szData,int nDataLen);
-	//²åÈëÊı¾İµÄ×îÇ°Ãæ£¬·µ»ØĞÂµÄÊı¾İ³¤¶È
+	//æ’å…¥æ•°æ®çš„æœ€å‰é¢ï¼Œè¿”å›æ–°çš„æ•°æ®é•¿åº¦
 	int InsertDataToHead(char *szData,int nDataLen);
 	/////////////////////////////////////////
-	//¶ş½øÖÆÊı¾İ¿½±´º¯Êı
-	//¿½±´µ½Ò»¿éÄ¿±ê»º³åÇøÓò£¬ÊÜ´«ÈëµÄ»º³åÇø³¤¶ÈÏŞÖÆ
+	//äºŒè¿›åˆ¶æ•°æ®æ‹·è´å‡½æ•°
+	//æ‹·è´åˆ°ä¸€å—ç›®æ ‡ç¼“å†²åŒºåŸŸï¼Œå—ä¼ å…¥çš„ç¼“å†²åŒºé•¿åº¦é™åˆ¶
 	int BinCopyTo(char *szBuffer,int nBufferSize);
-	//´ÓÒ»¿éÀ´Ô´»º³åÇø¿½±´Êı¾İµ½±¾¶ÔÏóÖĞ
+	//ä»ä¸€å—æ¥æºç¼“å†²åŒºæ‹·è´æ•°æ®åˆ°æœ¬å¯¹è±¡ä¸­
 	int BinCopyFrom(char *szData,int nDataLen);
-	//´ÓÁíÍâÒ»¸öBuffer¶ÔÏó¿½±´Êı¾İµ½±¾¶ÔÏó
+	//ä»å¦å¤–ä¸€ä¸ªBufferå¯¹è±¡æ‹·è´æ•°æ®åˆ°æœ¬å¯¹è±¡
 	int BinCopyFrom(CNEODynamicBuffer *pBuffer);
 	/////////////////////////////////////////////
-	//ÎÄ±¾Êı¾İ¿½±´¹¹½¨º¯Êı
+	//æ–‡æœ¬æ•°æ®æ‹·è´æ„å»ºå‡½æ•°
 	int StrCopyFrom(char *szString);
 	int Printf(char *szFormat,...);
 	/////////////////////////////////////////////
-	//Êı¾İ±È½Ïº¯Êı
+	//æ•°æ®æ¯”è¾ƒå‡½æ•°
 	int memcmp(char *szData,int nDataLen);
 	int strcmp(char *szString);
 	////////////////////////////////////////////
-	//·şÎñº¯Êı
+	//æœåŠ¡å‡½æ•°
 	bool IHaveData(void);
 
 	char* GetBuffer(void);
@@ -146,128 +150,128 @@ public:
 ///////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////
-//ÓÃÓÚÍ¨ĞÅË«·½µÄ²Ù×÷ÏµÍ³Ò»ÑùµÄÇé¿ö£¨Ğ§ÂÊÆ«µÍ£©
-//»Øµ÷º¯Êı¹¹ĞÍ
+//ç”¨äºé€šä¿¡åŒæ–¹çš„æ“ä½œç³»ç»Ÿä¸€æ ·çš„æƒ…å†µï¼ˆæ•ˆç‡åä½ï¼‰
+//å›è°ƒå‡½æ•°æ„å‹
 typedef bool(*_NEO_ENUM_DATA_CALLBACK)(
-	char *szData,//Êı¾İÖ¸Õë
-	int nDataLen//Êı¾İ³¤¶È
-	,void* pCallParam);//´ú´«µÄ²ÎÊı
+	char *szData,//æ•°æ®æŒ‡é’ˆ
+	int nDataLen//æ•°æ®é•¿åº¦
+	,void* pCallParam);//ä»£ä¼ çš„å‚æ•°
 //static bool EnumDataCallback(char *szData,int nDataLen,void *pCallParam);
-//»ù±¾¶ÓÁĞÄ£ĞÍ
+//åŸºæœ¬é˜Ÿåˆ—æ¨¡å‹
 class  CNEOPopBuffer
 {
 public:
-	CNEOPopBuffer(char *szBuffer,           //»º³åÇøÖ¸Õë
-		int nBufferSize,                    //»º³åÇø³ß´ç
-		bool bInitFlag=true);                //ÊÇ·ñ³õÊ¼»¯±êÖ¾
+	CNEOPopBuffer(char *szBuffer,           //ç¼“å†²åŒºæŒ‡é’ˆ
+		int nBufferSize,                    //ç¼“å†²åŒºå°ºå¯¸
+		bool bInitFlag=true);                //æ˜¯å¦åˆå§‹åŒ–æ ‡å¿—
 	~CNEOPopBuffer();
 public:
-	char *m_pBuffer;                       //×î¹Ø¼üµÄÄÚ²¿»º³åÇøÖ¸Õë
-	int m_nBufferSize;                     //ÄÚ²¿»º³åÇøµÄ³¤¶È
+	char *m_pBuffer;                       //æœ€å…³é”®çš„å†…éƒ¨ç¼“å†²åŒºæŒ‡é’ˆ
+	int m_nBufferSize;                     //å†…éƒ¨ç¼“å†²åŒºçš„é•¿åº¦
 private:
-	SNEOPopBufferHead *m_pHead;            //¶ÓÁĞÍ·Ö¸Õë
+	SNEOPopBufferHead *m_pHead;            //é˜Ÿåˆ—å¤´æŒ‡é’ˆ
 public:
-	//ÊµÏÖÕ³ºÏµÄ·½·¨,Íâ²¿´«ÈëµÄ»º³åÇøÓòÄÚ²¿»º³åÇøµÄÖ¸Õë¹Ò½Ó
+	//å®ç°ç²˜åˆçš„æ–¹æ³•,å¤–éƒ¨ä¼ å…¥çš„ç¼“å†²åŒºåŸŸå†…éƒ¨ç¼“å†²åŒºçš„æŒ‡é’ˆæŒ‚æ¥
 	void Set(char *szBuffer,int nBufferSize);
-	//Çå¿ÕÕû¸öÇøÓò£¬Êı¾İÇåÁã£¬»º³åÇø²»ÊÍ·Å
+	//æ¸…ç©ºæ•´ä¸ªåŒºåŸŸï¼Œæ•°æ®æ¸…é›¶ï¼Œç¼“å†²åŒºä¸é‡Šæ”¾
 	void Clean(void);
-	//ÄÚ²¿ĞÅÏ¢´òÓ¡º¯Êı
+	//å†…éƒ¨ä¿¡æ¯æ‰“å°å‡½æ•°
 	void PrintInside();
-	//ÄÜ·ñÕıÈ·¹¤×÷µÄ±êÖ¾º¯Êı
+	//èƒ½å¦æ­£ç¡®å·¥ä½œçš„æ ‡å¿—å‡½æ•°
 	bool ICanWork(void);
-	//¶ÓÁĞ×î¾­µäµÄ¹¦ÄÜ£¬×·¼Óµ½Ä©Î²£¬
+	//é˜Ÿåˆ—æœ€ç»å…¸çš„åŠŸèƒ½ï¼Œè¿½åŠ åˆ°æœ«å°¾ï¼Œ
 	int AddLast(const char *szData,int nDataLength);
 	int AddLast(CNEODynamicBuffer *pBuffer);
 	int AddLast(CNEOStaticBuffer *pBuffer);
-	//»ñµÃµ±Ç°ÄÚ²¿ÔªËØ¸öÊı
+	//è·å¾—å½“å‰å†…éƒ¨å…ƒç´ ä¸ªæ•°
 	int GetTokenCount(void);
-	//»ñµÃËùÓĞµÄ×Ö½ÚÊı
+	//è·å¾—æ‰€æœ‰çš„å­—èŠ‚æ•°
 	int GetAllBytes(void);
-	//ÅĞ¶ÏÄÚ²¿Ê£Óà¿Õ¼äÊÇ·ñ¹»ÓÃ,ÊÇ·ñ¹»ĞÂ¼ÓÈëµÄÊı¾İÓÃ
+	//åˆ¤æ–­å†…éƒ¨å‰©ä½™ç©ºé—´æ˜¯å¦å¤Ÿç”¨,æ˜¯å¦å¤Ÿæ–°åŠ å…¥çš„æ•°æ®ç”¨
 	bool ICanSave(int nDataLen);
-	//»ñµÃµÚÒ»¸öÔªËØµÄ³¤¶È
+	//è·å¾—ç¬¬ä¸€ä¸ªå…ƒç´ çš„é•¿åº¦
 	int GetFirstTokenLength(void);
-	//»ñÈ¡µÚÒ»¸öÔªËØ
+	//è·å–ç¬¬ä¸€ä¸ªå…ƒç´ 
 	int GetFirst(char *szBuffer,int nBufferSize);
 	int GetFirst(CNEODynamicBuffer *pBufferh);/////////////////////////////////////////////////////////////////???
 	int GetFirst(CNEOStaticBuffer *pBuffer);
-	//É¾³ıÒ»¸öÔªËØ
+	//åˆ é™¤ä¸€ä¸ªå…ƒç´ 
 	bool DeleteFirst(void);
-	//´Ó¶ÓÁĞ×Üµ¯³öµÚÒ»¸öÔªËØ
+	//ä»é˜Ÿåˆ—æ€»å¼¹å‡ºç¬¬ä¸€ä¸ªå…ƒç´ 
 	int GetAndDeleteFirst(char *szBuffer,int nBufferSize);
 	int GetAndDeleteFirst(CNEODynamicBuffer *pBufferh);///////////////////////////////////////////////////////////////??
 	int GetAndDeleteFirst(CNEOStaticBuffer *pBuffer);
-	//Ã¶¾Ù±éÀúËùÓĞÊı¾İ£¬Ìá½»»Øµ÷º¯Êı´¦Àí£¬²¢É¾³ıÊı¾İ
+	//æšä¸¾éå†æ‰€æœ‰æ•°æ®ï¼Œæäº¤å›è°ƒå‡½æ•°å¤„ç†ï¼Œå¹¶åˆ é™¤æ•°æ®
 	int MoveAllData(_NEO_ENUM_DATA_CALLBACK pCallBack,void *pCallParam);
 };
 
 //////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
-//¶¯Ì¬ÄÚ´æ·ÖÅä£¬¶ÓÁĞ²ÉÓÃÁĞ±íµÄ(ÒÀÀµÄÚ´æ³Ø)
+//åŠ¨æ€å†…å­˜åˆ†é…ï¼Œé˜Ÿåˆ—é‡‡ç”¨åˆ—è¡¨çš„(ä¾èµ–å†…å­˜æ± )
 class  CNEOMemQueue
 {
 private:
-	int m_nMaxToken;                        //×î´óµÄTokenÏŞÖÆ
-	int m_nTokenCount;                      //¶ÓÁĞÖĞÓĞĞ§µØToken¸öÊı
+	int m_nMaxToken;                        //æœ€å¤§çš„Tokené™åˆ¶
+	int m_nTokenCount;                      //é˜Ÿåˆ—ä¸­æœ‰æ•ˆåœ°Tokenä¸ªæ•°
 
-	SNEOQueueTokenHead *m_pHead;            //¶ÓÁĞÍ·Ö¸Õë
-	SNEOQueueTokenHead *m_pLast;            //¼ÓËÙÒò×Ó£¬¶ÓÁĞÎ²Ö¸Õë
+	SNEOQueueTokenHead *m_pHead;            //é˜Ÿåˆ—å¤´æŒ‡é’ˆ
+	SNEOQueueTokenHead *m_pLast;            //åŠ é€Ÿå› å­ï¼Œé˜Ÿåˆ—å°¾æŒ‡é’ˆ
 	CNEOLowDebug *m_pDebug;
 	CNEOMemPoolWithLock *m_pMemPool;        
 	char m_szAppName[NEO_APPLICATION_NAME_SIZE];
 public:
 	CNEOMemQueue(CNEOLowDebug *pDebug,CNEOMemPoolWithLock *pMemPool,
-		const char *szAppName,                    // Ó¦ÓÃ³ÌĞòÃû£¬´ú±í¶ÓÁĞÃû
-		int nMaxToken=NEO_CHAIN_TOKEN_MAX  //×î´ótokenÉÏÏŞ
+		const char *szAppName,                    // åº”ç”¨ç¨‹åºåï¼Œä»£è¡¨é˜Ÿåˆ—å
+		int nMaxToken=NEO_CHAIN_TOKEN_MAX  //æœ€å¤§tokenä¸Šé™
 		);
 	~CNEOMemQueue();
 public:
 	bool ICanWork(void);
-	void CleanAll(void);              //Çå³ıËùÓĞtoken;
-	int GetFirstLength(void);        // »ñµÃµÚÒ»¸ötokenÊı¾İ³¤¶È
-	int GetTokenCount(void);        //»ñµÃtoken×ÜÊı
-	void PrintInside(void);         //´òÓ¡ËÑÓĞ¶ÓÁĞÄÚ²¿tokenÊı¾İ
-	int AddLast(const char *szData       //Êı¾İÖ¸Õë
-		,int nDataLen,             //Êı¾İ³¤¶È
-		int nLimit=-1);              //·ÀÖ¹µİ¹é³¤¶È¹ıÉñ
+	void CleanAll(void);              //æ¸…é™¤æ‰€æœ‰token;
+	int GetFirstLength(void);        // è·å¾—ç¬¬ä¸€ä¸ªtokenæ•°æ®é•¿åº¦
+	int GetTokenCount(void);        //è·å¾—tokenæ€»æ•°
+	void PrintInside(void);         //æ‰“å°æœæœ‰é˜Ÿåˆ—å†…éƒ¨tokenæ•°æ®
+	int AddLast(const char *szData       //æ•°æ®æŒ‡é’ˆ
+		,int nDataLen,             //æ•°æ®é•¿åº¦
+		int nLimit=-1);              //é˜²æ­¢é€’å½’é•¿åº¦è¿‡ç¥
 	int GetFirst(char *szBuffer,int nBufferSize);
 	int GetFirst(CNEOStaticBuffer *pBuffer);
 	int GetFirst(CNEODynamicBuffer *pBuffer);
 	bool DeleteFirst(void);
 	int GetAndDeleteFirst(char *szBuffer,int nBufferSize);
-	int GetAndDeleteFirst(CNEOStaticBuffer *pBuffer);////////////////////////Î´Íê//////////////////////////////////////??????????
+	int GetAndDeleteFirst(CNEOStaticBuffer *pBuffer);
 	int GetAndDeleteFirst(CNEODynamicBuffer *pBuffer);
 
-	//´ÓÇ°Ãæµ¯³öÒ»ÅúÊı¾İ£¬
+	//ä»å‰é¢å¼¹å‡ºä¸€æ‰¹æ•°æ®ï¼Œ
 	int PopFromFirst(char *szBuffer,int nBufferSize);
-	//´ÓpopbufferµÄÊı¾İÇøµ¯³öËùÓĞÊı¾İ£¬×·¼Óµ½¶ÓÁĞÎ²
+	//ä»popbufferçš„æ•°æ®åŒºå¼¹å‡ºæ‰€æœ‰æ•°æ®ï¼Œè¿½åŠ åˆ°é˜Ÿåˆ—å°¾
 	int PushToLast(char *szData,int nDataLen);
 
-     //¶ÓÁĞÊı¾İĞ´Èë´ÅÅÌ
+     //é˜Ÿåˆ—æ•°æ®å†™å…¥ç£ç›˜
 	void WriteToFile(const char *szFileName);
-	//¶ÓÁĞÊı¾İ´Ó´ÅÅÌ¶Á³ö
+	//é˜Ÿåˆ—æ•°æ®ä»ç£ç›˜è¯»å‡º
 	int ReadFromFile(const char *szFileName);
 private:
 	void PrintAToken(SNEOQueueTokenHead *pToken);
 	void WriteATokenToFile(SNEOQueueTokenHead *pToken,FILE *fp);
 	int PopFromFirst4NEOPopBuffer(CNEOPopBuffer *pPopBuffer);
-	//ÉêÇëÓÃÀ´´æ´¢Êı¾İµÄÄÚ´æ
+	//ç”³è¯·ç”¨æ¥å­˜å‚¨æ•°æ®çš„å†…å­˜
 	int AddLastToThisToken(SNEOQueueTokenHead *pToken,const char *szData,int nDataLen);
-	//ÉêÇëÒ»¸ötokenÍ·
-	SNEOQueueTokenHead *GetAToken(void);//·µ»ØÖ¸Õë£¬²»×ñÊØË­ÉêÇëË­ÊÍ·ÅµÄÔ­Ôò
+	//ç”³è¯·ä¸€ä¸ªtokenå¤´
+	SNEOQueueTokenHead *GetAToken(void);//è¿”å›æŒ‡é’ˆï¼Œä¸éµå®ˆè°ç”³è¯·è°é‡Šæ”¾çš„åŸåˆ™
 	bool DeleteATokenAndHisNext(SNEOQueueTokenHead *pToken);
-	//»Øµ÷º¯ÊıÉêÃ÷
+	//å›è°ƒå‡½æ•°ç”³æ˜
 	static bool PushDataCallback(char *szData,int nDataLen,void *pCallParam);
 };
 
-//´ø°²È«ËøµÄÀà
+//å¸¦å®‰å…¨é”çš„ç±»
 class  CNEOMemQueueWithLock
 {
 public:
 	CNEOMemQueueWithLock(CNEOLowDebug *pDebug,
 		CNEOMemPoolWithLock *pMemPool,
-		const char *szAppName,                    // Ó¦ÓÃ³ÌĞòÃû£¬´ú±í¶ÓÁĞÃû
+		const char *szAppName,                    // åº”ç”¨ç¨‹åºåï¼Œä»£è¡¨é˜Ÿåˆ—å
 		int nMaxToken=NEO_CHAIN_TOKEN_MAX
 		);
 	~CNEOMemQueueWithLock();

@@ -1,4 +1,4 @@
-#ifndef NEO_LIST
+﻿#ifndef NEO_LIST
 #define NEO_LIST
 #ifdef NEOLIB_C_PLUS_PLUS
 extern "C" {

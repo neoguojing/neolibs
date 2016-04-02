@@ -1,4 +1,4 @@
-#ifndef NEOLOCK
+ï»¿#ifndef NEOLOCK
 
 #define NEOLOCK
 #include "neoindex.h"
@@ -86,52 +86,52 @@ cmType CMutexTemplate<cmType>::Dec(int nValue)
 }
 
 
-//cÓïÑÔµÄ¼ÓËø½á¹¹Ìå
+//cè¯­è¨€çš„åŠ é”ç»“æ„ä½“
 typedef struct _MINT_
 {
 	int m_nValue;
 	MUTEX m_MyLock;
 }MINT,MBOOL;
-//¶ÔÕûĞÎºÍboolĞÍÊı¾İµÄ¼ÓËø
-//³õÊ¼»¯ÄÄÒ»¸öÏß³Ì°²È«±äÁ¿£¬Í¬Ê±¿ÉÒÔ·µ»ØÉèÖÃÖµ
+//å¯¹æ•´å½¢å’Œboolå‹æ•°æ®çš„åŠ é”
+//åˆå§‹åŒ–å“ªä¸€ä¸ªçº¿ç¨‹å®‰å…¨å˜é‡ï¼ŒåŒæ—¶å¯ä»¥è¿”å›è®¾ç½®å€¼
  int MvarInit(MINT &(mValue),int nValue=0);
  void MvarDestroy(MINT &(mValue));
-//ÉèÖÃÒ»¸öÏß³Ì±äÁ¿Öµ
+//è®¾ç½®ä¸€ä¸ªçº¿ç¨‹å˜é‡å€¼
  int MvarSet(MINT &(mValue),int nValue);
-//µÃµ½Ïß³Ì°²È«±äÁ¿µÄÖµ
+//å¾—åˆ°çº¿ç¨‹å®‰å…¨å˜é‡çš„å€¼
  int MvarGet(MINT &(mValue));
-//Ïß³Ì°²È«±äÁ¿×ö¼Ó·¨ºÍ½â·¨
+//çº¿ç¨‹å®‰å…¨å˜é‡åšåŠ æ³•å’Œè§£æ³•
  int MvarAdd(MINT &(mValue),int nValue=1);
  int MvarDec(MINT &(mValue),int nValue=1);
 
-//µ¥Ğ´¶à¶ÁËø
+//å•å†™å¤šè¯»é”
 typedef struct _NEO_MULTI_READ_SINGLE_WRITE_LOCK_
 {
-	int m_nReadCount;                              //¶Á¼ÆÊıÆ÷
-	bool m_bWriteFlag;                             //Ğ´±ê¼Ç
-	MUTEX m_Lock;                                  //ÄÚ²¿Ëø£¬±£Ö¤¶àÏß³Ì°²È«
+	int m_nReadCount;                              //è¯»è®¡æ•°å™¨
+	bool m_bWriteFlag;                             //å†™æ ‡è®°
+	MUTEX m_Lock;                                  //å†…éƒ¨é”ï¼Œä¿è¯å¤šçº¿ç¨‹å®‰å…¨
 }SNeoMultiReadSingleWriteLock;
 const unsigned long  SNeoMultiReadSingleWriteLockSize=sizeof(SNeoMultiReadSingleWriteLock);
 
  void MRSWLock_Create(SNeoMultiReadSingleWriteLock *pLock);
  void MRSWLock_Destroy(SNeoMultiReadSingleWriteLock *pLock);
-//Ëø×´Ì¬»ñÖª
+//é”çŠ¶æ€è·çŸ¥
  bool MRSWLock_GetWrite(SNeoMultiReadSingleWriteLock *pLock);
  int MRSWLock_GetRead(SNeoMultiReadSingleWriteLock *pLock);
-//½øÈëĞ´²Ù×÷
+//è¿›å…¥å†™æ“ä½œ
  void MRSWLock_EnterWrite(SNeoMultiReadSingleWriteLock *pLock);
-//ÍË³öĞ´
+//é€€å‡ºå†™
  void MRSWLock_DisableWrite(SNeoMultiReadSingleWriteLock *pLock);
-//½øÈë¶Á
+//è¿›å…¥è¯»
  int MRSWLock_AddRead(SNeoMultiReadSingleWriteLock *pLock);
-//ÍË³ö¶Á
+//é€€å‡ºè¯»
  int MRSWLock_DecRead(SNeoMultiReadSingleWriteLock *pLock);
-//¶Á×ªĞ´
+//è¯»è½¬å†™
  void MRSWLock_ReadToWrite(SNeoMultiReadSingleWriteLock *pLock);
 /////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////
-//»ù±¾¼ÓËøÀà
+//åŸºæœ¬åŠ é”ç±»
 class  CMutexLock
 {
 public:
@@ -144,7 +144,7 @@ public:
 private:
 	MUTEX m_Lock;
 };
-//ÒÔÉÏº¯ÊıµÄc++ÀàÊµÏÖ
+//ä»¥ä¸Šå‡½æ•°çš„c++ç±»å®ç°
 class  CMint
 {
 public:
@@ -158,7 +158,7 @@ public:
 public:
 	MINT m_nValue;
 };
-//¶ÔboolĞÍ±äÁ¿µÄ¼ÓËø
+//å¯¹boolå‹å˜é‡çš„åŠ é”
 class  CMbool
 {
 public:
@@ -170,7 +170,7 @@ public:
 public:
 	MBOOL m_nValue;
 };
-//ÒÔÉÏº¯Êı¶ÔÓ¦µÄc++·â×°
+//ä»¥ä¸Šå‡½æ•°å¯¹åº”çš„c++å°è£…
 class  CMultiReadSingleWriteLock
 {
 public:
@@ -187,7 +187,7 @@ public:
 private:
 	SNeoMultiReadSingleWriteLock m_Lock;
 };
-//ÓÃÒÔÉÏµÄËø±£»¤ÕûĞÎºÍboolĞÍ±äÁ¿µÄÀà
+//ç”¨ä»¥ä¸Šçš„é”ä¿æŠ¤æ•´å½¢å’Œboolå‹å˜é‡çš„ç±»
 class  CMRSWint
 {
 public:
@@ -216,7 +216,7 @@ private:
 /////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////
-//²»¿ÉÖØÈëËø
+//ä¸å¯é‡å…¥é”
 class  CNonReentrant
 {
 public:
@@ -225,18 +225,18 @@ public:
 	bool Set(bool bRunFlag);
 private:
 	CMutexLock m_Lock;             //flag
-	bool m_bAlreadyRunFlag;        //ÄÚ²¿µÄ±äÁ¿Öµ
+	bool m_bAlreadyRunFlag;        //å†…éƒ¨çš„å˜é‡å€¼
 };
 ////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////
-//Ïß³Ì¿ØÖÆËø
+//çº¿ç¨‹æ§åˆ¶é”
 class  CThreadManager
 {
 private:
-	CMRSWbool m_bThreadContinue;//Ïß³Ì³ÖĞøµÄ±êÖ¾
-	CMRSWint m_nThreadCount;    //Ïß³Ì¼ÆÊıÆ÷
-	CMRSWint m_nThreadID;       //ÄÚÇ¶µÄdebugÓÑºÃ¹¦ÄÜ
+	CMRSWbool m_bThreadContinue;//çº¿ç¨‹æŒç»­çš„æ ‡å¿—
+	CMRSWint m_nThreadCount;    //çº¿ç¨‹è®¡æ•°å™¨
+	CMRSWint m_nThreadID;       //å†…åµŒçš„debugå‹å¥½åŠŸèƒ½
 public:
 	CThreadManager();
 	~CThreadManager();
@@ -244,13 +244,14 @@ public:
 	void CloseAll(void);
 	int AddThread(void);
 	void DecAThread(void);
-	//²éÑ¯Ïß³ÌÎ¬³Ö±äÁ¿µÄÖµ
+	//æŸ¥è¯¢çº¿ç¨‹ç»´æŒå˜é‡çš„å€¼
 	bool ThreadContinue(void);
-	//»ñµÃ¼ÆÊıÆ÷µÄÖµ
+	//è·å¾—è®¡æ•°å™¨çš„å€¼
 	int GetThreadCount(void);
-	//·ÖÅäÒ»¸öÏß³ÌID¹©debugÓÃ
+	//åˆ†é…ä¸€ä¸ªçº¿ç¨‹IDä¾›debugç”¨
 	int GetID(void);
 };
+
 
 }
 

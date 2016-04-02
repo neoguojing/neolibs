@@ -1,4 +1,4 @@
-#ifndef NEOMEM 
+ï»¿#ifndef NEOMEM 
 
 #define NEOMEM 
 #include "neoindex.h"  
@@ -10,114 +10,114 @@ namespace NEOLIB {
 ///////////////////////////////////////////////export func
 // void neosafestrncpy(char *pD,char *pS,int nDestSize);
 // int neosafesprintf(char *szBuf,int nDestSize,char *szFormat,...);
-//ÀàµÄÉêÃ÷
-//»ù±¾Àà±íÔªËØ
+//ç±»çš„ç”³æ˜
+//åŸºæœ¬ç±»è¡¨å…ƒç´ 
 typedef struct _CHAIN_TOKEN_
 {
 	struct _CHAIN_TOKEN_ *m_pNext;
 	char *m_pBuffer;
 }SChainToken;
-//ÁĞ±íµÄÍ·
+//åˆ—è¡¨çš„å¤´
 typedef struct _NEO_MEM_BLOCK_HEAD_
 {
-	unsigned long m_ulBlockSize;//ÄÚ´æ¿éµÄ´óĞ¡£¨byte£©
+	unsigned long m_ulBlockSize;//å†…å­˜å—çš„å¤§å°ï¼ˆbyteï¼‰
 	struct _NEO_MEM_BLOCK_HEAD_ *m_pNext;
 }SNeoMemroryBlockHead;
 const unsigned long SNeoMemroryBlockHeadSize=sizeof(SNeoMemroryBlockHead);
 ////////////////////////////////////////////////////////////////////////////
-////×Ô¶¨Òå¼ÆËãÄ£¿é
+////è‡ªå®šä¹‰è®¡ç®—æ¨¡å—
 //#define NEO_MEM_BLOCK_SIZE(nDataLen) (nDataLen+SNeoMemroryBlockHeadSize)
 //#define NEO_MEM_BLOCK_DATA_SIZE(nBlockSize) (nBlockSize-SNeoMemroryBlockHeadSize)
-////¸ù¾İÊÍ·ÅµÄÖ¸Õë£¬ÄæÇóÕæÊµµÄÄÚ´æÄÚµØÖ·
+////æ ¹æ®é‡Šæ”¾çš„æŒ‡é’ˆï¼Œé€†æ±‚çœŸå®çš„å†…å­˜å†…åœ°å€
 //#define NEO_MEM_BLOCK_HEAD(pData) ((SNeoMemroryBlockHead*)(((char*)pData)-SNeoMemroryBlockHeadSize))
-////ÇóÊı¾İ¿éµÄµØÖ·
+////æ±‚æ•°æ®å—çš„åœ°å€
 //#define NEO_MEM_BLOCK_DATA(pHead) (((char *)pHead)+SNeoMemroryBlockHeadSize)
-////×îĞ¡×î´óÄÚ´æ¿é
+////æœ€å°æœ€å¤§å†…å­˜å—
 //#define NEO_MEM_STACK_BLOCK_MIN 16
 //#define NEO_MEM_STACK_BLOCK_MAX (1024*1024)
 //////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////
-////ÄÚ´æ×¢²áÄ£¿é
+////å†…å­˜æ³¨å†Œæ¨¡å—
 //#ifndef NEO_MEM_BLOCK_INFO_MAX_SIZE
 //#define NEO_MEM_BLOCK_INFO_MAX_SIZE 124
 //#endif
 typedef struct _NEO_MEM_REGISTER_
 {
-	void *m_pPoint;                            //±£ÁôÖ¸Õë
-	char m_szInfo[NEO_MEM_BLOCK_INFO_MAX_SIZE];//ËµÃ÷ÎÄ×Ö
+	void *m_pPoint;                            //ä¿ç•™æŒ‡é’ˆ
+	char m_szInfo[NEO_MEM_BLOCK_INFO_MAX_SIZE];//è¯´æ˜æ–‡å­—
 }SNEOMemRegister;
 const unsigned long SNEOMemRegisterSize=sizeof(SNEOMemRegister);
-////¹ÜÀíµÄÖ¸Õë¸öÊı
+////ç®¡ç†çš„æŒ‡é’ˆä¸ªæ•°
 //#ifndef NEO_MEM_REGISTER_MAX
 //#define NEO_MEM_REGISTER_MAX 10000
 //#endif
-////×Ö·û´®Çå¿ÕµÄºê
+////å­—ç¬¦ä¸²æ¸…ç©ºçš„å®
 //#define NEO_CLEAN_CHAR_BUFFER(p) (*((char *)p)='\0')
 /////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////
-//socket×¢²áÄ£¿é
+//socketæ³¨å†Œæ¨¡å—
 typedef struct _NEO_SOCKET_REGISTER_
 {
 	WIN_LINUX_SOCKET m_nSocket;
 	char m_szInfo[NEO_MEM_BLOCK_INFO_MAX_SIZE];
 }SNEOSocketRegister;
 const unsigned long SNEOSocketRegisterSize=sizeof(SNEOSocketRegister);
-//ÄÚ´æ¿éÔªËØ¹ÜÀí,Ö÷ÒªÊÇÓÒÖ®Ê÷µÄ¹ÜÀí
+//å†…å­˜å—å…ƒç´ ç®¡ç†,ä¸»è¦æ˜¯å³ä¹‹æ ‘çš„ç®¡ç†
 class  CNEOMemStackToken
 {
 public:
-	CNEOMemStackToken(int nBlockSize/*Òª¹ÜÀíµÄ»ù±¾ÄÚ´æ¿é´óĞ¡*/,CNEOLowDebug *pDebug);
+	CNEOMemStackToken(int nBlockSize/*è¦ç®¡ç†çš„åŸºæœ¬å†…å­˜å—å¤§å°*/,CNEOLowDebug *pDebug);
 	~CNEOMemStackToken();
 private:
-	SNeoMemroryBlockHead *m_pFirstSon;//Á´±íÍ·
-	CNEOMemStackToken *m_pNext;//ĞÖµÜ½Úµã
-	CMultiReadSingleWriteLock m_Lock;//±£»¤ÉÏÃæÁ½¸ö±äÁ¿
-	//ÄÚ´æ¿é³ß´ç
-	unsigned long m_ulBlockSize;//Ö»¶ÁµÄËùÒÔÎŞËø±£»¤
-	CMRSWint m_nBlockOutSide;//·ÖÅä³öÈ¥µÄÄÚ´æÊı
-	CMRSWint m_nBlockInSide;//±£ÁôµÄ¿ÕÏĞÄÚ´æÊı
+	SNeoMemroryBlockHead *m_pFirstSon;//é“¾è¡¨å¤´
+	CNEOMemStackToken *m_pNext;//å…„å¼ŸèŠ‚ç‚¹
+	CMultiReadSingleWriteLock m_Lock;//ä¿æŠ¤ä¸Šé¢ä¸¤ä¸ªå˜é‡
+	//å†…å­˜å—å°ºå¯¸
+	unsigned long m_ulBlockSize;//åªè¯»çš„æ‰€ä»¥æ— é”ä¿æŠ¤
+	CMRSWint m_nBlockOutSide;//åˆ†é…å‡ºå»çš„å†…å­˜æ•°
+	CMRSWint m_nBlockInSide;//ä¿ç•™çš„ç©ºé—²å†…å­˜æ•°
 	CNEOLowDebug *m_pDebug;
 public:
-	void *Malloc(int nSize,/*Í³¼ÆÉè¼ÆÒÔ±ãdebugµ÷ÓÃ*/CMRSWint &nAllBlockCount,CMRSWint &nMemUsed);
+	void *Malloc(int nSize,/*ç»Ÿè®¡è®¾è®¡ä»¥ä¾¿debugè°ƒç”¨*/CMRSWint &nAllBlockCount,CMRSWint &nMemUsed);
 	bool Free(void *pPoint,bool bCloseFlag);
     void PrintStack(void);
 private:
-	//ÏµÍ³ÍÆ³öÊ±µİ¹éÏú»ÙÉêÇëµÄÄÚ´æ¿é,µİ¹éÏú»ÙÓÒÖ®Ê÷
+	//ç³»ç»Ÿæ¨å‡ºæ—¶é€’å½’é”€æ¯ç”³è¯·çš„å†…å­˜å—,é€’å½’é”€æ¯å³ä¹‹æ ‘
 	void DestroySon(SNeoMemroryBlockHead *pSon);
 };
-//¾ÛºÏ£¬ÊµÏÖ×óÖ¦Ê÷µÄ¹ÜÀí
+//èšåˆï¼Œå®ç°å·¦ææ ‘çš„ç®¡ç†
 class  CNEOMemStack
 {
 public:
 	CNEOMemStack(CNEOLowDebug *pDebug);
 	~CNEOMemStack();
 private:
-	CNEOMemStackToken *m_pHead;//×óÖ¦Ê÷µÄÒÔÒ»¸ö½Úµã
-	//CMRSWint m_pMaxPoint;//Í³¼Æµ±Ç°ÓÃµ½µÄ×î´óÄÚ´æÖ¸Õë
+	CNEOMemStackToken *m_pHead;//å·¦ææ ‘çš„ä»¥ä¸€ä¸ªèŠ‚ç‚¹
+	//CMRSWint m_pMaxPoint;//ç»Ÿè®¡å½“å‰ç”¨åˆ°çš„æœ€å¤§å†…å­˜æŒ‡é’ˆ
 	CMutexTemplate<void *> m_pMaxPoint;
-	CMRSWint m_nAllBlockCount;//Í³¼Æµ±Ç°ÓÃµ½µÄËùÓĞÄÚ´æ¿é
-	CMRSWint m_nMemoryUse;//Í³¼Æµ±Ç°Ê¹ÓÃµÄÄÚ´æ×Ü×Ö½ÚÊı
-	CMRSWbool m_CloseFlag;//¹Ø±Õ±êÇ©
+	CMRSWint m_nAllBlockCount;//ç»Ÿè®¡å½“å‰ç”¨åˆ°çš„æ‰€æœ‰å†…å­˜å—
+	CMRSWint m_nMemoryUse;//ç»Ÿè®¡å½“å‰ä½¿ç”¨çš„å†…å­˜æ€»å­—èŠ‚æ•°
+	CMRSWbool m_CloseFlag;//å…³é—­æ ‡ç­¾
 public:
-	//ÖØ¶¨ÒåÖ¸ÕëÖ¸ÏòµÄÄÚ´æµ¥ÔªµÄ¿Õ¼ä´óĞ¡£¬¸ø³ö¾ÉÖ¸ÕëºÍĞÂ¿Õ¼äµÄ³ß´ç
-    //Èç¹û³É¹¦£¬·µ»ØÓĞĞ§µØĞÂÖ¸Õë£¬Ö¸ÏòÖØ¶¨ÒåµÄ´óĞ¡Ö®ºóĞÂ¿Õ¼ä£¬Ê§°Ü·µ»Ønull
-	//¿ÉÒÔ½«¾Í¿Õ¼äµÄÊı¾İ±¸·İµ½ĞÂ¿Õ¼ä£¬µ«Õâ²»Ò»¶¨È¡¾öÓÚĞÂ¿Õ¼äµÄ´óĞ¡
-	void *ReMalloc(void *pPoint,//¾ÉÖ¸Õë
-		int nNewSize,//ĞÂµÄÊı¾İ³ß´ç
+	//é‡å®šä¹‰æŒ‡é’ˆæŒ‡å‘çš„å†…å­˜å•å…ƒçš„ç©ºé—´å¤§å°ï¼Œç»™å‡ºæ—§æŒ‡é’ˆå’Œæ–°ç©ºé—´çš„å°ºå¯¸
+    //å¦‚æœæˆåŠŸï¼Œè¿”å›æœ‰æ•ˆåœ°æ–°æŒ‡é’ˆï¼ŒæŒ‡å‘é‡å®šä¹‰çš„å¤§å°ä¹‹åæ–°ç©ºé—´ï¼Œå¤±è´¥è¿”å›null
+	//å¯ä»¥å°†å°±ç©ºé—´çš„æ•°æ®å¤‡ä»½åˆ°æ–°ç©ºé—´ï¼Œä½†è¿™ä¸ä¸€å®šå–å†³äºæ–°ç©ºé—´çš„å¤§å°
+	void *ReMalloc(void *pPoint,//æ—§æŒ‡é’ˆ
+		int nNewSize,//æ–°çš„æ•°æ®å°ºå¯¸
 		bool bCopyOldDataFlag=true);
-	//MallocºÍfree£¬µ÷ÓÃÄÚ´æ¹ÜÀíµ¥ÔªµÄ·½·¨
+	//Mallocå’Œfreeï¼Œè°ƒç”¨å†…å­˜ç®¡ç†å•å…ƒçš„æ–¹æ³•
 	void *Malloc(int nSize);
 	bool Free(void *pPoint);
-	//ÄÚ²¿ĞÅÏ¢Êä³öº¯Êı
+	//å†…éƒ¨ä¿¡æ¯è¾“å‡ºå‡½æ•°
 	void PrintStack(void);
 	void PrintInfo(void);
-	//ÉèÖÃ¹Ø±Õ±êÖ¾£¬ÎªÕæÊ±µ÷ÓÃÏµÍ³free
+	//è®¾ç½®å…³é—­æ ‡å¿—ï¼Œä¸ºçœŸæ—¶è°ƒç”¨ç³»ç»Ÿfree
 	void SetCloseFlag(bool bFlag=true);
 	CNEOLowDebug *m_pDebug;
 };
-//ÄÚ´æÖ¸Õë×¢²áÄ£¿é
+//å†…å­˜æŒ‡é’ˆæ³¨å†Œæ¨¡å—
 class  CMemRegister
 {
 public:
@@ -125,30 +125,30 @@ public:
 	~CMemRegister();
 private:
 	CNEOLowDebug *m_pDebug;
-	CMutexLock m_Lock;//Ïß³Ì°²È«Ëø
+	CMutexLock m_Lock;//çº¿ç¨‹å®‰å…¨é”
 	SNEOMemRegister m_RegisterArray[NEO_MEM_REGISTER_MAX];
-	//µ±Ç°Êı×é×î´óÊ¹ÓÃ¶àÉÙµ¥Ôª
+	//å½“å‰æ•°ç»„æœ€å¤§ä½¿ç”¨å¤šå°‘å•å…ƒ
 	int m_nUseMax;
-	//Í³¼Æ×î´óµÄÖ¸Õë
+	//ç»Ÿè®¡æœ€å¤§çš„æŒ‡é’ˆ
 	void *m_pMaxPoint;
-	//Í³¼Æµ±Ç°ÕıÔÚÊ¹ÓÃµÄÖ¸ÕëÊı
+	//ç»Ÿè®¡å½“å‰æ­£åœ¨ä½¿ç”¨çš„æŒ‡é’ˆæ•°
 	int m_nPointCount;
 private:
-	//ÄÚ²¿¹¤¾ß£¬¿½±´Êı¾İ
-	void RegisterCopy(SNEOMemRegister *pDest//Ä¿µÄ¿½±´Ö¸Õë
-		,void *pPoint                       //´ı¿½±´µÄÖ¸Õë
-		,const char *szInfo);                      //´ı¿½±´µÄÃèÊö
+	//å†…éƒ¨å·¥å…·ï¼Œæ‹·è´æ•°æ®
+	void RegisterCopy(SNEOMemRegister *pDest//ç›®çš„æ‹·è´æŒ‡é’ˆ
+		,void *pPoint                       //å¾…æ‹·è´çš„æŒ‡é’ˆ
+		,const char *szInfo);                      //å¾…æ‹·è´çš„æè¿°
 public:
-	//Ìí¼ÓÒ»¸öÖ¸Õë¼°ÆäËµÃ÷
+	//æ·»åŠ ä¸€ä¸ªæŒ‡é’ˆåŠå…¶è¯´æ˜
 	void Add(void *pPoint,const char *szInfo);
-	//É¾³ıÒ»¸öÖ¸Õë£¨ÄÚ´æ±»ÊÍ·Å£¬Ê§Ğ§£©
+	//åˆ é™¤ä¸€ä¸ªæŒ‡é’ˆï¼ˆå†…å­˜è¢«é‡Šæ”¾ï¼Œå¤±æ•ˆï¼‰
 	void Del(void *pPoint);
-	//remallocµÄÊ±ºò¸üĞÂÖ¸Õë
+	//remallocçš„æ—¶å€™æ›´æ–°æŒ‡é’ˆ
 	void Modeify(void *pOld,void *pNew);
-	//´òÓ¡ĞÅÏ¢
+	//æ‰“å°ä¿¡æ¯
 	void PrintInfo(void);
 };
-////socket×¢²áÄ£¿é
+////socketæ³¨å†Œæ¨¡å—
 //bool SocketIsOK(WIN_LINUX_SOCKET nSocket)
 //{
 //	//if(0>nSocket) return false;
@@ -166,10 +166,10 @@ private:
 	CNEOLowDebug *m_pDebug;
 	CMutexLock m_Lock;
 	SNEOSocketRegister m_RegisterArray[NEO_MEM_REGISTER_MAX];
-	//¹ÜÀí±äÁ¿m_nSocketUseCount
+	//ç®¡ç†å˜é‡m_nSocketUseCount
 	int m_nUseMax;
-	WIN_LINUX_SOCKET m_nMaxSocket;//×¢²á¹ıµÄ×î´óµÄsocket
-	int m_nSocketUseCount;//ÔÚÓÃµÄsocket×ÜÊı
+	WIN_LINUX_SOCKET m_nMaxSocket;//æ³¨å†Œè¿‡çš„æœ€å¤§çš„socket
+	int m_nSocketUseCount;//åœ¨ç”¨çš„socketæ€»æ•°
 public:
 	void Add(WIN_LINUX_SOCKET s,char *szInfo=NULL);
 	bool Del(WIN_LINUX_SOCKET s);
@@ -177,41 +177,41 @@ public:
 };
 //////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////
-//ÄÚ´æ³ØÀà
+//å†…å­˜æ± ç±»
 class  CNEOMemPoolWithLock
 {
 public:
 	CNEOMemPoolWithLock(CNEOLowDebug *pDebug,
 		bool bOpenResgisterFlag=true);
 	~CNEOMemPoolWithLock();
-	//Ö¸Õë¹ÜÀí
+	//æŒ‡é’ˆç®¡ç†
 private:
 	CMemRegister *m_pRegister;
 public:
 	void Register(void *pPoint,const char *szInfo);
 	void UnRegister(void *pPoint);
-	//socket   ¹ÜÀí
+	//socket   ç®¡ç†
 private:
 	CSocketRegister *m_pSocketRegister;
 public:
 	void RegisterSocket(WIN_LINUX_SOCKET s,char *szInfo=NULL);
-	//·´×¢²á¼Ó¹Ø±Õ
+	//åæ³¨å†ŒåŠ å…³é—­
 	void CloseSocket(WIN_LINUX_SOCKET &s);
-	//¹«¹²¹ÜÀí
+	//å…¬å…±ç®¡ç†
 public:
-	//ÉèÖÃ±êÖ¾£¬ÈÃËùÓĞµÄfree¶¼Ö±½Ófree, ²»ÔÚ±£ÁôÔÚstackÖĞ
+	//è®¾ç½®æ ‡å¿—ï¼Œè®©æ‰€æœ‰çš„freeéƒ½ç›´æ¥free, ä¸åœ¨ä¿ç•™åœ¨stackä¸­
 	void SetCloseFlag(bool bFlag=true);
-	//ÖØĞÂ·ÖÅäÖ¸ÕëµÄ¿Õ¼ä£¬Ä¬ÈÏ¿½±´Ô­Ê¼Êı¾İµ½ĞÂ¿Õ¼ä
+	//é‡æ–°åˆ†é…æŒ‡é’ˆçš„ç©ºé—´ï¼Œé»˜è®¤æ‹·è´åŸå§‹æ•°æ®åˆ°æ–°ç©ºé—´
 	void *ReMalloc(void *pPoint,int nNewSize,bool bCopyOldDataFlag=true);
-	//·ÖÅäÒ»¿éÄÚ´æ
+	//åˆ†é…ä¸€å—å†…å­˜
 	void *Malloc(int nSize,const char *szInfo=NULL);
 	void Free(void *pBlock);
-	//ÏÔÊ¾Õû¿ÃÄÚ´æÊ÷µÄÄÚÈİ
+	//æ˜¾ç¤ºæ•´æ£µå†…å­˜æ ‘çš„å†…å®¹
 	void PrintTree(void);
-	//¹Ø¼üĞÅÏ¢ÏÔÊ¾
+	//å…³é”®ä¿¡æ¯æ˜¾ç¤º
 	void PrintInfo(void);
 public:
-	CNEOMemStack *m_pMemPool;//ÄÚ´æÕ»¶ÔÏó
+	CNEOMemStack *m_pMemPool;//å†…å­˜æ ˆå¯¹è±¡
 	CNEOLowDebug *m_pDebug;
 };
 }

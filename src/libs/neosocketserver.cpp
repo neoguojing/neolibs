@@ -246,6 +246,9 @@ void * doWriteTask(void *pParam)
 
             if(tThis->m_connSocket == WIN_LINUX_InvalidSocket)
                 continue;
+	    
+            tThis->m_pNEOBaseLib->m_pDebug->DebugToFile("got a client %s,%d!\r\n",
+                inet_ntoa(tThis->m_ClientAddr.sin_addr),tThis->m_ClientAddr.sin_port);
 
             makeSocketNonBlocking(tThis->m_connSocket);
 
