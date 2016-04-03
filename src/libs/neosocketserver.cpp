@@ -53,7 +53,7 @@ void* doReadTask(void *pParam)
     ev.data.fd = pReadWriteParam.m_event.data.fd;
     ev.events = pReadWriteParam.m_event.events | EPOLLOUT;
 
-    int rtn = epoll_ctl(pReadWriteParam.epollfd, EPOLL_CTL_MOD,pReadWriteParam.fd,&ev);
+    int rtn = epoll_ctl(pReadWriteParam.epollfd, EPOLL_CTL_MOD,pReadWriteParam.m_event.data.fd,&ev);
     if (rtn == -1)
     {
         printf("epoll_ctl in doReadTask fail!\r\n");
