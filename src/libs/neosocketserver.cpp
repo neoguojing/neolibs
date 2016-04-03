@@ -82,10 +82,10 @@ void * doWriteTask(void *pParam)
             if (result == -1 && errno != EAGAIN)
             {
                 printf("doWriteTask fail!\r\n");
+				break;
             }
-            break;
-			n -= result;
         }   
+		n -= result;
     }
     //close(pReadWriteParam.m_event.data.fd);
 }
