@@ -69,6 +69,7 @@ void* doReadTask(void *pParam)
 void * doWriteTask(void *pParam)
 {
     int result = 0;
+	struct epoll_event ev={0};  
 
     ReadWriteParam pReadWriteParam = ((WorkerThread*)pParam)->mpParam;
 
@@ -86,6 +87,14 @@ void * doWriteTask(void *pParam)
             }
         }   
 		n -= result;
+    }
+
+	ev.events = pReadWriteParam.m_event.events & (~EPOLLOUT);
+
+	int rtn = epoll_ctl(pReadWriteParam.epollfd, EPOLL_CTL_MOD,pReadWriteParam.m_event.data.fd,&ev);
+    if (rtn == -1)
+    {
+        printf("epoll_ctl in doWriteTask fail!\r\n");
     }
     //close(pReadWriteParam.m_event.data.fd);
 }
