@@ -48,7 +48,10 @@ void* doReadTask(void *pParam)
     }
 
     if (pReadWriteParam.m_event.events & EPOLLOUT)
+	{
+		delete(pReadWriteParam.buffer);
         return 0;
+	}
 
     ev.data.fd = pReadWriteParam.m_event.data.fd;
     ev.events = pReadWriteParam.m_event.events | EPOLLOUT;
@@ -58,6 +61,8 @@ void* doReadTask(void *pParam)
     {
         printf("epoll_ctl in doReadTask fail!\r\n");
     }
+
+	delete(pReadWriteParam.buffer);
 }
 
 //void __stdcall* doWriteTask(void *pParam)
