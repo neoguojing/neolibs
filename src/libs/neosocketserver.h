@@ -23,10 +23,9 @@ class CClient;
 
 typedef struct
 {
-    int fd;
+	int epollfd;
+	epoll_event m_event;
     int bufsize;
-    unsigned int events;
-    int epollfd; 
     char *buffer;
 }ReadWriteParam;
 

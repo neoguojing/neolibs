@@ -34,7 +34,7 @@ void* doReadTask(void *pParam)
 
     ReadWriteParam pReadWriteParam = ((WorkerThread*)pParam)->mpParam;
 
-    while((result = read(pReadWriteParam.fd,pReadWriteParam.buffer+total, 
+    while((result = read(pReadWriteParam.m_event.data.fd,pReadWriteParam.buffer+total, 
         pReadWriteParam.bufsize))>0)
     {
         total += result;
@@ -47,11 +47,11 @@ void* doReadTask(void *pParam)
         printf("doReadTask fail!\r\n");
     }
 
-    if (pReadWriteParam.events & EPOLLOUT)
+    if (pReadWriteParam.m_event.events & EPOLLOUT)
         return 0;
 
-    ev.data.fd = pReadWriteParam.fd;
-    ev.events = pReadWriteParam.events | EPOLLOUT;
+    ev.data.fd = pReadWriteParam.m_event.data.fd;
+    ev.events = pReadWriteParam.m_event.events | EPOLLOUT;
 
     int rtn = epoll_ctl(pReadWriteParam.epollfd, EPOLL_CTL_MOD,pReadWriteParam.fd,&ev);
     if (rtn == -1)
@@ -71,7 +71,7 @@ void * doWriteTask(void *pParam)
 
     while (n > 0)
     {
-        result = write(pReadWriteParam.fd, pReadWriteParam.buffer,n);
+        result = write(pReadWriteParam.m_event.data.fd, pReadWriteParam.buffer,n);
         if (result < n)
         {
             if (result == -1 && errno != EAGAIN)
@@ -82,7 +82,7 @@ void * doWriteTask(void *pParam)
         }
         n -= result;
     }
-    close(pReadWriteParam.fd);
+    close(pReadWriteParam.m_event.data.fd);
 }
 
 #else
@@ -551,13 +551,12 @@ bool NeoServer::doSend(CClient* pClient)
 
     }
 
-    bool NeoServer::recv(unsigned int events)
+    bool NeoServer::recv(epoll_event evt)
     {
         //也可以用task pool处理 
         ReadWriteParam param;
-		param.fd = m_connSocket;
-        param.events = events;
-        param.epollfd = m_epollFd;
+		param.epollfd = m_epollFd;
+        param.m_event = events;
 		param.buffer = new char[NEO_SERVER_RECEIVE_BUFFER_SIZE];
 		param.bufsize = NEO_SERVER_RECEIVE_BUFFER_SIZE;
         WorkerThread *readThread = new WorkerThread(doReadTask,param);
