@@ -556,7 +556,7 @@ bool NeoServer::doSend(CClient* pClient)
         //也可以用task pool处理 
         ReadWriteParam param;
 		param.epollfd = m_epollFd;
-        param.m_event = events;
+        memcpy(&param.m_event,&evt,sizeof(evt));
 		param.buffer = new char[NEO_SERVER_RECEIVE_BUFFER_SIZE];
 		param.bufsize = NEO_SERVER_RECEIVE_BUFFER_SIZE;
         WorkerThread *readThread = new WorkerThread(doReadTask,param);
