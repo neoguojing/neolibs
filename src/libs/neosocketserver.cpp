@@ -429,7 +429,7 @@ bool NeoServer::doSend(CClient* pClient)
                 }
                 else if (tThis->m_Events[i].events & EPOLLIN)
                 {
-                    //tThis->recv(tThis->m_Events[i].events);
+                    tThis->recv(tThis->m_Events[i].events);
                 }
                 else if (tThis->m_Events[i].events & EPOLLOUT)
                 {
