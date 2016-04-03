@@ -84,10 +84,10 @@ void * doWriteTask(void *pParam)
                 printf("doWriteTask fail!\r\n");
             }
             break;
-        }
-        n -= result;
+			n -= result;
+        }   
     }
-    close(pReadWriteParam.m_event.data.fd);
+    //close(pReadWriteParam.m_event.data.fd);
 }
 
 #else
@@ -438,7 +438,11 @@ bool NeoServer::doSend(CClient* pClient)
                 }
                 else if (tThis->m_Events[i].events & EPOLLOUT)
                 {
-                    
+                    ReadWriteParam param;
+					param.epollfd = m_epollFd;
+					param.buffer = "I am the server";
+					param.bufsize = 16;
+					tThis->send(param);
                 }
             }
 
