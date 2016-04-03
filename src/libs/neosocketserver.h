@@ -62,7 +62,7 @@ public:
 
 #ifndef WIN32
     bool send(ReadWriteParam& param);
-    bool recv(unsigned int events);
+    bool recv(epoll_event evt);
 #endif
 
     void close();
