@@ -400,7 +400,7 @@ bool NeoServer::doSend(CClient* pClient)
          }
 
          tThis->m_Event.events = EPOLLIN;
-         tThis->m_Event.data.fd =  tThis->m_epollFd;
+         tThis->m_Event.data.fd =  tThis->m_Socket;
          if (addEvent(tThis->m_epollFd,tThis->m_Socket,tThis->m_Event) == -1)
          {
              tThis->m_pNEOBaseLib->m_pDebug->DebugToFile("addEvent m_Socket fail!\r\n");
@@ -413,7 +413,7 @@ bool NeoServer::doSend(CClient* pClient)
             numofwaitingfds = epoll_wait(tThis->m_epollFd, tThis->m_Events, EPOLL_SIZE_HINT, -1);
             if (-1 == numofwaitingfds)
             {
-                 tThis->m_pNEOBaseLib->m_pDebug->DebugToFile("epoll_ctl fail!\r\n");
+                 tThis->m_pNEOBaseLib->m_pDebug->DebugToFile("epoll_wait fail!\r\n");
                  continue;
             }
 
