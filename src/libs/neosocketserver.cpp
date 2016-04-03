@@ -35,7 +35,7 @@ void* doReadTask(void *pParam)
     ReadWriteParam pReadWriteParam = ((WorkerThread*)pParam)->mpParam;
 
     while((result = read(pReadWriteParam.fd,pReadWriteParam.buffer+total, 
-        pReadWriteParam.bufsize-1))>0)
+        pReadWriteParam.bufsize))>0)
     {
         total += result;
     }
@@ -555,6 +555,7 @@ bool NeoServer::doSend(CClient* pClient)
     {
         //也可以用task pool处理 
         ReadWriteParam param;
+		param.fd = m_connSocket;
         param.events = events;
         param.epollfd = m_epollFd;
 		param.buffer = new char[NEO_SERVER_RECEIVE_BUFFER_SIZE];
