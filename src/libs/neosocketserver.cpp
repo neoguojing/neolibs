@@ -439,7 +439,7 @@ bool NeoServer::doSend(CClient* pClient)
                 else if (tThis->m_Events[i].events & EPOLLOUT)
                 {
                     ReadWriteParam param;
-					param.epollfd = m_epollFd;
+					param.epollfd = tThis->m_epollFd;
 					param.buffer = "I am the server";
 					param.bufsize = 16;
 					tThis->send(param);
