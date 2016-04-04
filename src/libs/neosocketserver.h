@@ -2,6 +2,7 @@
 
 #define NEOSOCKETSERVER
 #include "neoindex.h" 
+//#include "neolock.h"
 #include <string>
 #include <set>
 /*
@@ -41,6 +42,9 @@ typedef struct _completionKey
 
 class NeoServer{
 public:
+
+    friend class CClient;
+
     NeoServer(const string addr, const unsigned short port, const SERVICE_TYPE svctype=(SERVICE_TYPE)0);
     ~NeoServer();
     
@@ -61,21 +65,37 @@ public:
     static bool loop(void *pThis,int &nStatus);
 
 #ifndef WIN32
+    /*bool setEpollEvents(WIN_LINUX_SOCKET s,epoll_event &listened_evnet)
+    {
+        if ((listened_evnet.events & EPOLLOUT) == 0)
+            listened_evnet.events |= EPOLLOUT;
+        else 
+            listened_evnet.events |= EPOLLIN;
+        modEvent(m_epollFd,s,listened_evnet);
+        return true;
+    }*/
     bool send(ReadWriteParam& param);
-    bool recv(epoll_event evt);
+    bool send(const WIN_LINUX_SOCKET s,const SERVICE_TYPE svctype = ::TCP);
+    static bool sendTask(void *pThis,int &nStatus);
+    bool recv(epoll_event evt, const SERVICE_TYPE svctype = ::TCP);
+    static bool recvTask(void *pThis,int &nStatus);
+#else
+    static bool sendTask(void *pThis,int &nStatus);
 #endif
 
     void close();
 
     bool doSend(CClient* pClient);
 
+    CClient* findClientBySocket(const WIN_LINUX_SOCKET s);
+
 private:
     void setInetAddr(string addr, unsigned short port);
     
     static bool accept(void *pThis,int &nStatus);
     bool sendToAppQueue(const char *szData,int nDataLen);
-    static bool sendTask(void *pThis,int &nStatus);
-
+    
+    //CMutexLock m_Lock;
     bool serverSwitch;
     set<CClient*> g_clientManager;
     CNEOBaseLibrary *m_pNEOBaseLib;

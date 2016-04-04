@@ -268,8 +268,12 @@ void * doWriteTask(void *pParam)
 
             tThis->m_Event.events = EPOLL_ET_IN;
             tThis->m_Event.data.fd = tThis->m_connSocket;
+            
+            CClient*pClient=new CClient(tThis->m_connSocket,tThis->m_ClientAddr);
+            //pClient->setDataBuffer();
 
-            addEvent(tThis->m_epollFd, tThis->m_connSocket,tThis->m_Event);
+            if(-1 != addEvent(tThis->m_epollFd, tThis->m_connSocket,tThis->m_Event))
+                tThis->g_clientManager.insert(pClient);
         }
 
         if (-1 == tThis->m_connSocket)
@@ -323,6 +327,13 @@ void * doWriteTask(void *pParam)
 
      void NeoServer::close()
      {
+        set<CClient*>::const_iterator iter;
+        for(iter = g_clientManager.begin() ; iter != g_clientManager.end() ; ++iter)
+        {
+             g_clientManager.erase(*iter);
+             delete(*iter);
+        }
+
         serverSwitch = false;
         m_pNEOBaseLib->m_pMemPool->CloseSocket(m_Socket);
 #ifdef WIN32
@@ -443,16 +454,18 @@ bool NeoServer::doSend(CClient* pClient)
                 }
                 else if (tThis->m_Events[i].events & EPOLLIN)
                 {
-                    tThis->recv(tThis->m_Events[i]);
+                    tThis->recv(tThis->m_Events[i],::TCP);
+                    //tThis->send(tThis->m_Events[i].data.fd);
+                                        
                 }
                 else if (tThis->m_Events[i].events & EPOLLOUT)
                 {
-                    ReadWriteParam param;
+                    /*ReadWriteParam param;
 					memcpy(&param.m_event,&tThis->m_Events[i],sizeof(tThis->m_Events[i]));
 					param.epollfd = tThis->m_epollFd;
 					param.buffer = "I am the server";
 					param.bufsize = 16;
-					tThis->send(param);
+					tThis->send(param);*/
                 }
             }
 
@@ -559,6 +572,17 @@ bool NeoServer::doSend(CClient* pClient)
 #endif
 
 #ifndef WIN32   
+namespace
+{
+    typedef struct _epoll_thread_param
+    {
+        SERVICE_TYPE svctype;
+        WIN_LINUX_SOCKET s;
+        NeoServer *pThis;
+        void *pData;
+    }EpollThreadParam;
+}
+
     bool NeoServer::send(ReadWriteParam& param)
     {
 
@@ -569,19 +593,152 @@ bool NeoServer::doSend(CClient* pClient)
         return true;
 
     }
-
-    bool NeoServer::recv(epoll_event evt)
+    bool NeoServer::send(const WIN_LINUX_SOCKET s,const SERVICE_TYPE svctype)
     {
-        //也可以用task pool处理 
-        ReadWriteParam param;
+        int sendBufferSize = 0;
+        IO_OPERATION_DATA *pIOData = new IO_OPERATION_DATA;
+        pIOData->IoType=IOWrite;
+        if (sendBufferSize > NEO_CLIENT_RECEIVE_BUFFER_SIZE)
+        {
+            pIOData->len = 16;
+            pIOData->buffersize = NEO_CLIENT_RECEIVE_BUFFER_SIZE;
+        }
+        else
+        {
+            pIOData->len = 16;
+            pIOData->buffersize = 16;
+        }
+	pIOData->dataBuf = "I am the server";
+
+        EpollThreadParam *param = new EpollThreadParam;
+        param->svctype = svctype;
+        param->s = s;
+        param->pThis = this;
+        param->pData = (void*)pIOData;
+
+        return m_pNEOBaseLib->m_pTaskPool->RegisterATask(sendTask,param);
+    }
+
+    bool NeoServer::sendTask(void *pThis,int &nStatus)
+    {
+        bool needContinue = false;
+        int result = 0;
+        int totalsent = 0;
+
+        SERVICE_TYPE svctype = ((EpollThreadParam*)pThis)->svctype;
+        NeoServer *tThis = (NeoServer*)((EpollThreadParam*)pThis)->pThis;
+        IO_OPERATION_DATA *pIOData = (IO_OPERATION_DATA*)((EpollThreadParam*)pThis)->pData;
+        WIN_LINUX_SOCKET s = ((EpollThreadParam*)pThis)->s;
+
+        if(svctype == ::TCP)
+        {
+            int n = pIOData->len;
+
+            while (n > 0)
+            {
+                result = write(s,pIOData->dataBuf+totalsent,n);
+                if (result < n)
+                {
+                    if (result == -1 && errno != EAGAIN)
+                    {
+                        printf("CClient::Send fail!\r\n");
+                        needContinue = true;
+		        break;
+                    }
+                }  
+                totalsent += result;
+	        n -= result;
+            }
+        }
+        else if(svctype == ::UDP)
+        {
+            CClient *pClient = tThis->findClientBySocket(s);
+            result = sendto(s, pIOData->dataBuf, pIOData->len, 0, (struct sockaddr *)&(pClient->m_addr), sizeof(sockaddr_in));  
+            if (result < 0)  
+            {  
+		needContinue = true;
+            }  
+        }
+        delete(pThis);
+        //delete(pIOData.dataBuf);
+        return needContinue;
+    }
+
+    bool NeoServer::recv(epoll_event evt,const SERVICE_TYPE svctype)
+    {
+        //线程直接理理
+        /*ReadWriteParam param;
 		param.epollfd = m_epollFd;
         memcpy(&param.m_event,&evt,sizeof(evt));
 		param.buffer = new char[NEO_SERVER_RECEIVE_BUFFER_SIZE];
 		param.bufsize = NEO_SERVER_RECEIVE_BUFFER_SIZE;
         WorkerThread *readThread = new WorkerThread(doReadTask,param);
-        readThread->start();
+        readThread->start();*/
+        EpollThreadParam *param = new EpollThreadParam;
+        param->svctype = svctype;
+        param->s = evt.data.fd;
+        param->pThis = this;
 
-        return true;
+        return m_pNEOBaseLib->m_pTaskPool->RegisterATask(recvTask,param);
+        
+    }
+
+    bool NeoServer::recvTask(void *pThis,int &nStatus)
+    {
+        bool needContinue = false;
+        int addrsize = sizeof(sockaddr_in);
+        int result = 0;
+        
+        SERVICE_TYPE svctype = ((EpollThreadParam*)pThis)->svctype;
+        NeoServer *tThis = (NeoServer*)((EpollThreadParam*)pThis)->pThis;
+        WIN_LINUX_SOCKET s = ((EpollThreadParam*)pThis)->s;
+
+        IO_OPERATION_DATA IoRecv;
+        IoRecv.IoType=IORead;
+        IoRecv.len = 0;
+        IoRecv.dataBuf = new char[NEO_SERVER_RECEIVE_BUFFER_SIZE];
+        IoRecv.buffersize = NEO_SERVER_RECEIVE_BUFFER_SIZE;
+
+        tThis->m_pNEOBaseLib->m_pDebug->DebugToFile("NeoServer::recvTask started!\r\n");
+        if(svctype == ::TCP)
+        {
+            while((result = read(s,IoRecv.dataBuf+IoRecv.len, 
+                IoRecv.buffersize))>0)
+            {
+                IoRecv.len += result;
+            }
+
+        }
+        else if(svctype == ::UDP)
+        {
+            CClient *pClient = tThis->findClientBySocket(s);
+            result = recvfrom(s,IoRecv.dataBuf,IoRecv.len,0,(struct sockaddr *)&(pClient->m_addr),(socklen_t*)&addrsize);
+        }
+        
+        printf("recv msg = %s,len=%d!\r\n",IoRecv.dataBuf,IoRecv.len);
+
+        if ((result == -1 && errno != EAGAIN) || 0 == IoRecv.len)
+        {
+            printf("CClient::Recv fail! or client closed\r\n");
+            CClient *pClient = tThis->findClientBySocket(s);
+            if(!tThis->g_clientManager.empty() && NULL != pClient)
+            {
+                tThis->g_clientManager.erase(pClient);
+                delete(pClient);
+                pClient = NULL;
+            }
+            needContinue = false;
+        }
+        else
+        {
+            tThis->sendToAppQueue(IoRecv.dataBuf,IoRecv.len);
+            tThis->m_pNEOBaseLib->m_pMemQueue->PrintInside();
+        }
+
+        delete(pThis);
+        delete(IoRecv.dataBuf);
+        
+        return needContinue;
     }
 #endif
    
@@ -594,20 +751,32 @@ bool NeoServer::sendToAppQueue(const char *szData,int nDataLen)
     return true;
 }
 
+#ifdef WIN32
 bool NeoServer::sendTask(void *pThis,int &nStatus)
 {
     bool needContinue = false;
     int sendRet = 0;
     CClient *tThis = (CClient*)pThis;
 
-#ifdef WIN32
+
     tThis->setDataBuffer("i am the server",16,IOWrite);
     needContinue = tThis->Send();
-#else
 
-#endif
     return needContinue;
 }
+#endif
 
+CClient* NeoServer::findClientBySocket(const WIN_LINUX_SOCKET s)
+{
+    set<CClient*>::const_iterator iter;
+    for(iter = g_clientManager.begin() ; iter != g_clientManager.end() ; ++iter)
+    {
+        if((*iter)->m_s == s)
+            return *iter;         
+    }
+    
+    if (iter == g_clientManager.end())
+        return NULL;
+}
 
 }//NEOLIB
