@@ -54,20 +54,24 @@ void CClient::setDataBuffer(char *buf, const unsigned long buffsize,IOTYPE iotyp
 	}
 }
 
-void CClient::eraseDataBuffer()
+void CClient::eraseDataBuffer(IOTYPE iotype)
 {
-	if (m_IoRecv.dataBuf.buf != NULL)
-	{
-		delete(m_IoRecv.dataBuf.buf);
+	if(IORead == iotype)
+    {
+		if (m_IoRecv.dataBuf.buf != NULL)
+		{
+			delete(m_IoRecv.dataBuf.buf);
+		}
+		ZeroMemory(&m_IoRecv,sizeof(IO_OPERATION_DATA));
 	}
-
-	if (m_IoSend.dataBuf.buf != NULL)
+	else
 	{
-		delete(m_IoSend.dataBuf.buf);
+		if (m_IoSend.dataBuf.buf != NULL)
+		{
+			delete(m_IoSend.dataBuf.buf);
+		}
+		ZeroMemory(&m_IoSend,sizeof(IO_OPERATION_DATA));
 	}
-
-	ZeroMemory(&m_IoRecv,sizeof(IO_OPERATION_DATA));
-	ZeroMemory(&m_IoSend,sizeof(IO_OPERATION_DATA));
 }
 
 #else
