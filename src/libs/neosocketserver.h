@@ -65,15 +65,7 @@ public:
     static bool loop(void *pThis,int &nStatus);
 
 #ifndef WIN32
-    /*bool setEpollEvents(WIN_LINUX_SOCKET s,epoll_event &listened_evnet)
-    {
-        if ((listened_evnet.events & EPOLLOUT) == 0)
-            listened_evnet.events |= EPOLLOUT;
-        else 
-            listened_evnet.events |= EPOLLIN;
-        modEvent(m_epollFd,s,listened_evnet);
-        return true;
-    }*/
+    bool setEpollEvents(epoll_event listened_evnet);
     bool send(ReadWriteParam& param);
     bool send(const WIN_LINUX_SOCKET s,const SERVICE_TYPE svctype = ::TCP);
     static bool sendTask(void *pThis,int &nStatus);

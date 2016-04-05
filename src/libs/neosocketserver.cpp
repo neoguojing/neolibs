@@ -455,7 +455,8 @@ bool NeoServer::doSend(CClient* pClient)
                 else if (tThis->m_Events[i].events & EPOLLIN)
                 {
                     tThis->recv(tThis->m_Events[i],::TCP);
-                    //tThis->send(tThis->m_Events[i].data.fd);
+                    tThis->send(tThis->m_Events[i].data.fd);
+                    //tThis->setEpollEvents(tThis->m_Events[i]);
                                         
                 }
                 else if (tThis->m_Events[i].events & EPOLLOUT)
@@ -466,6 +467,8 @@ bool NeoServer::doSend(CClient* pClient)
 					param.buffer = "I am the server";
 					param.bufsize = 16;
 					tThis->send(param);*/
+                    //tThis->send(tThis->m_Events[i].data.fd);
+                    //tThis->setEpollEvents(tThis->m_Events[i]);
                 }
             }
 
@@ -583,6 +586,19 @@ namespace
     }EpollThreadParam;
 }
 
+    bool NeoServer::setEpollEvents(epoll_event listened_evnet)
+    {
+        struct epoll_event ev = {0};
+        //if ((listened_evnet.events & EPOLLOUT) == 0)
+            ev.events = listened_evnet.events | EPOLLOUT;
+            ev.data.fd = listened_evnet.data.fd;
+        //else 
+            //listened_evnet.events &= (~EPOLLOUT);
+        if (-1 == modEvent(m_epollFd,listened_evnet.data.fd,ev))
+            return false;
+        return true;
+    }
+
     bool NeoServer::send(ReadWriteParam& param)
     {
 
@@ -642,7 +658,7 @@ namespace
                     if (result == -1 && errno != EAGAIN)
                     {
                         printf("CClient::Send fail!\r\n");
-                        needContinue = true;
+                        needContinue = false;
 		        break;
                     }
                 }  
@@ -656,7 +672,7 @@ namespace
             result = sendto(s, pIOData->dataBuf, pIOData->len, 0, (struct sockaddr *)&(pClient->m_addr), sizeof(sockaddr_in));  
             if (result < 0)  
             {  
-		needContinue = true;
+		needContinue = false;
             }  
         }
         delete(pThis);
