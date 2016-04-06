@@ -16,6 +16,11 @@ private:
             CREATETHREADLOCALVAR(gThreadLocalKey)
     }
 public:
+    ~ThreadLocal(){
+        if (gThreadLocalKey != NULL)
+            free();
+    }
+
     static ThreadLocal* gThreadLocal;
 
     static ThreadLocal* getInstance()

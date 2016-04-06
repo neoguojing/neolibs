@@ -784,15 +784,18 @@ bool NeoServer::sendTask(void *pThis,int &nStatus)
 
 CClient* NeoServer::findClientBySocket(const WIN_LINUX_SOCKET s)
 {
+    CClient* client = NULL;
     set<CClient*>::const_iterator iter;
     for(iter = g_clientManager.begin() ; iter != g_clientManager.end() ; ++iter)
     {
         if((*iter)->m_s == s)
-            return *iter;         
+        {
+            client =  *iter;  
+            break;
+        }
     }
     
-    if (iter == g_clientManager.end())
-        return NULL;
+    return client;
 }
 
 }//NEOLIB

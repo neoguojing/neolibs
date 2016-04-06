@@ -15,7 +15,7 @@ struct MessageGreater;
 
 namespace
 {
-    typedef priority_queue<Message, vector<Message>, MessageGreater> MessageQueue;
+    typedef priority_queue<Message*, vector<Message*>, MessageGreater> MessageQueue;
 }
 
 class Looper{

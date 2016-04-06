@@ -51,9 +51,9 @@ void Looper::loop()
        if(queue->empty()){
            NEOMinSleep();
        }else{
-           Message &msg = const_cast<Message&>(queue->top());
-           if(TimelsUp((time_t)msg.mWhen,0)){
-               msg.mTarget->dispatchMessage(msg);
+           Message* msg = const_cast<Message*>(queue->top());
+           if(TimelsUp((time_t)msg->mWhen,0)){
+               msg->mTarget->dispatchMessage(msg);
                queue->pop();
            }
            

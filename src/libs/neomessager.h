@@ -8,7 +8,7 @@ namespace NEOLIB {
 class Message;
 class Handler;
 
-typedef void(*HANDLER_CALLBACK)(Message &message);
+typedef void(*HANDLER_CALLBACK)(Message *message);
 
 class Message{
 
@@ -39,17 +39,17 @@ private:
 
 struct MessageLess
 {
-    bool operator ()(const Message & a,const Message & b)
+    bool operator ()(const Message * a,const Message * b)
     {
-        return a.mWhen<b.mWhen;
+        return a->mWhen<b->mWhen;
     }
 };
 
 struct MessageGreater
 {
-    bool operator ()(const Message & a,const Message & b)
+    bool operator ()(const Message * a,const Message * b)
     {
-        return a.mWhen>b.mWhen;;
+        return a->mWhen>b->mWhen;;
     }
 };
 

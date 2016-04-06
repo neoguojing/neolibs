@@ -12,10 +12,10 @@ namespace NEOLIB {
 class Message;
 class Looper;
 struct MessageGreater;
-typedef void(*HANDLER_CALLBACK)(Message &message);
+typedef void(*HANDLER_CALLBACK)(Message *message);
 namespace
 {
-    typedef priority_queue<Message, vector<Message>, MessageGreater> MessageQueue;
+    typedef priority_queue<Message*, vector<Message*>, MessageGreater> MessageQueue;
 }
 class Handler{
 
@@ -28,11 +28,11 @@ public:
 
     ~Handler(){}
 
-    virtual void handleMessage(Message &message);
-    void dispatchMessage(Message& msg);
-    bool sendMessageDelayed(Message& msg, long timeinsec);
-    bool sendMessage(Message& msg);
-    bool sendMessageAtTime(Message& msg,long timeinsec);
+    virtual void handleMessage(Message *message);
+    void dispatchMessage(Message* msg);
+    bool sendMessageDelayed(Message* msg, long timeinsec);
+    bool sendMessage(Message* msg);
+    bool sendMessageAtTime(Message* msg,long timeinsec);
 
     Message *obtainMessage();
     Message *obtainMessage(int msgid);
@@ -40,7 +40,7 @@ public:
 
 private:
     //未完待续
-    bool enQueueMessage(MessageQueue* queue, Message& msg, long timeinsec);
+    bool enQueueMessage(MessageQueue* queue, Message* msg, long timeinsec);
 public:
     Looper *mLooper;
     MessageQueue *mMessageQueue;

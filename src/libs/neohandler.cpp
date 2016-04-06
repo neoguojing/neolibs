@@ -41,10 +41,10 @@ Handler::Handler(HANDLER_CALLBACK callback, bool sync):
 
 }
 
-void Handler::dispatchMessage(Message& msg)
+void Handler::dispatchMessage(Message* msg)
 {
-    if(msg.callback!=NULL){
-        msg.callback(msg);
+    if(msg->callback!=NULL){
+        msg->callback(msg);
     }else{
         if(mCallback!=NULL){
             mCallback(msg);
@@ -54,7 +54,7 @@ void Handler::dispatchMessage(Message& msg)
     }
 }
 
-bool Handler::sendMessageAtTime(Message& msg,long timeinsec)
+bool Handler::sendMessageAtTime(Message* msg,long timeinsec)
 {
         MessageQueue *queue = mMessageQueue;
         if (queue==NULL){
@@ -63,32 +63,37 @@ bool Handler::sendMessageAtTime(Message& msg,long timeinsec)
         return enQueueMessage(queue,msg,timeinsec);
 }
 
-bool Handler::sendMessageDelayed(Message& msg, long timeinsec)
+bool Handler::sendMessageDelayed(Message* msg, long timeinsec)
 {
     if(timeinsec<0)
         timeinsec = 0;
     return sendMessageAtTime(msg,timeinsec);
 }
 
-bool Handler::sendMessage(Message& msg)
+bool Handler::sendMessage(Message* msg)
 {
     return sendMessageDelayed(msg,0);
 }
 
-void Handler::handleMessage(Message &message)
+void Handler::handleMessage(Message* message)
 {
-    printf("Handler::handleMessage msgid=%d\n",message.mMsgId);
+    printf("Handler::handleMessage msgid=%d\n",message->mMsgId);
+    if (NULL != message)
+    {
+        delete(message);
+        message = NULL;
+    }
 }
 
-bool Handler::enQueueMessage(MessageQueue* queue, Message& msg, long timeinsec)
+bool Handler::enQueueMessage(MessageQueue* queue, Message* msg, long timeinsec)
 {
     time_t tNow;
 	TimeSetNow(tNow);
 
-    msg.mTarget = this;
-    msg.mWhen = (long)tNow+timeinsec;
+    msg->mTarget = this;
+    msg->mWhen = (long)tNow+timeinsec;
     if(mSync){
-        msg.setSync(true);
+        msg->setSync(true);
     }
 
     queue->push(msg);
