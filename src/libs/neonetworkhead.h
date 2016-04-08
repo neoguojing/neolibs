@@ -32,6 +32,7 @@
     #include<getopt.h>
     #include<time.h>
 	#include <semaphore.h>
+   #include <sys/timerfd.h>
 #endif
 
 #ifdef NEO_DEBUG

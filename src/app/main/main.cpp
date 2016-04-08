@@ -484,18 +484,19 @@ int main(int argc,char **argv,char *env[])
 
     printf(">>>>>>>>>>>>>>>>>>>>>>socket test client>>>>>>>>>>>>>>>>>>>>>>>>>>\n");
     //NeoClient * client =new  NeoClient("127.0.0.1",8888);
-	//NeoClient * client =new  NeoClient("192.168.1.7",8888);
+   // NeoClient * client =new  NeoClient("192.168.1.4",8888);
 
     printf(">>>>>>>>>>>>>>>>>>>>>>timer test client>>>>>>>>>>>>>>>>>>>>>>>>>>\n");
     NeoTimer *myimer = new NeoTimer();
-    myimer->CreateTimer("test");
+    myimer->CreateTimer("test",5000000);
     // myimer->DeleteTimer("test");
-    myimer->CreateOneShotTimer("test ont shot",5000000);
-    myimer->PrintInside();
-    myimer->DeleteTimer("test");
+    myimer->CreateOneShotTimer("test ont shot",1000000);
     myimer->PrintInside();
     myimer->DeleteTimer("test ont shot");
     myimer->PrintInside();
+   myimer->DeleteTimer("test");
+    myimer->PrintInside();
+
 #ifndef WIN32
 	//linux 主线程退出之后，子线程也会退出
 	while(1)

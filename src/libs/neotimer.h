@@ -1,21 +1,31 @@
-﻿#ifndef NEOTIMER
+﻿#ifndef _NEOTIMER_
 
-#define NEOTIMER
+#define _NEOTIMER_
 
-#define NEOMAXTIMERCOUNT 1024
+#include "neoindex.h"
 #include<string>
 #include<map>
 using namespace std;
 
+#define NEOMAXTIMERCOUNT 1024
 namespace NEOLIB {
 
+class CNEOBaseLibrary ;
 #ifndef WIN32
 
-typedef struct _neo_timer
+/*typedef struct _neo_timer
 {
     struct itimerval mTimer;
     struct itimerval mOldTimer;
+}NEOTIMER,*PNEOTIMER;*/
+
+typedef struct _neo_timer
+{
+    struct itimerspec   mTimer;
+    struct itimerspec   mOldTimer;
 }NEOTIMER,*PNEOTIMER;
+
+class NeoEpoll;
 
 #endif
 
@@ -37,12 +47,16 @@ public:
 #endif
 
 private:
-
+    CNEOBaseLibrary *m_pNEOBaseLib;
 #ifdef WIN32
     map<string,HANDLE> m_hTimers;
     HANDLE m_hTimerQueue;
 #else
-    map<string,PNEOTIMER> m_hTimers;
+    void StartTimer();
+    //map<string,PNEOTIMER> m_hTimers;
+    map<string,int> m_hTimers;
+    NeoEpoll *m_myEpoll;
+    struct epoll_event m_Event;
 #endif
 
 };
