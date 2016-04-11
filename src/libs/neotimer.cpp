@@ -180,7 +180,7 @@ void NeoTimer::TimerRoutine(void* lpParam, bool TimerOrWaitFired)
     printf("I am the timer\n");
 }
 #else
-void NeoTimer::TimerRoutine(int signo)
+void NeoTimer::TimerRoutine(void* lpParam)
 {
     if (SIGALRM == signo)
         printf("I am the timer\n");

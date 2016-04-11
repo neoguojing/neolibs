@@ -50,7 +50,7 @@ public:
 #ifdef WIN32
     static void TimerRoutine(void* lpParam=NULL, bool TimerOrWaitFired=false);
 #else
-    static void TimerRoutine(int signo);
+    static void TimerRoutine(void* lpParam=NULL);
 #endif
 
 private:
