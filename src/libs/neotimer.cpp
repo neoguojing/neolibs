@@ -62,9 +62,9 @@ NeoTimer::~NeoTimer()
     }
 }
 
+#ifdef WIN32
 bool NeoTimer::CreateTimer(string timername,unsigned long delay,unsigned long interval,void* callback, void* param)
 {
-#ifdef WIN32
     HANDLE tTimer = INVALID_HANDLE_VALUE;
     if (!CreateTimerQueueTimer(&tTimer, m_hTimerQueue, (WAITORTIMERCALLBACK)callback, param,delay/1000, interval/1000, WT_EXECUTEDEFAULT))
 	{
@@ -72,8 +72,12 @@ bool NeoTimer::CreateTimer(string timername,unsigned long delay,unsigned long in
         return false;
 	}
     m_hTimers.insert(pair<string,HANDLE>(timername, tTimer));
-#else
 
+    return true;
+}
+#else
+bool NeoTimer::CreateTimer(string timername,unsigned long delay,unsigned long interval)
+{
     PNEOTIMER tTimer = new NEOTIMER;
     tTimer->mTimer.it_value.tv_sec = delay/NEOSECONDINMICRO;
     tTimer->mTimer.it_value.tv_nsec =  (delay*1000)%NEOSECONDINNANO;
@@ -92,19 +96,24 @@ bool NeoTimer::CreateTimer(string timername,unsigned long delay,unsigned long in
     }
     m_hTimers.insert(pair<string,int>(timername, timerId));
 
-#endif   
     return true;
 }
+#endif  
 
+#ifdef WIN32
 bool NeoTimer::CreateOneShotTimer(string timername, unsigned long delay,void* callback, void* param)
 {
-#ifdef WIN32
+
     HANDLE tTimer = INVALID_HANDLE_VALUE;
     if (!CreateTimerQueueTimer(&tTimer, m_hTimerQueue, (WAITORTIMERCALLBACK)callback, param,delay/1000, 0, WT_EXECUTEONLYONCE))
         return false;
     m_hTimers.insert(pair<string,HANDLE>(timername, tTimer));
-#else
 
+    return true;
+}
+#else
+bool NeoTimer::CreateOneShotTimer(string timername, unsigned long delay)
+{
     PNEOTIMER tTimer = new NEOTIMER;
     
     tTimer->mTimer.it_value.tv_sec = delay/NEOSECONDINMICRO;
@@ -124,9 +133,9 @@ bool NeoTimer::CreateOneShotTimer(string timername, unsigned long delay,void* ca
 	}
 	m_hTimers.insert(pair<string,int>(timername, timerId));
 
-#endif   
     return true;
 }
+#endif 
 
 bool NeoTimer::DeleteTimer(string timername)
 {

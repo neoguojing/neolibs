@@ -40,10 +40,15 @@ public:
     NeoTimer();
     ~NeoTimer();
 	//delay and interval is in micro second.
+#ifdef WIN32
     bool CreateTimer(string timername, unsigned long delay=0,unsigned long interval=NEOSECONDINMICRO,
 		void* callback=TimerRoutine, void* param=NULL);
     bool CreateOneShotTimer(string timername,  unsigned long delay=NEOSECONDINMICRO,
 		void* callback=TimerRoutine, void* param=NULL);
+#else
+	bool CreateTimer(string timername, unsigned long delay=0,unsigned long interval=NEOSECONDINMICRO);
+    bool CreateOneShotTimer(string timername,  unsigned long delay=NEOSECONDINMICRO);
+#endif
     bool DeleteTimer(string timername);
     void PrintInside();
     int GetTimerCount();
