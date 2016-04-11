@@ -43,12 +43,6 @@ NeoTimer::~NeoTimer()
     	m_myEpoll = NULL;
     }
 
-    /*map<string, PNEOTIMER>::iterator iter;
-    for(iter=m_hTimers.begin();iter!=m_hTimers.end();++iter)
-    {
-        if(iter->second!=NULL)
-            delete(iter->second);
-    }*/
     map<string, int>::iterator iter;
 	for(iter=m_hTimers.begin();iter!=m_hTimers.end();++iter)
 	{
@@ -191,8 +185,7 @@ void NeoTimer::TimerRoutine(void* lpParam, bool TimerOrWaitFired)
 #else
 void NeoTimer::TimerRoutine(void* lpParam)
 {
-    if (SIGALRM == signo)
-        printf("I am the timer\n");
+    printf("I am the timer\n");
 }
 
 void NeoTimer::StartTimer()
