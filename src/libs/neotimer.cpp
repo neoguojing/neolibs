@@ -6,7 +6,6 @@
 
 namespace NEOLIB{
 
-
 #ifdef WIN32
 NeoTimer::NeoTimer():
     m_hTimerQueue(INVALID_HANDLE_VALUE)
@@ -63,31 +62,23 @@ NeoTimer::~NeoTimer()
     }
 }
 
-bool NeoTimer::CreateTimer(string timername,unsigned long usec, void* param)
+bool NeoTimer::CreateTimer(string timername,unsigned long delay,unsigned long interval,void* callback, void* param)
 {
 #ifdef WIN32
     HANDLE tTimer = INVALID_HANDLE_VALUE;
-    if (!CreateTimerQueueTimer(&tTimer, m_hTimerQueue, (WAITORTIMERCALLBACK)TimerRoutine, param,0, usec/1000, WT_EXECUTEDEFAULT))
+    if (!CreateTimerQueueTimer(&tTimer, m_hTimerQueue, (WAITORTIMERCALLBACK)callback, param,delay/1000, interval/1000, WT_EXECUTEDEFAULT))
+	{
+		printf("CreateTimer::CreateTimerQueueTimer fail\r\n");
         return false;
+	}
     m_hTimers.insert(pair<string,HANDLE>(timername, tTimer));
 #else
-    //signal(SIGALRM, TimerRoutine);
 
     PNEOTIMER tTimer = new NEOTIMER;
-    tTimer->mTimer.it_value.tv_sec = usec/1000000;
-   // tTimer->mTimer.it_value.tv_usec = usec%1000000;
-    tTimer->mTimer.it_value.tv_nsec =  (usec*1000)%1000000000;
-    tTimer->mTimer.it_interval.tv_sec = usec/1000000;
-    //tTimer->mTimer.it_interval.tv_usec = usec%1000000;
-    tTimer->mTimer.it_interval.tv_nsec = (usec*1000)%1000000000;
-    
-   /* if (-1 == setitimer(ITIMER_REAL, &(tTimer->mTimer), &(tTimer->mOldTimer)))
-    {
-    	char * mesg = strerror(errno);
-        printf("CreateTimer::setitimer fail errno=%s\r\n",mesg);
-        return false;
-    }
-    m_hTimers.insert(pair<string,PNEOTIMER>(timername, tTimer));*/
+    tTimer->mTimer.it_value.tv_sec = delay/NEOSECONDINMICRO;
+    tTimer->mTimer.it_value.tv_nsec =  (delay*1000)%NEOSECONDINNANO;
+    tTimer->mTimer.it_interval.tv_sec = interval/NEOSECONDINMICRO;
+    tTimer->mTimer.it_interval.tv_nsec = (interval*1000)%NEOSECONDINNANO;
 
     int timerId = timerfd_create(CLOCK_REALTIME, 0);
     m_myEpoll->makeSocketNonBlocking(timerId);
@@ -96,6 +87,7 @@ bool NeoTimer::CreateTimer(string timername,unsigned long usec, void* param)
     {
     	char * mesg = strerror(errno);
     	printf("CreateTimer::timerfd_settime fail errno=%s\r\n",mesg);
+		delete(tTimer);
     	return false;
     }
     m_hTimers.insert(pair<string,int>(timername, timerId));
@@ -104,34 +96,21 @@ bool NeoTimer::CreateTimer(string timername,unsigned long usec, void* param)
     return true;
 }
 
-bool NeoTimer::CreateOneShotTimer(string timername, unsigned long usec, void* param)
+bool NeoTimer::CreateOneShotTimer(string timername, unsigned long delay,void* callback, void* param)
 {
 #ifdef WIN32
     HANDLE tTimer = INVALID_HANDLE_VALUE;
-    if (!CreateTimerQueueTimer(&tTimer, m_hTimerQueue, (WAITORTIMERCALLBACK)TimerRoutine, param,usec/1000, 0, WT_EXECUTEONLYONCE))
+    if (!CreateTimerQueueTimer(&tTimer, m_hTimerQueue, (WAITORTIMERCALLBACK)callback, param,delay/1000, 0, WT_EXECUTEONLYONCE))
         return false;
     m_hTimers.insert(pair<string,HANDLE>(timername, tTimer));
 #else
-    //signal(SIGALRM, TimerRoutine);
 
     PNEOTIMER tTimer = new NEOTIMER;
-    //tv_sec是秒部分，tv_usec是微秒部分
-   /* tTimer->mTimer.it_value.tv_sec = usec/1000000;
-    tTimer->mTimer.it_value.tv_usec = usec%1000000;
-    tTimer->mTimer.it_interval.tv_sec = 0;
-    tTimer->mTimer.it_interval.tv_usec = 0;*/
     
-    tTimer->mTimer.it_value.tv_sec = usec/1000000;
-    tTimer->mTimer.it_value.tv_nsec =  (usec*1000)%1000000000;
+    tTimer->mTimer.it_value.tv_sec = delay/NEOSECONDINMICRO;
+    tTimer->mTimer.it_value.tv_nsec =  (delay*1000)%NEOSECONDINNANO;
     tTimer->mTimer.it_interval.tv_sec = 0;
     tTimer->mTimer.it_interval.tv_nsec = 0;
-
-    /*if (-1 == setitimer(ITIMER_REAL, &(tTimer->mTimer), NULL))
-    {
-        printf("CreateOneShotTimer::setitimer fail errno=%d\r\n",errno);
-        return false;
-    }
-    m_hTimers.insert(pair<string,PNEOTIMER>(timername, tTimer));*/
 
     int timerId = timerfd_create(CLOCK_REALTIME, 0);
 	m_myEpoll->makeSocketNonBlocking(timerId);
@@ -140,6 +119,7 @@ bool NeoTimer::CreateOneShotTimer(string timername, unsigned long usec, void* pa
 	{
 		char * mesg = strerror(errno);
 		printf("CreateOneShotTimer::timerfd_settime fail errno=%s\r\n",mesg);
+		delete(tTimer);
 		return false;
 	}
 	m_hTimers.insert(pair<string,int>(timername, timerId));
@@ -161,17 +141,6 @@ bool NeoTimer::DeleteTimer(string timername)
     DeleteTimerQueueTimer(m_hTimerQueue,iter->second,NULL);
     m_hTimers.erase(iter);
 #else
-    //map<string, PNEOTIMER>::iterator iter;
-    //iter = m_hTimers.find(timername);
-    //memset(iter->second,0,sizeof(NEOTIMER));
-
-   /* if (-1 == setitimer(ITIMER_REAL, &(iter->second->mTimer), &(iter->second->mOldTimer)))
-    {
-        printf("DeleteTimer::setitimer fail errno=%d",errno);
-        return false;
-    }
-    delete(iter->second);*/
-
     map<string, int>::iterator iter;
     iter = m_hTimers.find(timername);
     m_myEpoll->delEvent(iter->second,m_Event);
@@ -187,7 +156,6 @@ void NeoTimer::PrintInside()
 #ifdef WIN32
     map<string, HANDLE>::iterator iter; 
 #else
-    //map<string, PNEOTIMER>::iterator iter;
     map<string, int>::iterator iter;
 #endif
     
@@ -196,17 +164,6 @@ void NeoTimer::PrintInside()
 #ifdef WIN32
         printf("timer name:%s,handler:%p\r\n",iter->first.c_str(),iter->second);
 #else
-        /*printf("timer name:%s,NEOTIMER:%p\r\n",iter->first.c_str(),iter->second);
-        printf("mTimer:it_value.tv_sec=%d,it_value.tv=%d,it_interval.tv_sec=%d,it_interval.tv_usec=%d\r\n",
-                iter->second->mTimer.it_value.tv_sec,
-                iter->second->mTimer.it_value.tv_usec, 
-                iter->second->mTimer.it_interval.tv_sec,
-                iter->second->mTimer.it_interval.tv_usec);
-        printf("mOldTimer:it_value.tv_sec=%d,it_value.tv=%d,it_interval.tv_sec=%d,it_interval.tv_usec=%d\r\n",
-                iter->second->mOldTimer.it_value.tv_sec,
-                iter->second->mOldTimer.it_value.tv_usec, 
-                iter->second->mOldTimer.it_interval.tv_sec,
-                iter->second->mOldTimer.it_interval.tv_usec);*/
         printf("timer name:%s,fd:%d\r\n",iter->first.c_str(),iter->second);
 #endif
     }

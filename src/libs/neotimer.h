@@ -10,6 +10,11 @@ using namespace std;
 #define NEOMAXTIMERCOUNT 1024
 namespace NEOLIB {
 
+
+#define NEOSECONDINNANO 1000000000
+#define NEOSECONDINMICRO 1000000
+#define NEOSECONDINMILLI 1000
+
 class CNEOBaseLibrary ;
 #ifndef WIN32
 
@@ -34,9 +39,11 @@ class NeoTimer{
 public:
     NeoTimer();
     ~NeoTimer();
-
-    bool CreateTimer(string timername, unsigned long usec=1000000, void* param=NULL);
-    bool CreateOneShotTimer(string timername, unsigned long usec=1000000, void* param=NULL);
+	//delay and interval is in micro second.
+    bool CreateTimer(string timername, unsigned long delay=0,unsigned long interval=NEOSECONDINMICRO,
+		void* callback=TimerRoutine, void* param=NULL);
+    bool CreateOneShotTimer(string timername,  unsigned long delay=NEOSECONDINMICRO,
+		void* callback=TimerRoutine, void* param=NULL);
     bool DeleteTimer(string timername);
     void PrintInside();
     int GetTimerCount();
@@ -53,7 +60,6 @@ private:
     HANDLE m_hTimerQueue;
 #else
     void StartTimer();
-    //map<string,PNEOTIMER> m_hTimers;
     map<string,int> m_hTimers;
     NeoEpoll *m_myEpoll;
     struct epoll_event m_Event;
