@@ -491,11 +491,11 @@ int main(int argc,char **argv,char *env[])
     myimer->CreateTimer("test",5000000);
     // myimer->DeleteTimer("test");
     myimer->CreateOneShotTimer("test ont shot",1000000);
-    myimer->PrintInside();
-    myimer->DeleteTimer("test ont shot");
-    myimer->PrintInside();
-   myimer->DeleteTimer("test");
-    myimer->PrintInside();
+    //myimer->PrintInside();
+   // myimer->DeleteTimer("test ont shot");
+  //  myimer->PrintInside();
+  // myimer->DeleteTimer("test");
+   // myimer->PrintInside();
 
 #ifndef WIN32
 	//linux 主线程退出之后，子线程也会退出

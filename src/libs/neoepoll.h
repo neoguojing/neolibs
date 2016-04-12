@@ -21,6 +21,8 @@ public:
 
     void setEvent(int fd, unsigned int eventbit);
 
+    void close();
+
    static  bool loop(void *pThis,int &nStatus);
 
 private:

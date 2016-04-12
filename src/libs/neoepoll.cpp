@@ -20,7 +20,7 @@ NeoEpoll::NeoEpoll():m_Switch(true)
 
 NeoEpoll::~NeoEpoll()
 {
-
+	close();
 }
 
 int NeoEpoll::makeSocketNonBlocking (int& fd)
@@ -88,6 +88,11 @@ int NeoEpoll::addEvent( const int fd, epoll_event &listened_evnet)
 	   	m_Event.events = eventbit;
    }
 
+   void NeoEpoll::close()
+   {
+	   m_Switch = false;
+	   ::close(m_epollFd);
+   }
    bool NeoEpoll::loop(void *pThis,int &nStatus)
        {
            bool needContinue = false;
