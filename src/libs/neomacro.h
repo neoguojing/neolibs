@@ -269,4 +269,5 @@ inline void NEOMinSleep(void)
 //回调函数原型
 
 typedef void (*_APP_INFO_OUT_CALLBACK)(char *szInfo,void *pCallParam);
+
 #endif

@@ -181,6 +181,7 @@ int NeoTimer::GetTimerCount()
 void NeoTimer::TimerRoutine(void* lpParam, bool TimerOrWaitFired)
 {
     printf("I am the timer\n");
+    //m_pNEOBaseLib->m_pTaskPool->RegisterATask(lpParam,TimerOrWaitFired);
 }
 #else
 void NeoTimer::TimerRoutine(void* lpParam)

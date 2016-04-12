@@ -178,12 +178,22 @@ enum SERVICE_TYPE
 
 #define SOCKET_MAX_LISTENER 64
 #define SOCKET_ADDR_SIZE sizeof(struct sockaddr)
-//epoll 定义
+/*epoll 定义*/
 #ifndef WIN32
 #define EPOLL_SIZE_HINT 1024
 #define EPOLL_MAX_EVENTS 64
 #define EPOLL_ET_IN (EPOLLIN | EPOLLET)
 #define EPOLL_ET_OUT (EPOLLOUT | EPOLLET)
+
+//for NeoEpoll
+typedef void (*_NEO_COMMON_CALLBACK)(void *pCallParam);
+class NeoEpoll;
+typedef struct _neoepoll_loop_param
+{
+	NeoEpoll *pThis;
+	_NEO_COMMON_CALLBACK  pCallback;
+    void* pParam;
+}NEOEPOLLPARAM, *PNEOEPOLLPARAM;
 
 typedef enum _io_type
 {
